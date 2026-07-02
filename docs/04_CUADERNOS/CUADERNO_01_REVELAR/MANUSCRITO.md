@@ -11,93 +11,40 @@
 
 > *Toda construcción comienza cuando una identidad se revela.*
 
----
-
-# El origen
-
-Durante mucho tiempo me pregunté cuándo me sentía verdaderamente libre.
-
-No buscaba una respuesta intelectual.
-
-Buscaba reconocer ese instante en el que todo parecía ocupar su lugar.
-
-Con el tiempo descubrí que siempre aparecía en los mismos momentos.
-
-Cuando estoy presente.
-
-Cuando expreso mi genuinidad.
-
-Cuando despierto mi poder creador y permito que la creatividad encuentre una forma de manifestarse.
-
-Esa sensación nunca dependía del resultado.
-
-Ni del reconocimiento.
-
-Ni del éxito.
-
-Nacía de la coherencia entre lo que sentía, lo que pensaba y lo que expresaba.
-
----
-
-> *Revelar no consiste en inventar una identidad.*
-
-> *Consiste en hacer visible aquello que ya existe.*
-
----
 
 # Todo empieza aquí
 
-Vivimos un momento extraordinario.
+Hay momentos en los que el tiempo desaparece.
 
-Nunca antes había sido tan fácil crear.
+Cuando creas.
 
-Una idea puede convertirse en una imagen.
+Cuando juegas.
 
-Una imagen en un vídeo.
+Cuando imaginas.
 
-Un vídeo en una campaña.
+Cuando estás completamente presente.
 
-Las herramientas evolucionan cada día.
+En esos instantes no existe el ruido.
 
-La tecnología ha democratizado la creatividad y ha multiplicado nuestras posibilidades.
+No buscas impresionar.
 
-Sin embargo, mientras crear se vuelve más sencillo, diferenciarse resulta cada vez más difícil.
+No comparas.
 
-Cada día se publican millones de contenidos.
+No piensas en el resultado.
 
-Más imágenes.
+Solo existe el placer de dar forma a una idea.
 
-Más vídeos.
+Crear tiene ese poder.
 
-Más mensajes.
+Nos devuelve al presente.
 
-Más ruido.
+Y cuando estamos presentes empezamos a mirar de otra manera.
 
-Y cuanto mayor es el volumen de información, más difícil resulta reconocer aquello que realmente merece nuestra atención.
+Porque toda creación necesita una dirección.
 
-La diferencia nunca ha estado en la herramienta.
+No basta con mirar.
 
-Siempre ha estado en la identidad.
-
-Una herramienta puede generar contenido.
-
-Una identidad decide qué merece ser creado.
-
-Una herramienta puede acelerar un proceso.
-
-Una identidad le da dirección.
-
-Por eso este cuaderno no empieza hablando de Inteligencia Artificial.
-
-Empieza hablando de ti.
-
-De tu proyecto.
-
-De aquello que solo tú puedes expresar.
-
-Porque antes de comunicar existe una pregunta mucho más importante.
-
-**¿Qué merece ser revelado?**
+Hay que aprender a dirigir la mirada.
 
 ---
 
@@ -167,17 +114,9 @@ Un propósito.
 
 Revelar es dejar de buscar fuera lo que solo puede descubrirse dentro.
 
-Porque la comunicación no crea una identidad.
+Y cuando una identidad se expresa con claridad, deja de competir por llamar la atención
 
-La hace visible.
-
-Y cuando una identidad se expresa con claridad, deja de competir por llamar la atención.
-
-Empieza a conectar.
-
-No porque hable más alto.
-
-Sino porque habla desde un lugar verdadero.
+porque habla desde un lugar verdadero.
 
 Ese es el punto de partida de REVELDÍA.
 
@@ -188,10 +127,6 @@ Revelarlo.
 ---
 
 # El Árbol del Proyecto 
-
-Todo lo que se ve nace de algo que no se ve.
-
-También ocurre con los proyectos.
 
 La comunicación.
 
@@ -217,11 +152,43 @@ Las raíces.
 
 ---
 
+# Cuando todo encuentra su lugar
+
+Cuando descubres la esencia de un proyecto, las decisiones cambian.
+
+Empiezas a reconocer qué forma parte de él.
+
+Y qué no.
+
+Qué merece crecer.
+
+Y qué puedes dejar ir.
+
+Cada elección refuerza su identidad.
+
+Cada renuncia también.
+
+Entonces crear deja de ser una búsqueda constante.
+
+Las ideas encuentran su lugar.
+
+Las herramientas dejan de marcar el camino.
+
+Empiezan a acompañarlo.
+
+La Inteligencia Artificial deja de buscar respuestas por ti.
+
+Amplifica aquello que has decidido expresar.
+
+Porque una herramienta puede acelerar el proceso.
+
+Pero solo tú puedes darle una dirección.
+
+---
+
 # REVELA
 
-REVELA es una experiencia para descubrir aquello que siempre ha estado ahí y darle una forma visible.
-
-A lo largo de este recorrido aprenderás a reconocer la identidad de un proyecto.
+REVELA es una experiencia para descubrir la identidad que ya habita en tu proyecto y darle una forma visible.
 
 Su voz.
 
@@ -239,17 +206,13 @@ Ordena las ideas.
 
 Devuelve la luz a aquello que había quedado oculto.
 
-Y transforma esa identidad en una forma de comunicar con autenticidad.
+Y transforma esa esencia en una forma de comunicar con autenticidad.
 
 ---
 
 # La Declaración
 
 Toda identidad comienza con una decisión.
-
-La decisión de dejar de parecer.
-
-Y empezar a ser.
 
 Respira.
 
@@ -285,48 +248,64 @@ Lo que quiero revelar al mundo es...
 
 ---
 
-# Crear con identidad
+# El laboratorio
 
-Cuando sabes quién eres, crear cambia.
+Toda idea necesita un lugar donde crecer.
 
-Las decisiones dejan de depender de la inspiración.
+Un espacio para observar.
 
-Cada idea encuentra su lugar.
+Experimentar.
 
-Cada imagen tiene un propósito.
+Equivocarse.
 
-Cada palabra responde a una intención.
+Descubrir.
 
-Crear deja de ser producir contenido.
+Y volver a empezar.
 
-Empieza a ser una forma de expresar una identidad.
+Ese lugar es el Laboratorio.
 
-Entonces aparece una nueva pregunta.
+Aquí las ideas encuentran dirección.
 
-No es:
+La identidad se convierte en una forma de comunicar.
 
-¿Qué puedo publicar hoy?
+Y la creatividad deja de depender de la inspiración para apoyarse en un proceso consciente.
 
-Es:
+No vienes a aprender una herramienta.
 
-¿Qué merece ser compartido?
+Vienes a descubrir una forma de crear que podrás hacer tuya.
 
-Una identidad clara se reconoce en cada detalle.
+Porque el verdadero objetivo nunca ha sido depender de un método.
 
-En lo que dice.
+Sino desarrollar el tuyo.
 
-Y también en lo que decide no decir.
+Cuando eso ocurre, comunicar deja de ser una tarea.
 
-Porque comunicar con autenticidad no consiste en estar presente todo el tiempo.
+Se convierte en una expresión natural de quién eres.
 
-Consiste en estar presente con sentido.
+---
 
-Cuando la identidad guía el proceso, las herramientas dejan de dirigir la creación.
+# Lo que has descubierto merece ser cultivado
 
-Se convierten en aliadas.
+Has encontrado una forma diferente de mirar.
 
-Y la Inteligencia Artificial encuentra su lugar.
+Has empezado a reconocer aquello que hace único a tu proyecto.
 
-No como quien crea por ti.
+Ahora dale tiempo.
 
-Sino como quien amplifica aquello que solo tú puedes aportar.
+Observa.
+
+Escucha.
+
+Experimenta.
+
+Permítete crecer sin buscar respuestas inmediatas.
+
+Las raíces no aparecen el primer día.
+
+Se fortalecen con cada decisión tomada desde la autenticidad.
+
+Confía en el proceso.
+
+La semilla ya está en ti.
+
+Ahora es el momento de cultivarla.
