@@ -1,76 +1,130 @@
 "use client";
 
-import Logo from "./Logo";
-import Card from "./ui/Card";
+import { useState } from "react";
+import RevealCards from "./RevealCards";
+import SpecialistsLoader from "./SpecialistsLoader";
 
-export default function LaboratorioScreen() {
+type Props = {
+  onComplete?: () => void;
+};
+
+export default function LaboratorioScreen({
+  onComplete,
+}: Props) {
+  const [selected, setSelected] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  function handleContinue() {
+    if (!selected) return;
+
+    setLoading(true);
+
+    setTimeout(() => {
+      if (onComplete) {
+        onComplete();
+      }
+    }, 2200);
+  }
+
+  if (loading) {
+    return (
+      <SpecialistsLoader
+        category={selected ?? "identity"}
+      />
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-[#090909]">
+    <main className="min-h-screen bg-[#090909] text-white">
 
-      <div className="mx-auto flex max-w-6xl flex-col px-8 py-12">
+      <section className="mx-auto max-w-[1500px] px-8 py-16 md:px-14 lg:px-20">
 
-        {/* Logo */}
+        <header className="max-w-4xl">
 
-        <div className="mb-14 flex justify-center">
-          <Logo />
-        </div>
-
-        {/* Cabecera */}
-
-        <div className="mb-16 text-center">
-
-          <p className="mb-5 font-[var(--font-space)] text-sm uppercase tracking-[0.45em] text-[#0391A1]">
+          <p
+            className="
+              text-xs
+              uppercase
+              tracking-[0.45em]
+              text-[#0391A1]
+            "
+          >
             LABORATORIO CREATIVO
           </p>
 
-          <h1 className="font-[var(--font-space)] text-5xl font-semibold uppercase text-white">
-            ¿QUÉ QUIERES REVELAR?
+          <h1
+            className="
+              mt-10
+              font-[var(--font-space)]
+              text-5xl
+              font-light
+              leading-[0.92]
+              md:text-7xl
+            "
+          >
+            ¿QUÉ QUIERES
+            <br />
+            REVELAR?
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-neutral-400">
-            Elige el punto de partida. Los especialistas te acompañarán durante
-            todo el proceso creativo.
+          <p
+            className="
+              mt-10
+              max-w-3xl
+              text-lg
+              leading-8
+              text-neutral-400
+            "
+          >
+            Tu mentor creativo con IA para revelar la identidad de tu marca,
+            definir una guía de estilo visual y construir una comunicación
+            auténtica.
           </p>
 
+          <p
+            className="
+              mt-4
+              text-[#0391A1]
+            "
+          >
+            Los especialistas te acompañarán durante el revelado.
+          </p>
+
+        </header>
+
+        <RevealCards
+          selected={selected}
+          onSelect={setSelected}
+        />
+
+        <div className="mt-20 flex justify-end">
+
+          <button
+            onClick={handleContinue}
+            disabled={!selected}
+            className="
+              rounded-full
+              border
+              border-[#0391A1]
+              px-10
+              py-4
+              uppercase
+              tracking-[0.30em]
+              text-[#0391A1]
+              transition-all
+              duration-300
+              hover:bg-[#0391A1]
+              hover:text-black
+              disabled:opacity-30
+              disabled:cursor-default
+            "
+          >
+            CONTINUAR →
+          </button>
+
         </div>
 
-        {/* Tarjetas */}
-
-        <div className="grid gap-6 md:grid-cols-2">
-
-          <Card
-            title="IDENTIDAD"
-            description="Descubre la esencia de una marca, define sus valores, personalidad, posicionamiento y propósito."
-          />
-
-          <Card
-            title="PROYECTO"
-            description="Convierte una idea en un proyecto sólido con objetivos, estructura y estrategia."
-          />
-
-          <Card
-            title="CONTENIDO"
-            description="Diseña publicaciones, campañas y narrativas coherentes con tu identidad."
-          />
-
-          <Card
-            title="ESTRATEGIA"
-            description="Analiza, planifica y construye un sistema de comunicación con visión a largo plazo."
-          />
-
-          <Card
-            title="EDITOR"
-            description="Desarrolla piezas audiovisuales, storytelling y dirección creativa."
-          />
-
-          <Card
-            title="OTRO"
-            description="Empieza desde una idea abierta y deja que el Laboratorio te guíe."
-          />
-
-        </div>
-
-      </div>
+      </section>
 
     </main>
   );

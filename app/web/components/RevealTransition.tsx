@@ -1,18 +1,38 @@
 "use client";
 
-export default function RevealTransition() {
+import { useEffect, useRef } from "react";
+
+type Props = {
+  onFinished: () => void;
+};
+
+export default function RevealTransition({
+  onFinished,
+}: Props) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    videoRef.current?.play();
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 bg-black">
+    <main className="fixed inset-0 z-[9999] bg-black">
 
       <video
+        ref={videoRef}
         autoPlay
         muted
         playsInline
-        className="absolute inset-0 h-full w-full object-cover"
+        preload="auto"
+        onEnded={onFinished}
+        className="h-screen w-screen object-cover"
       >
-        <source src="/videos/darkroom.mp4" type="video/mp4" />
+        <source
+          src="/videos/transition.mp4"
+          type="video/mp4"
+        />
       </video>
 
-    </div>
+    </main>
   );
 }
