@@ -2,175 +2,169 @@
 
 import { useEffect, useState } from "react";
 
-type Props = {
-  category: string;
+type SpecialistsLoaderProps = {
+  laboratory: string;
+  onFinished?: () => void;
 };
 
-const specialists: Record<string, string[]> = {
-  identity: [
-    "Mentor Creativo",
-    "Mentor de Marca",
-    "Director Creativo",
-    "Storytelling",
-    "Dirección de Arte",
-    "Especialista IA",
-  ],
-
-  purpose: [
-    "Mentor Creativo",
-    "Estratega",
-    "Storytelling",
-    "Branding",
-    "Especialista IA",
-  ],
-
-  value: [
-    "Mentor Creativo",
-    "Branding",
-    "Marketing",
-    "Storytelling",
-    "Especialista IA",
-  ],
-
-  voice: [
-    "Mentor Creativo",
-    "Copywriter",
-    "Storytelling",
-    "Comunicación",
-    "Especialista IA",
-  ],
-
-  visual: [
-    "Mentor Creativo",
-    "Director de Arte",
-    "Color",
-    "Tipografía",
-    "Especialista IA",
-  ],
-
-  content: [
-    "Mentor Creativo",
-    "Estrategia",
-    "Copywriter",
-    "Director Creativo",
-    "Especialista IA",
-  ],
-
-  project: [
-    "Mentor Creativo",
-    "Director Creativo",
-    "Productor",
-    "Storytelling",
-    "Especialista IA",
-  ],
-
-  idea: [
-    "Mentor Creativo",
-    "Director Creativo",
-    "Innovación",
-    "Storytelling",
-    "Especialista IA",
-  ],
-};
+const labs = [
+  {
+    name: "MENTOR CREATIVO",
+    loading: "PREPARANDO...",
+  },
+  {
+    name: "LABORATORIO DE IDENTIDAD",
+    loading: "CONECTANDO...",
+  },
+  {
+    name: "LABORATORIO NARRATIVO",
+    loading: "INICIALIZANDO...",
+  },
+  {
+    name: "LABORATORIO VISUAL",
+    loading: "CARGANDO REFERENCIAS...",
+  },
+  {
+    name: "LABORATORIO ESTRATÉGICO",
+    loading: "SINCRONIZANDO...",
+  },
+];
 
 export default function SpecialistsLoader({
-  category,
-}: Props) {
-  const list =
-    specialists[category] ?? specialists.identity;
-
-  const [visible, setVisible] = useState(0);
+  onFinished,
+}: SpecialistsLoaderProps) {
+  const [active, setActive] = useState(-1);
+  const [finished, setFinished] = useState(false);
 
   useEffect(() => {
-    if (visible >= list.length) return;
+    let current = -1;
 
-    const timer = setTimeout(() => {
-      setVisible((v) => v + 1);
-    }, 140);
+    const interval = setInterval(() => {
+      current++;
 
-    return () => clearTimeout(timer);
-  }, [visible, list.length]);
+      if (current < labs.length) {
+        setActive(current);
+      } else {
+        clearInterval(interval);
+
+        setFinished(true);
+
+        setTimeout(() => {
+          onFinished?.();
+        }, 900);
+      }
+    }, 650);
+
+    return () => clearInterval(interval);
+  }, [onFinished]);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#090909] text-white">
 
-      <div className="w-full max-w-xl px-10">
+      <div className="w-full max-w-[820px] px-10">
 
         <p
           className="
-            text-center
             text-xs
             uppercase
-            tracking-[0.45em]
-            text-[#0391A1]
+            tracking-[0.55em]
+            text-[#00B5CC]
           "
         >
-          LABORATORIO CREATIVO
+          RƎVELA
         </p>
 
         <h1
           className="
             mt-8
-            text-center
             font-[var(--font-space)]
             text-5xl
             font-light
+            tracking-[0.10em]
+            text-[#00B5CC]
           "
         >
           INVOCANDO
           <br />
-          ESPECIALISTAS
+          LABORATORIOS
         </h1>
 
-        <div className="mt-14 space-y-5">
+        <div className="mt-20 space-y-6">
 
-          {list.map((specialist, index) => (
+          {labs.map((lab, index) => {
 
-            <div
-              key={specialist}
-              className={`
-                flex
-                items-center
-                gap-4
-                text-xl
-                transition-all
-                duration-500
+            const visible = index <= active;
 
-                ${
-                  index < visible
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-3 opacity-0"
-                }
-              `}
-            >
-              <span className="text-[#0391A1]">
-                ✓
-              </span>
+            if (!visible) return null;
 
-              <span className="font-light">
-                {specialist}
-              </span>
+            const ready = finished;
 
-            </div>
+            return (
 
-          ))}
+              <div
+                key={lab.name}
+                className="
+                  border-t
+                  border-neutral-800
+                  pt-6
+                "
+              >
+
+                <div className="flex items-center justify-between">
+
+                  <h2
+                    className="
+                      font-[var(--font-space)]
+                      text-xl
+                      tracking-[0.12em]
+                    "
+                  >
+                    {lab.name}
+                  </h2>
+
+                  <span
+                    className={`
+                      font-[var(--font-inter)]
+                      text-xs
+                      uppercase
+                      tracking-[0.25em]
+                      ${
+                        ready
+                          ? "text-[#00B5CC]"
+                          : "text-neutral-500"
+                      }
+                    `}
+                  >
+                    {ready ? "LISTO" : lab.loading}
+                  </span>
+
+                </div>
+
+              </div>
+
+            );
+
+          })}
 
         </div>
 
-        {visible >= list.length && (
+        {finished && (
 
-          <p
-            className="
-              mt-16
-              animate-pulse
-              text-center
-              uppercase
-              tracking-[0.30em]
-              text-[#0391A1]
-            "
-          >
-            TODOS LOS ESPECIALISTAS ESTÁN LISTOS
-          </p>
+          <div className="mt-24 text-center">
+
+            <p
+              className="
+                font-[var(--font-space)]
+                text-4xl
+                font-light
+                tracking-[0.08em]
+                text-[#00B5CC]
+              "
+            >
+              LABORATORIO PREPARADO
+            </p>
+
+          </div>
 
         )}
 

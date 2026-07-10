@@ -41,7 +41,7 @@ export default function HomeScreen({ onStart }: HomeScreenProps) {
             </h1>
 
             <p className="mt-12 max-w-[420px] font-[var(--font-inter)] text-lg leading-8 text-neutral-400">
-              Los especialistas te acompañarán durante el revelado
+              Especialistas te acompañarán durante el revelado
             </p>
 
             <button

@@ -82,7 +82,7 @@ export default function RevealCard({
           className="
             mt-5
             text-sm
-            leading-7
+            leading-14
             text-neutral-400
           "
         >
