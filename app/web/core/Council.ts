@@ -1,6 +1,8 @@
 import { Observation } from "@/types/observation";
 import { CouncilResult } from "@/types/CouncilResult";
 
+import { buildObservationContext } from "./ObservationContext";
+
 import { analyzeIdentity } from "./IdentityLab";
 import { analyzeNarrative } from "./NarrativeLab";
 import { analyzeVisual } from "./VisualLab";
@@ -10,29 +12,23 @@ export function consultCouncil(
   observations: Observation[]
 ): CouncilResult {
 
-  const identity =
-    analyzeIdentity(observations);
+  const last = observations.at(-1);
 
-  const narrative =
-    analyzeNarrative(observations);
-
-  const visual =
-    analyzeVisual(observations);
-
-  const strategy =
-    analyzeStrategy(observations);
+  const context = buildObservationContext(
+    last?.answer ?? ""
+  );
 
   return {
 
     results: [
 
-      identity,
+      analyzeIdentity(context),
 
-      narrative,
+      analyzeNarrative(context),
 
-      visual,
+      analyzeVisual(context),
 
-      strategy,
+      analyzeStrategy(context),
 
     ],
 

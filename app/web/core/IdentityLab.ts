@@ -1,20 +1,17 @@
-import { Observation } from "@/types/observation";
+import { ObservationContext } from "@/types/ObservationContext";
 import { LabResult } from "@/types/LabResult";
 
 export function analyzeIdentity(
-  observations: Observation[]
+  context: ObservationContext
 ): LabResult {
-
-  const last =
-    observations.at(-1);
 
   return {
 
     laboratory: "Identidad",
 
-    confidence: 0.86,
+    confidence: context.hasAnswer ? 0.86 : 0,
 
-    patterns: last?.answer
+    patterns: context.hasAnswer
       ? [
           "Autenticidad",
           "Coherencia",

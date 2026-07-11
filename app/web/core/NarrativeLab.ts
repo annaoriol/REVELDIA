@@ -1,20 +1,17 @@
-import { Observation } from "@/types/observation";
+import { ObservationContext } from "@/types/ObservationContext";
 import { LabResult } from "@/types/LabResult";
 
 export function analyzeNarrative(
-  observations: Observation[]
+  context: ObservationContext
 ): LabResult {
-
-  const last =
-    observations.at(-1);
 
   return {
 
     laboratory: "Narrativa",
 
-    confidence: 0.74,
+    confidence: context.hasAnswer ? 0.74 : 0,
 
-    patterns: last?.answer
+    patterns: context.hasAnswer
       ? [
           "Lenguaje emocional",
           "Comunicación reflexiva"

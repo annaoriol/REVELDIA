@@ -10,8 +10,12 @@ import RevelationCard from "./RevelationCard";
 import DossierIndicator from "./DossierIndicator";
 
 import { observations } from "@/data/mentor/observations";
+
 import { useProject } from "@/context/ProjectContext";
+
 import { registerObservation } from "@/core/ObservationEngine";
+import { consultCouncil } from "@/core/Council";
+import { generateRevelation } from "@/core/RevelationEngine";
 
 type MentorState =
   | "intro"
@@ -40,33 +44,92 @@ export default function MentorScreen() {
   }
 
   function reveal() {
-    const updatedProject = registerObservation(
-      project,
-      {
-        id: observation.id,
-        laboratory: "identity",
-        image: observation.image,
-        question: observation.question,
-        answer,
-        createdAt: new Date().toISOString(),
-      }
-    );
+
+    //----------------------------------------
+    // Registrar observación
+    //----------------------------------------
+
+    const projectWithObservation =
+      registerObservation(
+        project,
+        {
+          id: observation.id,
+          laboratory: "identity",
+          image: observation.image,
+          question: observation.question,
+          answer,
+          createdAt: new Date().toISOString(),
+        }
+      );
+
+    //----------------------------------------
+    // Consejo Creativo
+    //----------------------------------------
+
+    const council =
+      consultCouncil(
+        projectWithObservation.dossier.observations
+      );
+
+    //----------------------------------------
+    // Revelación
+    //----------------------------------------
+
+    const revelation =
+      generateRevelation(council);
+
+    //----------------------------------------
+    // Guardar revelación
+    //----------------------------------------
+
+    const updatedProject = {
+
+      ...projectWithObservation,
+
+      updatedAt: new Date().toISOString(),
+
+      dossier: {
+
+        ...projectWithObservation.dossier,
+
+        revelations: [
+
+          ...projectWithObservation
+            .dossier
+            .revelations,
+
+          revelation,
+
+        ],
+
+      },
+
+    };
+
+    //----------------------------------------
 
     setProject(updatedProject);
 
     setState("thinking");
 
     setTimeout(() => {
+
       setState("revelation");
+
     }, 4200);
+
   }
 
   function next() {
+
     setAnswer("");
+
     setState("observe");
+
   }
 
   return (
+
     <main className="min-h-screen bg-[#090909] text-white">
 
       <DossierIndicator />
@@ -98,11 +161,12 @@ export default function MentorScreen() {
 
       {state === "revelation" && (
         <RevelationCard
-          observation={observation}
-          onContinue={next}
-        />
+      onContinue={next}
+      />
       )}
 
     </main>
+
   );
+
 }

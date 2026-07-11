@@ -1,20 +1,17 @@
-import { Observation } from "@/types/observation";
+import { ObservationContext } from "@/types/ObservationContext";
 import { LabResult } from "@/types/LabResult";
 
 export function analyzeVisual(
-  observations: Observation[]
+  context: ObservationContext
 ): LabResult {
-
-  const last =
-    observations.at(-1);
 
   return {
 
     laboratory: "Visual",
 
-    confidence: 0.91,
+    confidence: context.hasAnswer ? 0.91 : 0,
 
-    patterns: last?.answer
+    patterns: context.hasAnswer
       ? [
           "Minimalismo",
           "Luz natural",

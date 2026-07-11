@@ -1,20 +1,24 @@
 "use client";
 
-type Observation = {
-  id: string;
-  revelation: string;
-};
+import { useProject } from "@/context/ProjectContext";
 
 type RevelationCardProps = {
-  observation: Observation;
   onContinue: () => void;
 };
 
 export default function RevelationCard({
-  observation,
   onContinue,
 }: RevelationCardProps) {
+
+  const { project } = useProject();
+
+  const revelation =
+    project.dossier.revelations.at(-1);
+
+  if (!revelation) return null;
+
   return (
+
     <section className="min-h-screen bg-[#090909] text-white">
 
       <div className="mx-auto flex min-h-screen max-w-[980px] flex-col justify-center px-12 py-24">
@@ -27,7 +31,7 @@ export default function RevelationCard({
             text-[#00B5CC]
           "
         >
-          DOSSIER · REVELACIÓN 001
+          DOSSIER VIVO · REVELACIÓN {project.dossier.revelations.length}
         </p>
 
         <div
@@ -48,11 +52,7 @@ export default function RevelationCard({
               tracking-[-0.03em]
             "
           >
-            Empieza a
-            <br />
-            emerger un
-            <br />
-            patrón.
+            {revelation.title}
           </h1>
 
         </div>
@@ -61,12 +61,13 @@ export default function RevelationCard({
 
           <p
             className="
+              whitespace-pre-line
               text-[25px]
               leading-[2]
               text-neutral-300
             "
           >
-            {observation.revelation}
+            {revelation.text}
           </p>
 
         </div>
@@ -95,45 +96,50 @@ export default function RevelationCard({
 
           <div className="mt-8 grid gap-5 md:grid-cols-2">
 
-            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-              <span className="text-neutral-400">
-                Mentor Creativo
-              </span>
+            {revelation.council.map((item) => (
 
-              <span className="text-[#00B5CC]">
-                ✓
-              </span>
-            </div>
+              <div
+                key={item.specialist}
+                className="
+                  border-b
+                  border-neutral-800
+                  pb-4
+                "
+              >
 
-            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-              <span className="text-neutral-400">
-                Identidad
-              </span>
+                <div className="flex items-center justify-between">
 
-              <span className="text-[#00B5CC]">
-                ✓
-              </span>
-            </div>
+                  <span className="text-neutral-300">
 
-            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-              <span className="text-neutral-400">
-                Narrativa
-              </span>
+                    {item.specialist}
 
-              <span className="text-[#00B5CC]">
-                ✓
-              </span>
-            </div>
+                  </span>
 
-            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-              <span className="text-neutral-400">
-                Visual
-              </span>
+                  <span className="text-[#00B5CC]">
 
-              <span className="text-[#00B5CC]">
-                ✓
-              </span>
-            </div>
+                    {Math.round(
+                      item.confidence * 100
+                    )}
+                    %
+
+                  </span>
+
+                </div>
+
+                <p
+                  className="
+                    mt-3
+                    text-sm
+                    leading-7
+                    text-neutral-500
+                  "
+                >
+                  {item.summary}
+                </p>
+
+              </div>
+
+            ))}
 
           </div>
 
@@ -161,15 +167,16 @@ export default function RevelationCard({
               CONSENSO
             </p>
 
-            <div className="mt-4 flex gap-2">
-
-              <div className="h-2 w-14 bg-[#00B5CC]" />
-              <div className="h-2 w-14 bg-[#00B5CC]" />
-              <div className="h-2 w-14 bg-[#00B5CC]" />
-              <div className="h-2 w-14 bg-neutral-700" />
-              <div className="h-2 w-14 bg-neutral-700" />
-
-            </div>
+            <p
+              className="
+                mt-4
+                text-5xl
+                font-light
+                text-[#00B5CC]
+              "
+            >
+              {revelation.confidence}%
+            </p>
 
           </div>
 
@@ -214,5 +221,7 @@ export default function RevelationCard({
       </div>
 
     </section>
+
   );
+
 }

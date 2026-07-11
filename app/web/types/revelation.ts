@@ -10,4 +10,10 @@ export interface Revelation {
   laboratories: string[];
 
   createdAt: string;
+
+  council: {
+    specialist: string;
+    confidence: number;
+    summary: string;
+  }[];
 }
