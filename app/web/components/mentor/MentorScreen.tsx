@@ -13,10 +13,8 @@ import { observations } from "@/data/mentor/observations";
 
 import { useProject } from "@/context/ProjectContext";
 
-import { registerObservation } from "@/core/ObservationEngine";
-import { consultCouncil } from "@/core/Council";
-import { generateRevelation } from "@/core/RevelationEngine";
-import { buildObservationContext } from "@/core/ObservationContext";
+import { CreativeDirector } from "@/core/CreativeDirector";
+import { executeRevealProcess } from "@/core/RevealProcess";
 
 type MentorState =
   | "intro"
@@ -26,93 +24,52 @@ type MentorState =
   | "revelation";
 
 export default function MentorScreen() {
+
   const { project, setProject } = useProject();
+
+  const director = new CreativeDirector(project);
 
   const [state, setState] =
     useState<MentorState>("intro");
 
   const [answer, setAnswer] =
-  useState("");
+    useState("");
 
-const [currentObservation, setCurrentObservation] =
-  useState(0);
+  const [currentObservation, setCurrentObservation] =
+    useState(0);
 
-const observation =
-  observations[currentObservation];
+  const observation =
+    observations[currentObservation];
 
   function startReveal() {
+
     setState("ready");
+
   }
 
   function readyFinished() {
+
     setState("observe");
+
   }
 
   function reveal() {
 
-    //----------------------------------------
-    // Registrar observación
-    //----------------------------------------
+    const updatedProject =
+      executeRevealProcess(
 
-    const projectWithObservation =
-      registerObservation(
         project,
+
         {
           id: observation.id,
-          laboratory: "identity",
+          laboratory: observation.laboratory,
           image: observation.image,
           question: observation.question,
-          answer,
-          createdAt: new Date().toISOString(),
-        }
+        },
+
+        answer
+
       );
-
-    //----------------------------------------
-    // Consejo Creativo
-    //----------------------------------------
-
-    const context =
-    buildObservationContext(answer);
-
-    const council =
-    consultCouncil(context);
-
-    //----------------------------------------
-    // Revelación
-    //----------------------------------------
-
-    const revelation =
-      generateRevelation(council);
-
-    //----------------------------------------
-    // Guardar revelación
-    //----------------------------------------
-
-    const updatedProject = {
-
-      ...projectWithObservation,
-
-      updatedAt: new Date().toISOString(),
-
-      dossier: {
-
-        ...projectWithObservation.dossier,
-
-        revelations: [
-
-          ...projectWithObservation
-            .dossier
-            .revelations,
-
-          revelation,
-
-        ],
-
-      },
-
-    };
-
-    //----------------------------------------
 
     setProject(updatedProject);
 
@@ -128,24 +85,24 @@ const observation =
 
   function next() {
 
-  const nextIndex =
-    currentObservation + 1;
+    const nextIndex =
+      currentObservation + 1;
 
-  setAnswer("");
+    setAnswer("");
 
-  if (nextIndex >= observations.length) {
+    if (nextIndex >= observations.length) {
 
-    console.log("Sesión terminada");
+      console.log("Sesión terminada");
 
-    return;
+      return;
+
+    }
+
+    setCurrentObservation(nextIndex);
+
+    setState("observe");
 
   }
-
-  setCurrentObservation(nextIndex);
-
-  setState("observe");
-
-}
 
   return (
 
@@ -180,8 +137,8 @@ const observation =
 
       {state === "revelation" && (
         <RevelationCard
-      onContinue={next}
-      />
+          onContinue={next}
+        />
       )}
 
     </main>
