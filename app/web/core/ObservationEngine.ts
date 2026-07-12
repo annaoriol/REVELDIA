@@ -1,10 +1,18 @@
-import { Observation } from "../types/observation";
-import { Project } from "../types/project";
+import { Project } from "@/types/project";
+import { Observation } from "@/types/observation";
 
 export function registerObservation(
   project: Project,
-  observation: Observation
+  observation: Omit<Observation, "keywords" | "confidence">
 ): Project {
+
+  const keywords = extractKeywords(observation.answer);
+
+  const completedObservation: Observation = {
+    ...observation,
+    keywords,
+    confidence: keywords.length > 0 ? 1 : 0.4,
+  };
 
   return {
 
@@ -20,12 +28,22 @@ export function registerObservation(
 
         ...project.dossier.observations,
 
-        observation
+        completedObservation,
 
-      ]
+      ],
 
-    }
+    },
 
   };
+
+}
+
+function extractKeywords(text: string): string[] {
+
+  return text
+    .toLowerCase()
+    .replace(/[.,;:!?¿¡]/g, "")
+    .split(/\s+/)
+    .filter((word) => word.length > 3);
 
 }

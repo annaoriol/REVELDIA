@@ -5,25 +5,51 @@ export function analyzeIdentity(
   context: ObservationContext
 ): LabResult {
 
+  const confidence =
+    !context.hasAnswer
+      ? 0
+      : Math.min(
+          0.95,
+          0.45 + context.length * 0.03
+        );
+
+  const patterns: string[] = [];
+
+  if (context.words.includes("yo")) {
+    patterns.push("Autoconocimiento");
+  }
+
+  if (context.words.includes("marca")) {
+    patterns.push("Identidad de marca");
+  }
+
+  if (context.words.includes("persona")) {
+    patterns.push("Identidad personal");
+  }
+
+  if (context.words.includes("valor")) {
+    patterns.push("Búsqueda de propósito");
+  }
+
+  if (patterns.length === 0 && context.hasAnswer) {
+    patterns.push("Identidad en exploración");
+  }
+
   return {
 
     laboratory: "Identidad",
 
-    confidence: context.hasAnswer ? 0.86 : 0,
+    confidence,
 
-    patterns: context.hasAnswer
-      ? [
-          "Autenticidad",
-          "Búsqueda de identidad",
-          "Coherencia"
-        ]
-      : [],
+    patterns,
 
     contradictions: [],
 
     recommendations: [
-      "Profundizar en el origen de esta identidad."
-    ]
+
+      "Continúa observando antes de consolidar una conclusión.",
+
+    ],
 
   };
 

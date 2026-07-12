@@ -10,17 +10,25 @@ export function consultCouncil(
   context: ObservationContext
 ): CouncilResult {
 
+  const identity = analyzeIdentity(context);
+
+  const narrative = analyzeNarrative(context);
+
+  const visual = analyzeVisual(context);
+
+  const strategy = analyzeStrategy(context);
+
   return {
 
     results: [
 
-      analyzeIdentity(context),
+      identity,
 
-      analyzeNarrative(context),
+      narrative,
 
-      analyzeVisual(context),
+      visual,
 
-      analyzeStrategy(context),
+      strategy,
 
     ],
 

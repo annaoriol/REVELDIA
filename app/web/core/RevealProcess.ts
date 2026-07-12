@@ -1,9 +1,11 @@
 import { Project } from "@/types/project";
+import { Laboratory } from "@/types/observation";
 
 import { registerObservation } from "./ObservationEngine";
 import { buildObservationContext } from "./ObservationContext";
 import { consultCouncil } from "./Council";
 import { generateRevelation } from "./RevelationEngine";
+import { buildClarity } from "./ClarityEngine";
 
 export function executeRevealProcess(
 
@@ -13,7 +15,7 @@ export function executeRevealProcess(
 
     id: string;
 
-    laboratory: string;
+    laboratory: Laboratory;
 
     image: string;
 
@@ -57,11 +59,18 @@ export function executeRevealProcess(
     consultCouncil(context);
 
   //----------------------------------
-  // Generar Revelación
+  // Revelación
   //----------------------------------
 
   const revelation =
     generateRevelation(council);
+
+  //----------------------------------
+  // Claridad
+  //----------------------------------
+
+  const clarity =
+    buildClarity(council);
 
   //----------------------------------
   // Actualizar proyecto
@@ -76,6 +85,8 @@ export function executeRevealProcess(
     dossier: {
 
       ...projectWithObservation.dossier,
+
+      clarity,
 
       revelations: [
 

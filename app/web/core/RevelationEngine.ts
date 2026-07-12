@@ -5,42 +5,83 @@ export function generateRevelation(
   council: CouncilResult
 ): Revelation {
 
+  //----------------------------------------
+  // Laboratorio dominante
+  //----------------------------------------
+
+  const strongest =
+    [...council.results].sort(
+      (a, b) => b.confidence - a.confidence
+    )[0];
+
+  //----------------------------------------
+  // Nivel de confianza
+  //----------------------------------------
+
   const confidence = Math.round(
+
     council.results.reduce(
+
       (total, lab) => total + lab.confidence,
+
       0
+
     ) /
+
       council.results.length *
+
       100
+
   );
 
+  //----------------------------------------
+  // Patrones
+  //----------------------------------------
+
   const patterns = council.results
+
     .flatMap((lab) => lab.patterns)
-    .slice(0, 5);
+
+    .slice(0, 6);
+
+  //----------------------------------------
+  // Recomendaciones
+  //----------------------------------------
 
   const recommendations = council.results
+
     .flatMap((lab) => lab.recommendations)
+
     .slice(0, 3);
+
+  //----------------------------------------
+  // Texto principal
+  //----------------------------------------
 
   let text = "";
 
   if (patterns.length > 0) {
 
     text +=
-      "Empiezan a aparecer patrones consistentes en tu forma de observar.\n\n";
+      `El laboratorio de ${strongest.laboratory.toLowerCase()} muestra actualmente la mayor consistencia dentro del proceso de revelado.\n\n`;
 
-    text += "Patrones detectados:\n";
+    text +=
+      "Empiezan a consolidarse los siguientes patrones:\n\n";
 
     patterns.forEach((pattern) => {
+
       text += `• ${pattern}\n`;
+
     });
 
     if (recommendations.length > 0) {
 
-      text += "\nSiguiente paso:\n\n";
+      text += "\nPara seguir revelando:\n\n";
 
       recommendations.forEach((item) => {
+
         text += `• ${item}\n`;
+
       });
 
     }
@@ -48,34 +89,55 @@ export function generateRevelation(
   } else {
 
     text =
-      "Todavía no existe suficiente información para elaborar una primera revelación.";
+      "Todavía no existe suficiente información para elaborar una revelación consistente.";
 
   }
+
+  //----------------------------------------
 
   return {
 
     id: crypto.randomUUID(),
 
-    title: "Primera Revelación",
+    title: "Revelación",
 
     text,
 
     confidence,
 
-    laboratories: council.results.map(
-      (lab) => lab.laboratory
-    ),
+    laboratories:
 
-    createdAt: new Date().toISOString(),
+      council.results.map(
 
-    council: council.results.map((lab) => ({
-      specialist: lab.laboratory,
-      confidence: lab.confidence,
-      summary:
-        lab.patterns.length > 0
-          ? lab.patterns.join(", ")
-          : "Sin patrones suficientes",
-    })),
+        (lab) => lab.laboratory
+
+      ),
+
+    createdAt:
+
+      new Date().toISOString(),
+
+    council:
+
+      council.results.map(
+
+        (lab) => ({
+
+          specialist: lab.laboratory,
+
+          confidence: lab.confidence,
+
+          summary:
+
+            lab.patterns.length > 0
+
+              ? lab.patterns.join(", ")
+
+              : "Sin patrones suficientes",
+
+        })
+
+      ),
 
   };
 

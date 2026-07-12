@@ -2,7 +2,6 @@ import { Dossier } from "./dossier";
 import { Seed } from "./seed";
 
 export interface Project {
-
   id: string;
 
   title: string;
@@ -14,5 +13,4 @@ export interface Project {
   updatedAt: string;
 
   dossier: Dossier;
-
 }

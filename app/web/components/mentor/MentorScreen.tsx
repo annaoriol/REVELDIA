@@ -13,7 +13,6 @@ import { observations } from "@/data/mentor/observations";
 
 import { useProject } from "@/context/ProjectContext";
 
-import { CreativeDirector } from "@/core/CreativeDirector";
 import { executeRevealProcess } from "@/core/RevealProcess";
 
 type MentorState =
@@ -26,8 +25,6 @@ type MentorState =
 export default function MentorScreen() {
 
   const { project, setProject } = useProject();
-
-  const director = new CreativeDirector(project);
 
   const [state, setState] =
     useState<MentorState>("intro");
