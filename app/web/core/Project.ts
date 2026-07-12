@@ -1,6 +1,6 @@
 import { createEmptyDossier } from "./Dossier";
 
-import { Project } from "../types/project";
+import { Project } from "@/types/project";
 
 export function createProject(): Project {
 
@@ -8,7 +8,9 @@ export function createProject(): Project {
 
     id: crypto.randomUUID(),
 
-    title: "Nuevo Proyecto",
+    title: "Nuevo proceso",
+
+    seed: null,
 
     createdAt: new Date().toISOString(),
 

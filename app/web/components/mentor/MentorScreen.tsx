@@ -16,6 +16,7 @@ import { useProject } from "@/context/ProjectContext";
 import { registerObservation } from "@/core/ObservationEngine";
 import { consultCouncil } from "@/core/Council";
 import { generateRevelation } from "@/core/RevelationEngine";
+import { buildObservationContext } from "@/core/ObservationContext";
 
 type MentorState =
   | "intro"
@@ -31,9 +32,13 @@ export default function MentorScreen() {
     useState<MentorState>("intro");
 
   const [answer, setAnswer] =
-    useState("");
+  useState("");
 
-  const observation = observations[0];
+const [currentObservation, setCurrentObservation] =
+  useState(0);
+
+const observation =
+  observations[currentObservation];
 
   function startReveal() {
     setState("ready");
@@ -66,10 +71,11 @@ export default function MentorScreen() {
     // Consejo Creativo
     //----------------------------------------
 
+    const context =
+    buildObservationContext(answer);
+
     const council =
-      consultCouncil(
-        projectWithObservation.dossier.observations
-      );
+    consultCouncil(context);
 
     //----------------------------------------
     // Revelación
@@ -122,11 +128,24 @@ export default function MentorScreen() {
 
   function next() {
 
-    setAnswer("");
+  const nextIndex =
+    currentObservation + 1;
 
-    setState("observe");
+  setAnswer("");
+
+  if (nextIndex >= observations.length) {
+
+    console.log("Sesión terminada");
+
+    return;
 
   }
+
+  setCurrentObservation(nextIndex);
+
+  setState("observe");
+
+}
 
   return (
 

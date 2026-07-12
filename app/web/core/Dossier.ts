@@ -1,4 +1,5 @@
 import { Dossier } from "@/types/dossier";
+import { createInitialClarity } from "./Clarity";
 
 export function createEmptyDossier(): Dossier {
 
@@ -7,6 +8,8 @@ export function createEmptyDossier(): Dossier {
     observations: [],
 
     revelations: [],
+
+    clarity: createInitialClarity(),
 
   };
 

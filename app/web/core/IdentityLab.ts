@@ -14,15 +14,15 @@ export function analyzeIdentity(
     patterns: context.hasAnswer
       ? [
           "Autenticidad",
-          "Coherencia",
-          "Búsqueda de identidad"
+          "Búsqueda de identidad",
+          "Coherencia"
         ]
       : [],
 
     contradictions: [],
 
     recommendations: [
-      "Profundizar en el origen de la marca."
+      "Profundizar en el origen de esta identidad."
     ]
 
   };
