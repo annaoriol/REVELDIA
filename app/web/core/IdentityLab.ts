@@ -37,7 +37,7 @@ export function analyzeIdentity(
 
   return {
 
-    laboratory: "Identidad",
+    laboratory: "identity",
 
     confidence,
 

@@ -1,22 +1,28 @@
 import { CouncilResult } from "@/types/CouncilResult";
 import { Revelation } from "@/types/revelation";
+import { Laboratory } from "@/types/observation";
+
+function getClarity(
+  council: CouncilResult,
+  laboratory: Laboratory
+): number {
+
+  const result = council.results.find(
+    (lab) => lab.laboratory === laboratory
+  );
+
+  return Math.round((result?.confidence ?? 0) * 100);
+
+}
 
 export function generateRevelation(
   council: CouncilResult
 ): Revelation {
 
-  //----------------------------------------
-  // Laboratorio dominante
-  //----------------------------------------
-
   const strongest =
     [...council.results].sort(
       (a, b) => b.confidence - a.confidence
     )[0];
-
-  //----------------------------------------
-  // Nivel de confianza
-  //----------------------------------------
 
   const confidence = Math.round(
 
@@ -34,66 +40,22 @@ export function generateRevelation(
 
   );
 
-  //----------------------------------------
-  // Patrones
-  //----------------------------------------
+  const patterns =
+    council.results
+      .flatMap((lab) => lab.patterns)
+      .slice(0, 6);
 
-  const patterns = council.results
+  const recommendations =
+    council.results
+      .flatMap((lab) => lab.recommendations)
+      .slice(0, 3);
 
-    .flatMap((lab) => lab.patterns)
+  const summary =
+    patterns.length > 0
 
-    .slice(0, 6);
+      ? `Empieza a consolidarse un lenguaje creativo dominado por el laboratorio ${strongest.laboratory}.`
 
-  //----------------------------------------
-  // Recomendaciones
-  //----------------------------------------
-
-  const recommendations = council.results
-
-    .flatMap((lab) => lab.recommendations)
-
-    .slice(0, 3);
-
-  //----------------------------------------
-  // Texto principal
-  //----------------------------------------
-
-  let text = "";
-
-  if (patterns.length > 0) {
-
-    text +=
-      `El laboratorio de ${strongest.laboratory.toLowerCase()} muestra actualmente la mayor consistencia dentro del proceso de revelado.\n\n`;
-
-    text +=
-      "Empiezan a consolidarse los siguientes patrones:\n\n";
-
-    patterns.forEach((pattern) => {
-
-      text += `• ${pattern}\n`;
-
-    });
-
-    if (recommendations.length > 0) {
-
-      text += "\nPara seguir revelando:\n\n";
-
-      recommendations.forEach((item) => {
-
-        text += `• ${item}\n`;
-
-      });
-
-    }
-
-  } else {
-
-    text =
-      "Todavía no existe suficiente información para elaborar una revelación consistente.";
-
-  }
-
-  //----------------------------------------
+      : "Todavía no existe suficiente información para realizar una revelación consistente.";
 
   return {
 
@@ -101,26 +63,40 @@ export function generateRevelation(
 
     title: "Revelación",
 
-    text,
+    text: summary,
+
+    summary,
 
     confidence,
 
+    clarity: {
+
+      identity: getClarity(council, "identity"),
+
+      narrative: getClarity(council, "narrative"),
+
+      visual: getClarity(council, "visual"),
+
+      strategy: getClarity(council, "strategy"),
+
+    },
+
+    patterns,
+
+    recommendations,
+
+    references: [],
+
     laboratories:
-
       council.results.map(
-
         (lab) => lab.laboratory
-
       ),
 
     createdAt:
-
       new Date().toISOString(),
 
     council:
-
       council.results.map(
-
         (lab) => ({
 
           specialist: lab.laboratory,
@@ -128,15 +104,11 @@ export function generateRevelation(
           confidence: lab.confidence,
 
           summary:
-
             lab.patterns.length > 0
-
               ? lab.patterns.join(", ")
-
               : "Sin patrones suficientes",
 
         })
-
       ),
 
   };

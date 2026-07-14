@@ -1,5 +1,12 @@
 import { Project } from "@/types/project";
-import { Clarity } from "@/types/Clarity";
+import { Revelation } from "@/types/revelation";
+
+export type LaboratoryStage =
+  | "idear"
+  | "revelar"
+  | "mesa-de-luz"
+  | "positivar"
+  | "transmitir";
 
 export class CreativeDirector {
 
@@ -8,32 +15,58 @@ export class CreativeDirector {
   ) {}
 
   //----------------------------------
-  // Estado del proceso
+  // Estado del proyecto
   //----------------------------------
 
-  public observationCount(): number {
+  public observations() {
 
-    return this.project
-      .dossier
-      .observations
-      .length;
+    return this.project.dossier.observations;
 
   }
 
-  public revelationCount(): number {
+  public revelations(): Revelation[] {
 
-    return this.project
-      .dossier
-      .revelations
-      .length;
+    return this.project.dossier.revelations;
 
   }
 
-  public clarity(): Clarity {
+  public lastRevelation():
 
-    return this.project
-      .dossier
-      .clarity;
+    Revelation | null {
+
+    const revelations =
+      this.revelations();
+
+    return revelations.length > 0
+
+      ? revelations[revelations.length - 1]
+
+      : null;
+
+  }
+
+  //----------------------------------
+  // Etapa del laboratorio
+  //----------------------------------
+
+  public stage(): LaboratoryStage {
+
+    const revelations =
+      this.revelations().length;
+
+    if (revelations === 0)
+      return "idear";
+
+    if (revelations < 3)
+      return "revelar";
+
+    if (revelations < 6)
+      return "mesa-de-luz";
+
+    if (revelations < 10)
+      return "positivar";
+
+    return "transmitir";
 
   }
 
@@ -43,51 +76,21 @@ export class CreativeDirector {
 
   public canReveal(): boolean {
 
-    return this.observationCount() > 0;
+    return this.observations().length > 0;
 
   }
 
-  public hasFinished(
-    totalObservations: number
-  ): boolean {
+  public canPositivate(): boolean {
 
-    return (
-      this.observationCount()
-      >=
-      totalObservations
-    );
+    return this.stage() === "positivar"
+
+      || this.stage() === "transmitir";
 
   }
 
-  public nextObservationIndex(): number {
+  public canTransmit(): boolean {
 
-    return this.observationCount();
-
-  }
-
-  //----------------------------------
-  // Estado textual
-  //----------------------------------
-
-  public stage():
-
-    | "observing"
-    | "revealing"
-    | "clarifying"
-    | "positivating"
-
-  {
-
-    if (this.revelationCount() === 0)
-      return "observing";
-
-    if (this.revelationCount() < 3)
-      return "revealing";
-
-    if (this.revelationCount() < 6)
-      return "clarifying";
-
-    return "positivating";
+    return this.stage() === "transmitir";
 
   }
 
