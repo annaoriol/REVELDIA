@@ -3,7 +3,7 @@ import { Laboratory } from "@/types/observation";
 
 import { registerObservation } from "../../core/ObservationEngine";
 import { buildObservationContext } from "../../core/ObservationContext";
-import { consultCouncil } from "@/laboratory/reveal/Council";
+import { consultCouncil } from "../../laboratory/reveal/Council";
 import { generateRevelation } from "../../core/RevelationEngine";
 import { buildClarity } from "../../core/ClarityEngine";
 
