@@ -11,72 +11,103 @@ export type LaboratoryStage =
 export class CreativeDirector {
 
   constructor(
-    private project: Project
+    private readonly project: Project
   ) {}
 
-  //----------------------------------
+  //--------------------------
   // Estado del proyecto
-  //----------------------------------
+  //--------------------------
 
-  public observations() {
+  public observationsCount(): number {
 
-    return this.project.dossier.observations;
-
-  }
-
-  public revelations(): Revelation[] {
-
-    return this.project.dossier.revelations;
+    return this.project.dossier.observations.length;
 
   }
 
-  public lastRevelation():
+  public revelationsCount(): number {
 
-    Revelation | null {
+    return this.project.dossier.revelations.length;
+
+  }
+
+  public lastRevelation(): Revelation | null {
 
     const revelations =
-      this.revelations();
+      this.project.dossier.revelations;
 
-    return revelations.length > 0
+    if (revelations.length === 0) {
 
-      ? revelations[revelations.length - 1]
+      return null;
 
-      : null;
+    }
+
+    return revelations[revelations.length - 1];
 
   }
 
-  //----------------------------------
-  // Etapa del laboratorio
-  //----------------------------------
+  //--------------------------
+  // Etapa actual
+  //--------------------------
 
   public stage(): LaboratoryStage {
 
-    const revelations =
-      this.revelations().length;
+    const observations =
+      this.observationsCount();
 
-    if (revelations === 0)
+    if (observations === 0) {
+
       return "idear";
 
-    if (revelations < 3)
+    }
+
+    const revelation =
+      this.lastRevelation();
+
+    if (!revelation) {
+
       return "revelar";
 
-    if (revelations < 6)
+    }
+
+    if (revelation.confidence < 60) {
+
+      return "revelar";
+
+    }
+
+    if (revelation.confidence < 80) {
+
       return "mesa-de-luz";
 
-    if (revelations < 10)
-      return "positivar";
+    }
 
-    return "transmitir";
+    if (revelation.recommendations.length > 0) {
+
+      return "mesa-de-luz";
+
+    }
+
+    return "positivar";
 
   }
 
-  //----------------------------------
-  // Reglas
-  //----------------------------------
+  //--------------------------
+  // Decisiones
+  //--------------------------
 
   public canReveal(): boolean {
 
-    return this.observations().length > 0;
+    return this.observationsCount() > 0;
+
+  }
+
+  public canOpenLightTable(): boolean {
+
+    return this.stage() === "mesa-de-luz"
+
+      || this.stage() === "positivar"
+
+      || this.stage() === "transmitir";
 
   }
 

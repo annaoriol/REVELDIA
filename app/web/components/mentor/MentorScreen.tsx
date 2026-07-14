@@ -13,7 +13,7 @@ import { observations } from "@/data/mentor/observations";
 
 import { useProject } from "@/context/ProjectContext";
 
-import { executeRevealProcess } from "@/core/RevealProcess";
+import { executeRevealProcess } from "../../useCases/reveal/executeReveal";
 
 type MentorState =
   | "intro"

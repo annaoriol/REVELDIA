@@ -1,5 +1,4 @@
 import { createEmptyDossier } from "./Dossier";
-
 import { Project } from "@/types/project";
 
 export function createProject(): Project {

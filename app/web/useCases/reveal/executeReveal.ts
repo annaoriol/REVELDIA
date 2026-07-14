@@ -1,11 +1,11 @@
 import { Project } from "@/types/project";
 import { Laboratory } from "@/types/observation";
 
-import { registerObservation } from "./ObservationEngine";
-import { buildObservationContext } from "./ObservationContext";
-import { consultCouncil } from "./Council";
-import { generateRevelation } from "./RevelationEngine";
-import { buildClarity } from "./ClarityEngine";
+import { registerObservation } from "../../core/ObservationEngine";
+import { buildObservationContext } from "../../core/ObservationContext";
+import { consultCouncil } from "@/laboratory/reveal/Council";
+import { generateRevelation } from "../../core/RevelationEngine";
+import { buildClarity } from "../../core/ClarityEngine";
 
 export function executeRevealProcess(
 

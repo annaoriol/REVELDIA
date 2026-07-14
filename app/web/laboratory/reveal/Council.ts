@@ -1,10 +1,10 @@
 import { ObservationContext } from "@/types/ObservationContext";
 import { CouncilResult } from "@/types/CouncilResult";
 
-import { analyzeIdentity } from "./IdentityLab";
-import { analyzeNarrative } from "./NarrativeLab";
-import { analyzeVisual } from "./VisualLab";
-import { analyzeStrategy } from "./StrategyLab";
+import { analyzeIdentity } from "@/core/IdentityLab";
+import { analyzeNarrative } from "@/core/NarrativeLab";
+import { analyzeVisual } from "@/core/VisualLab";
+import { analyzeStrategy } from "@/core/StrategyLab";
 
 export function consultCouncil(
   context: ObservationContext
