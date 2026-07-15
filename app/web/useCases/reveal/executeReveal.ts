@@ -1,11 +1,11 @@
 import { Project } from "@/types/project";
 import { Laboratory } from "@/types/observation";
 
-import { registerObservation } from "../../core/ObservationEngine";
-import { buildObservationContext } from "../../core/ObservationContext";
-import { consultCouncil } from "../../laboratory/reveal/Council";
-import { generateRevelation } from "../../core/RevelationEngine";
-import { buildClarity } from "../../core/ClarityEngine";
+import { registerObservation } from "@/core/ObservationEngine";
+import { buildObservationContext } from "@/core/ObservationContext";
+
+import { consultCouncil } from "@/laboratory/reveal/Council";
+import { CreativeDirector } from "@/director/CreativeDirector";
 
 export function executeRevealProcess(
 
@@ -45,32 +45,31 @@ export function executeRevealProcess(
     );
 
   //----------------------------------
-  // Construir contexto
+  // Contexto
   //----------------------------------
 
   const context =
     buildObservationContext(answer);
 
   //----------------------------------
-  // Consejo Creativo
+  // Consejo
   //----------------------------------
 
   const council =
     consultCouncil(context);
 
   //----------------------------------
-  // Revelación
+  // Director
   //----------------------------------
+
+  const director =
+    new CreativeDirector();
 
   const revelation =
-    generateRevelation(council);
-
-  //----------------------------------
-  // Claridad
-  //----------------------------------
+    director.reveal(council);
 
   const clarity =
-    buildClarity(council);
+    director.clarify(council);
 
   //----------------------------------
   // Actualizar proyecto
