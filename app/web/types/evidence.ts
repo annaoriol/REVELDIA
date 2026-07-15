@@ -1,39 +1,12 @@
-export type EvidenceType =
-
-  | "idea"
-  | "observation"
-  | "pattern"
-  | "contradiction"
-  | "hypothesis"
-  | "revelation"
-  | "reference"
-  | "decision"
-  | "prompt"
-  | "asset";
-
-export type EvidenceSource =
-
-  | "user"
-  | "mentor"
-  | "director"
-  | "specialist"
-  | "ai";
-
 export interface Evidence {
 
   id: string;
 
-  type: EvidenceType;
+  specialist: string;
 
-  source: EvidenceSource;
-
-  title: string;
-
-  content: unknown;
+  text: string;
 
   confidence: number;
-
-  tags: string[];
 
   createdAt: string;
 

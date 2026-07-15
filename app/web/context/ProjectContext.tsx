@@ -5,43 +5,76 @@ import {
   useContext,
   useState,
   ReactNode,
+  useMemo,
 } from "react";
 
 import { createProject } from "@/core/Project";
-import { Project } from "../types/project";
+import { Project } from "@/types/project";
+import { ProjectRepository } from "@/storage/ProjectRepository";
 
 type ProjectContextType = {
 
   project: Project;
 
-  setProject: React.Dispatch<
-    React.SetStateAction<Project>
-  >;
+  replaceProject: (
+    project: Project
+  ) => void;
+
+  newProject: () => void;
 
 };
 
 const ProjectContext =
-createContext<ProjectContextType | null>(null);
+  createContext<ProjectContextType | null>(null);
 
 export function ProjectProvider({
 
   children,
 
-}:{
+}: {
 
-  children:ReactNode;
+  children: ReactNode;
 
-}){
+}) {
 
-  const [project,setProject]=
+  const repository =
+    useMemo(
+      () => new ProjectRepository(),
+      []
+    );
 
-  useState<Project>(
+  const [project, setProject] =
+    useState<Project>(() => {
 
-    createProject()
+      return (
+        repository.load() ??
+        createProject()
+      );
 
-  );
+    });
 
-  return(
+  function replaceProject(
+    project: Project
+  ) {
+
+    repository.save(project);
+
+    setProject(project);
+
+  }
+
+  function newProject() {
+
+    const project =
+      createProject();
+
+    repository.save(project);
+
+    setProject(project);
+
+  }
+
+  return (
 
     <ProjectContext.Provider
 
@@ -49,7 +82,9 @@ export function ProjectProvider({
 
         project,
 
-        setProject
+        replaceProject,
+
+        newProject,
 
       }}
 
@@ -63,18 +98,15 @@ export function ProjectProvider({
 
 }
 
-export function useProject(){
+export function useProject() {
 
-  const context=
+  const context =
+    useContext(ProjectContext);
 
-  useContext(ProjectContext);
-
-  if(!context){
+  if (!context) {
 
     throw new Error(
-
       "ProjectProvider missing"
-
     );
 
   }

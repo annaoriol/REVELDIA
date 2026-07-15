@@ -24,7 +24,13 @@ type MentorState =
 
 export default function MentorScreen() {
 
-  const { project, setProject } = useProject();
+  const {
+
+    project,
+
+    replaceProject,
+
+  } = useProject();
 
   const [state, setState] =
     useState<MentorState>("intro");
@@ -68,7 +74,7 @@ export default function MentorScreen() {
 
       );
 
-    setProject(updatedProject);
+    replaceProject(updatedProject);
 
     setState("thinking");
 

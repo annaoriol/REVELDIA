@@ -45,58 +45,32 @@ export function executeRevealProcess(
     );
 
   //----------------------------------
-  // Contexto
+  // Construir contexto
   //----------------------------------
 
   const context =
     buildObservationContext(answer);
 
   //----------------------------------
-  // Consejo
+  // Consejo Creativo
   //----------------------------------
 
   const council =
     consultCouncil(context);
 
   //----------------------------------
-  // Director
+  // Director Creativo
   //----------------------------------
 
   const director =
     new CreativeDirector();
 
-  const revelation =
-    director.reveal(council);
+  return director.updateProject(
 
-  const clarity =
-    director.clarify(council);
+    projectWithObservation,
 
-  //----------------------------------
-  // Actualizar proyecto
-  //----------------------------------
+    council
 
-  return {
-
-    ...projectWithObservation,
-
-    updatedAt: new Date().toISOString(),
-
-    dossier: {
-
-      ...projectWithObservation.dossier,
-
-      clarity,
-
-      revelations: [
-
-        ...projectWithObservation.dossier.revelations,
-
-        revelation,
-
-      ],
-
-    },
-
-  };
+  );
 
 }
