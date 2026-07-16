@@ -7,76 +7,149 @@ type HomeScreenProps = {
   onStart: () => void;
 };
 
-export default function HomeScreen({ onStart }: HomeScreenProps) {
+export default function HomeScreen({
+  onStart,
+}: HomeScreenProps) {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#090909] text-white">
-      <section className="mx-auto flex min-h-screen max-w-[1500px] flex-col px-8 py-8 md:px-14 lg:px-20">
+    <main className="relative min-h-screen overflow-hidden bg-black text-white">
 
-        <header className="flex flex-col items-center pt-2">
-          <Logo />
+      {/* Imagen de fondo */}
 
-          <p className="mt-7 font-[var(--font-inter)] text-xs uppercase tracking-[0.48em] text-[#0391A1]">
-            LABORATORIO CREATIVO
-          </p>
-        </header>
+      <Image
+        src="/images/home/editorial.jpg"
+        alt="RƎVELA"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
 
-        <div className="grid flex-1 items-center gap-12 py-10 lg:grid-cols-12 lg:gap-20">
+      {/* Oscurecer */}
 
-          {/* TEXTO */}
+      <div className="absolute inset-0 bg-black/45" />
 
-          <div className="order-2 lg:order-1 lg:col-span-6">
+      {/* Degradado */}
 
-            <h1 className="font-[var(--font-space)] leading-[0.90] tracking-[-0.045em]">
-              <span className="block text-[4.3rem] font-light md:text-[5.8rem] xl:text-[7rem]">
-                La identidad
-              </span>
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-transparent" />
 
-              <span className="block text-[4.3rem] font-light md:text-[5.8rem] xl:text-[7rem]">
-                no se inventa
-              </span>
+      {/* Branding */}
 
-              <span className="mt-2 block text-[4.6rem] font-medium text-[#0391A1] md:text-[6rem] xl:text-[7.3rem]">
-                Se revela
-              </span>
+     <header className="absolute inset-x-0 top-8 z-20 flex flex-col items-center">
+
+  <div
+    style={{
+      transform: "scale(1.5)",
+      transformOrigin: "center",
+    }}
+  >
+    <Logo />
+  </div>
+
+  <p
+    className="
+      mt-10
+      font-[var(--font-inter)]
+      font-medium
+      uppercase
+      tracking-[0.55em]
+      text-[#55C1D4]
+    "
+    style={{
+      fontSize: "clamp(22px,1.4vw,34px)",
+    }}
+  >
+    LABORATORIO CREATIVO
+  </p>
+
+</header>
+
+      {/* Contenido */}
+
+      <section className="relative z-10 flex min-h-screen items-center">
+
+        <div className="w-full pl-[6vw]">
+
+          <div className="max-w-[1200px]">
+
+            <p
+              className="
+                mb-10
+                font-[var(--font-inter)]
+                text-lg
+                uppercase
+                tracking-[0.55em]
+                text-[#55C1D4]
+              "
+            >
+
+            </p>
+
+            <h1
+              className="
+                font-[var(--font-space)]
+                font-light
+                uppercase
+                leading-[0.84]
+                tracking-[-0.04em]
+                text-white
+              "
+              style={{
+                fontSize: "clamp(120px,10vw,220px)",
+              }}
+            >
+              RƎVELA
+              <br />
+              TU
+              <br />
+              CONTENIDO
             </h1>
 
-            <p className="mt-12 max-w-[420px] font-[var(--font-inter)] text-lg leading-8 text-neutral-400">
-              Especialistas te acompañarán durante el revelado
+            <p
+              className="
+                mt-12
+                max-w-[900px]
+                font-[var(--font-inter)]
+                text-white/85
+              "
+              style={{
+                fontSize: "clamp(34px,2vw,46px)",
+                lineHeight: "1.45",
+              }}
+            >
+              Los especialistas te acompañan para interpretar,
+              positivar y transmitir con identidad.
             </p>
 
             <button
               onClick={onStart}
-              className="mt-14 rounded-full border border-[#0391A1] px-11 py-4 font-[var(--font-inter)] text-sm font-semibold uppercase tracking-[0.30em] text-[#0391A1] transition-all duration-300 hover:bg-[#0391A1] hover:text-black"
+              className="
+                mt-20
+                h-24
+                w-[800px]
+                rounded-full
+                border
+                border-[#55C1D4]
+                font-[var(--font-inter)]
+                text-2xl
+                font-medium
+                uppercase
+                tracking-[0.35em]
+                text-[#55C1D4]
+                transition-all
+                duration-300
+                hover:bg-[#55C1D4]
+                hover:text-black
+              "
             >
-              REVÉLATE
+              RƎVÉLATE →
             </button>
-
-          </div>
-
-          {/* IMAGEN */}
-
-          <div className="order-1 lg:order-2 lg:col-span-6 flex items-center justify-center">
-
-            <div className="relative h-[720px] w-full max-w-[620px]">
-
-              <Image
-                src="/images/home/editorial.jpg"
-                alt="Laboratorio creativo"
-                fill
-                priority
-                sizes="(max-width:1024px) 100vw, 50vw"
-                className="object-cover object-center"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-black/10 to-[#090909]" />
-
-            </div>
 
           </div>
 
         </div>
 
       </section>
+
     </main>
   );
 }

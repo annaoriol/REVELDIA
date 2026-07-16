@@ -6,7 +6,13 @@ export class ProjectRepository {
 
   save(project: Project): void {
 
-    localStorage.setItem(
+    if (typeof window === "undefined") {
+
+      return;
+
+    }
+
+    window.localStorage.setItem(
 
       STORAGE_KEY,
 
@@ -18,13 +24,17 @@ export class ProjectRepository {
 
   load(): Project | null {
 
-    const json =
+    if (typeof window === "undefined") {
 
-      localStorage.getItem(
+      return null;
 
-        STORAGE_KEY
+    }
 
-      );
+    const json = window.localStorage.getItem(
+
+      STORAGE_KEY
+
+    );
 
     if (!json) {
 
@@ -32,13 +42,27 @@ export class ProjectRepository {
 
     }
 
-    return JSON.parse(json) as Project;
+    try {
+
+      return JSON.parse(json) as Project;
+
+    } catch {
+
+      return null;
+
+    }
 
   }
 
   clear(): void {
 
-    localStorage.removeItem(
+    if (typeof window === "undefined") {
+
+      return;
+
+    }
+
+    window.localStorage.removeItem(
 
       STORAGE_KEY
 

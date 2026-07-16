@@ -7,194 +7,210 @@ type RevealGalleryProps = {
   onSelect: (id: string) => void;
 };
 
-const laboratories = [
+const areas = [
+
   {
     id: "identity",
-    title: "LA IDENTIDAD",
-    description: "Descubre quién eres antes de comunicar.",
+    title: "IDENTIDAD",
     image: "/images/reveal/identity.jpg",
   },
+
   {
     id: "purpose",
     title: "PROPÓSITO",
-    description: "Conecta con la razón que da sentido a todo lo que haces.",
     image: "/images/reveal/purpose.jpg",
   },
+
   {
     id: "value",
     title: "PROPUESTA DE VALOR",
-    description: "Define aquello que te hace único y el impacto que generas.",
     image: "/images/reveal/value.jpg",
   },
+
   {
     id: "voice",
     title: "VOZ",
-    description: "Encuentra las palabras, el tono y el lenguaje que te representan.",
     image: "/images/reveal/voice.jpg",
   },
+
   {
     id: "visual",
     title: "UNIVERSO VISUAL",
-    description: "Construye un sistema visual coherente con tu identidad.",
     image: "/images/reveal/visual.jpg",
   },
+
   {
     id: "communication",
     title: "COMUNICACIÓN",
-    description: "Transforma tu mensaje en historias que conectan y permanecen.",
     image: "/images/reveal/communication.jpg",
   },
+
   {
     id: "project",
     title: "PROYECTO",
-    description: "Organiza las ideas y conviértelas en un plan de acción.",
     image: "/images/reveal/project.jpg",
   },
+
   {
     id: "idea",
     title: "IDEA",
-    description: "Da forma a la chispa inicial antes de hacerla crecer.",
     image: "/images/reveal/idea.jpg",
   },
+
 ];
 
 export default function RevealGallery({
+
   selected,
+
   onSelect,
+
 }: RevealGalleryProps) {
+
   return (
+
     <section className="w-full">
 
-      <div className="mb-24">
+      <header className="mb-20 text-center">
 
-        <p className="mb-5 font-[var(--font-inter)] text-xs uppercase tracking-[0.55em] text-[#0391A1]">
-          LABORATORIO CREATIVO
+        <h1
+          className="
+            font-[var(--font-space)]
+            text-5xl
+            md:text-7xl
+            uppercase
+            font-light
+            tracking-[0.12em]
+            text-[#55C1D4]
+          "
+        >
+
+          RƎVELA TU CONTENIDO
+
+        </h1>
+
+        <p
+          className="
+            mx-auto
+            mt-10
+            max-w-3xl
+            font-[var(--font-inter)]
+            text-xl
+            leading-10
+            text-neutral-300
+          "
+        >
+
+          Los especialistas te acompañan para interpretar,
+          positivar, transmitir y comunicar con identidad.
+
         </p>
 
-        <h2
-  className="
-    font-[var(--font-space)]
-    text-[#00B5CC]
-    text-5xl
-    md:text-7xl
-    font-light
-    uppercase
-    leading-[0.88]
-    tracking-[0.14em]
-  "
->
-          ¿QUÉ QUIERES
-          <br />
-         REVELAR?
-        </h2>
+        <p
+          className="
+            mt-16
+            uppercase
+            tracking-[0.40em]
+            text-sm
+            text-neutral-500
+          "
+        >
 
-        <p className="mt-10 max-w-[860px] font-[var(--font-inter)] text-xl leading-10 text-neutral-300">
-          Cada proceso activará un equipo
-          especializado para ayudarte a revelar la identidad de tu marca,
-          proyecto o comunicación.
+          ¿Qué quieres revelar hoy?
+
         </p>
 
-      </div>
+      </header>
 
-      <div className="grid gap-14 md:grid-cols-2 2xl:grid-cols-4">
+      <div
+        className="
+          grid
+          grid-cols-2
+          lg:grid-cols-4
+          gap-8
+        "
+      >
 
-        {laboratories.map((item) => {
+        {areas.map((area) => (
 
-          const active = selected === item.id;
+          <button
 
-          return (
-            <button
-              key={item.id}
-              onClick={() => onSelect(item.id)}
-              className="group text-left"
+            key={area.id}
+
+            onClick={() => onSelect(area.id)}
+
+            className="group"
+
+          >
+
+            <div
+              className="
+                overflow-hidden
+                rounded-md
+                border
+                border-neutral-800
+                transition-all
+                duration-500
+                group-hover:border-[#55C1D4]
+              "
             >
 
-              <div
-                className={`
-                  overflow-hidden
-                  rounded-sm
-                  border
-                  transition-all
-                  duration-500
-                  ${
-                    active
-                      ? "border-[#0391A1]"
-                      : "border-neutral-800 hover:border-neutral-600"
-                  }
-                `}
-              >
+              <div className="relative aspect-[4/5]">
 
-                <div className="relative aspect-[4/5] overflow-hidden">
+                <Image
 
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    priority
-                    sizes="(max-width:768px) 100vw,
-                           (max-width:1280px) 50vw,
-                           25vw"
-                    className={`
-                      object-cover
-                      transition-all
-                      duration-700
-                      ${
-                        active
-                          ? "scale-[1.02] brightness-100 contrast-125"
-                          : "grayscale brightness-75 contrast-125 group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-[1.015]"
-                      }
-                    `}
-                  />
+                  src={area.image}
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                  alt={area.title}
 
-                </div>
+                  fill
 
-                <div className="bg-[#090909] px-7 py-7">
+                  priority
 
-                  <h3
-  className="
-    font-[var(--font-space)]
-    text-[#00B5CC]
-    text-[1.35rem]
-    uppercase
-    font-light
-    tracking-[0.16em]
-  "
->
-                    {item.title}
-                  </h3>
+                  className="
+                    object-cover
+                    grayscale
+                    transition-all
+                    duration-700
+                    group-hover:grayscale-0
+                    group-hover:scale-[1.02]
+                  "
 
-                  <p
-                    className={`
-                      mt-10
-                      overflow-hidden
-                      font-[var(--font-inter)]
-                      text-sm
-                      leading-9
-                      text-neutral-400
-                      transition-all
-                      duration-500
-                      ${
-                        active
-                          ? "max-h-32 opacity-100"
-                          : "max-h-0 opacity-0 group-hover:max-h-32 group-hover:opacity-100"
-                      }
-                    `}
-                  >
-                    {item.description}
-                  </p>
+                />
 
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
 
               </div>
 
-            </button>
-          );
-        })}
+              <div className="bg-[#090909] py-6">
+
+                <h2
+                  className="
+                    text-center
+                    font-[var(--font-space)]
+                    text-lg
+                    uppercase
+                    tracking-[0.18em]
+                    text-white
+                  "
+                >
+
+                  {area.title}
+
+                </h2>
+
+              </div>
+
+            </div>
+
+          </button>
+
+        ))}
 
       </div>
 
     </section>
+
   );
+
 }

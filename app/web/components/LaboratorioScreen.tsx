@@ -3,71 +3,53 @@
 import { useState } from "react";
 
 import RevealGallery from "./RevealGallery";
-import SpecialistsLoader from "./SpecialistsLoader";
 
 type LaboratorioScreenProps = {
+
   onComplete: () => void;
+
 };
 
 export default function LaboratorioScreen({
+
   onComplete,
+
 }: LaboratorioScreenProps) {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
-  function handleContinue() {
-    if (!selected) return;
+  const [selected, setSelected] =
 
-    setLoading(true);
-  }
+    useState<string | null>(null);
 
-  if (loading) {
-    return (
-      <SpecialistsLoader
-        laboratory={selected!}
-        onFinished={onComplete}
-      />
-    );
+  function handleSelect(id: string) {
+
+    setSelected(id);
+
+    setTimeout(() => {
+
+      onComplete();
+
+    }, 250);
+
   }
 
   return (
+
     <main className="min-h-screen bg-black text-white">
 
-      <div className="mx-auto max-w-[1700px] px-10 py-20">
+      <div className="mx-auto max-w-[1700px] px-10 py-16">
 
         <RevealGallery
+
           selected={selected}
-          onSelect={setSelected}
+
+          onSelect={handleSelect}
+
         />
-
-        <div className="mt-20 flex justify-center">
-
-          <button
-            disabled={!selected}
-            onClick={handleContinue}
-            className={`
-              rounded-full
-              border
-              px-10
-              py-4
-              uppercase
-              tracking-[0.35em]
-              transition-all
-              duration-300
-              ${
-                selected
-                  ? "border-[#00AFC7] text-[#00AFC7] hover:bg-[#00AFC710]"
-                  : "cursor-not-allowed border-neutral-800 text-neutral-700"
-              }
-            `}
-          >
-            CONTINUAR →
-          </button>
-
-        </div>
 
       </div>
 
     </main>
+
   );
+
 }

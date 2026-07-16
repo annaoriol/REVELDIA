@@ -6,7 +6,7 @@ import HomeScreen from "@/components/HomeScreen";
 import RevealTransition from "@/components/RevealTransition";
 import LaboratorioScreen from "@/components/LaboratorioScreen";
 
-import MentorScreen from "@/components/mentor/MentorScreen";
+import Workspace from "@/components/workspace/Workspace";
 
 import { ProjectProvider } from "@/context/ProjectContext";
 
@@ -42,7 +42,7 @@ function AppFlow() {
       );
 
     case "mentor":
-      return <MentorScreen />;
+  return <Workspace />;
 
     default:
       return null;
