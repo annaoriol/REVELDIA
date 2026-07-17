@@ -1,86 +1,154 @@
+"use client";
+
 export default function RightDossier() {
-
   return (
+    <aside
+      className="
+        h-full
+        overflow-y-auto
+        rounded-2xl
+        border
+        border-white/10
+        bg-black/45
+        backdrop-blur-2xl
+        shadow-[0_12px_40px_rgba(0,0,0,.45)]
+        workspace-scroll
+      "
+    >
+      <div
+        className="
+          space-y-10
+          p-8
+          xl:p-10
+          bg-gradient-to-b
+          from-white/[0.03]
+          to-transparent
+        "
+      >
 
-    <aside className="w-[380px] border-l border-white/10 bg-[#141414] overflow-y-auto">
+        {/* DOSSIER */}
 
-      <div className="p-8">
+        <section>
 
-        <div className="mb-8">
-
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">
-
-            Dossier
-
+          <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+            Dossier creativo
           </p>
 
-          <h2 className="mt-3 text-2xl font-light">
-
-            Cuaderno de trabajo
-
+          <h2 className="mt-5 text-4xl font-extralight tracking-[0.08em]">
+            RƎVELA
           </h2>
 
-        </div>
+          <p className="mt-4 text-lg leading-8 text-white/70">
+            Todo el conocimiento generado durante el proceso queda registrado
+            para construir la identidad de la marca.
+          </p>
 
-        <div className="space-y-6">
+        </section>
 
-          <section className="rounded-2xl border border-white/10 bg-[#181818] p-5">
+        {/* PROGRESO */}
 
-            <p className="text-xs uppercase tracking-[0.25em] text-cyan-400">
+        <section className="border-t border-white/10 pt-8">
 
-              Revelación
+          <div className="flex items-center justify-between">
 
-            </p>
+            <span className="text-xs uppercase tracking-[0.35em] text-white/45">
+              Progreso
+            </span>
 
-            <p className="mt-4 text-sm leading-7 text-white/70">
+            <span className="text-cyan-300 text-sm">
+              18%
+            </span>
 
-              Aquí aparecerán las ideas que el Director considere
-              suficientemente importantes para conservar.
+          </div>
 
-            </p>
+          <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
 
-          </section>
+            <div className="h-full w-[18%] rounded-full bg-cyan-400 transition-all duration-700" />
 
-          <section className="rounded-2xl border border-white/10 bg-[#181818] p-5">
+          </div>
 
-            <p className="text-xs uppercase tracking-[0.25em] text-white/40">
+        </section>
 
-              Evidencias
+        {/* INSIGHTS */}
 
-            </p>
+        <section className="border-t border-white/10 pt-8">
 
-            <ul className="mt-4 space-y-3 text-sm text-white/60">
+          <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+            Insights
+          </p>
 
-              <li>• Observación pendiente</li>
-              <li>• Observación pendiente</li>
-              <li>• Observación pendiente</li>
+          <div className="mt-6 space-y-4">
 
-            </ul>
+            {[
+              "Autenticidad",
+              "Coherencia",
+              "Propósito",
+              "Narrativa",
+              "Universo Visual",
+            ].map((item) => (
 
-          </section>
+              <div
+                key={item}
+                className="
+                  rounded-2xl
+                  border
+                  border-white/10
+                  bg-white/[0.035]
+                  backdrop-blur-md
+                  px-5
+                  py-4
+                  transition-all
+                  duration-300
+                  hover:border-cyan-400/30
+                "
+              >
 
-          <section className="rounded-2xl border border-white/10 bg-[#181818] p-5">
+                <p className="text-base text-white/80">
+                  {item}
+                </p>
 
-            <p className="text-xs uppercase tracking-[0.25em] text-white/40">
+              </div>
 
-              Ideas
+            ))}
 
-            </p>
+          </div>
 
-            <div className="mt-4 rounded-xl border border-dashed border-white/10 p-6 text-center text-sm text-white/35">
+        </section>
 
-              Las ideas importantes aparecerán aquí.
+        {/* NOTAS */}
 
-            </div>
+        <section className="border-t border-white/10 pt-8">
 
-          </section>
+          <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+            Observaciones
+          </p>
 
-        </div>
+          <textarea
+            placeholder="Escribe tus notas..."
+            className="
+              mt-6
+              h-56
+              w-full
+              resize-none
+              rounded-2xl
+              border
+              border-white/10
+              bg-black/20
+              p-5
+              text-base
+              text-white
+              outline-none
+              transition-all
+              duration-300
+              placeholder:text-white/25
+              focus:border-cyan-400/40
+            "
+          />
+
+        </section>
 
       </div>
 
     </aside>
-
   );
-
 }

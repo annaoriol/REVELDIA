@@ -1,23 +1,46 @@
+"use client";
+
 export default function BottomToolbar() {
-
   return (
+    <footer
+      className="
+        flex
+        h-full
+        items-center
+        justify-between
+        border-t
+        border-white/10
+        bg-[#151515]
+        px-8
+      "
+    >
+      <div className="flex items-center gap-8 text-sm uppercase tracking-[0.25em] text-white/45">
 
-    <footer className="h-[72px] border-t border-white/10 bg-[#141414] flex items-center justify-center gap-10 text-xs uppercase tracking-[0.25em] text-white/50">
+        <button className="transition hover:text-white">
+          Importar
+        </button>
 
-      <span>Observar</span>
+        <button className="transition hover:text-white">
+          Moodboard
+        </button>
 
-      <span>Revelar</span>
+        <button className="transition hover:text-white">
+          Referencias
+        </button>
 
-      <span>Mesa de Luz</span>
+        <button className="transition hover:text-white">
+          IA
+        </button>
 
-      <span>Idear</span>
+      </div>
 
-      <span>Transmitir</span>
+      <div className="text-sm uppercase tracking-[0.30em] text-cyan-300">
+        RƎVELA · Laboratorio Creativo
+      </div>
 
-      <span>Positivar</span>
-
+      <div className="text-sm text-white/45">
+        v0.1
+      </div>
     </footer>
-
   );
-
 }

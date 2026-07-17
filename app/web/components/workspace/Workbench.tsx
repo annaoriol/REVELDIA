@@ -1,21 +1,48 @@
-import Image from "next/image";
+"use client";
 
 export default function Workbench() {
-
   return (
-
-    <section className="relative flex-1 overflow-hidden bg-black">
-
-      <Image
-        src="/workspace/desk.jpeg"
-        alt="REVELA Creative Laboratory"
-        fill
-        priority
-        className="object-cover"
+    <>
+      {/* Fondo */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "url('/workspace/desk.png')",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
       />
 
-    </section>
+      {/* Oscurece ligeramente toda la mesa */}
+      <div className="absolute inset-0 bg-black/35" />
 
+      {/* Viñeteado para dirigir la vista al centro */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(0,0,0,0) 28%, rgba(0,0,0,.35) 100%)",
+        }}
+      />
+
+      {/* Degradado superior */}
+      <div
+        className="absolute top-0 left-0 right-0 h-40"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,0))",
+        }}
+      />
+
+      {/* Degradado inferior */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-56"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0))",
+        }}
+      />
+    </>
   );
-
 }

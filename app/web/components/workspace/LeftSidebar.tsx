@@ -1,90 +1,160 @@
+"use client";
+
 export default function LeftSidebar() {
-
   return (
+    <aside
+      className="
+        relative
+        h-full
+        overflow-hidden
+        rounded-2xl
+        border
+        border-white/10
+        bg-black/35
+        backdrop-blur-[28px]
+        shadow-[0_18px_50px_rgba(0,0,0,.45)]
+      "
+    >
+      {/* Capa para oscurecer el fondo sin perder transparencia */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          bg-gradient-to-br
+          from-black/45
+          via-black/25
+          to-black/45
+        "
+      />
 
-    <aside className="w-[320px] border-r border-white/10 bg-[#141414] overflow-y-auto">
+      <div
+        className="
+          relative
+          z-10
+          h-full
+          overflow-y-auto
+          workspace-scroll
+        "
+      >
+        <div className="space-y-10 p-8 xl:p-10">
 
-      <div className="p-6 space-y-6">
+          {/* PERSPECTIVA */}
 
-        <div>
+          <section>
 
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">
+            <div className="flex items-center justify-between">
 
-            Perspectiva
+              <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+                Perspectiva
+              </p>
 
-          </p>
+              <span
+                className="
+                  rounded-full
+                  bg-cyan-400/20
+                  px-4
+                  py-1
+                  text-sm
+                  text-cyan-300
+                "
+              >
+                Activa
+              </span>
 
-          <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
+            </div>
 
-            <img
-              src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800"
-              alt="Esencia"
-              className="h-40 w-full object-cover grayscale"
-            />
+            <h1 className="mt-5 text-5xl font-extralight tracking-[0.06em] text-white">
+              ESENCIA
+            </h1>
 
-          </div>
+            <p className="mt-6 text-lg leading-8 text-white/85">
+              Descubrir quién eres antes de decidir cómo comunicar.
+              Toda gran marca nace de una identidad clara.
+            </p>
 
-          <h2 className="mt-4 text-lg font-medium">
+          </section>
 
-            ESENCIA
+          {/* REFERENCIAS */}
 
-          </h2>
+          <section className="border-t border-white/10 pt-8">
 
-          <p className="mt-2 text-sm leading-6 text-white/50">
+            <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+              Referencias visuales
+            </p>
 
-            Descubrir quién eres antes de decidir cómo comunicar.
+            <div className="mt-6 grid grid-cols-2 gap-4">
 
-          </p>
+              {[1, 2, 3, 4].map((item) => (
+
+                <div
+                  key={item}
+                  className="
+                    aspect-[4/3]
+                    overflow-hidden
+                    rounded-2xl
+                    border
+                    border-white/10
+                    bg-black/20
+                    backdrop-blur-xl
+                    transition-all
+                    duration-300
+                    hover:border-cyan-400/40
+                  "
+                >
+
+                  <img
+                    src={`/workspace/ref-${item}.jpg`}
+                    alt=""
+                    className="
+                      h-full
+                      w-full
+                      object-cover
+                      grayscale
+                      opacity-90
+                    "
+                  />
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </section>
+
+          {/* IDEA CENTRAL */}
+
+          <section className="border-t border-white/10 pt-8">
+
+            <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+              Idea central
+            </p>
+
+            <div
+              className="
+                mt-6
+                rounded-2xl
+                border
+                border-white/10
+                bg-black/20
+                backdrop-blur-xl
+                p-6
+              "
+            >
+
+              <p className="text-base leading-8 text-white/80">
+                Revelar antes de comunicar.
+                Toda decisión visual nace de una comprensión profunda
+                de la identidad de la marca.
+              </p>
+
+            </div>
+
+          </section>
 
         </div>
-
-        <div className="border-t border-white/10 pt-6">
-
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">
-
-            Referencias
-
-          </p>
-
-          <div className="mt-4 grid grid-cols-2 gap-3">
-
-            <div className="aspect-square rounded-lg bg-white/5 border border-white/10" />
-            <div className="aspect-square rounded-lg bg-white/5 border border-white/10" />
-            <div className="aspect-square rounded-lg bg-white/5 border border-white/10" />
-            <div className="aspect-square rounded-lg bg-white/5 border border-white/10" />
-
-          </div>
-
-        </div>
-
-        <div className="border-t border-white/10 pt-6">
-
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">
-
-            Material de trabajo
-
-          </p>
-
-          <ul className="mt-4 space-y-3 text-sm text-white/60">
-
-            <li>📷 Fotografías</li>
-
-            <li>🎞 Hojas de contacto</li>
-
-            <li>📓 Libreta</li>
-
-            <li>✂ Tijeras</li>
-
-            <li>📎 Referencias</li>
-
-          </ul>
-
-        </div>
-
       </div>
-
     </aside>
-
   );
-
 }
