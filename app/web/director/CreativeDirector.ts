@@ -5,6 +5,7 @@ import { Project } from "@/types/project";
 
 import { generateRevelation } from "@/core/RevelationEngine";
 import { buildClarity } from "@/core/ClarityEngine";
+import { updateProjectWithRevelation } from "@/core/ProjectUpdater";
 
 export class CreativeDirector {
 
@@ -35,33 +36,16 @@ export class CreativeDirector {
     const revelation =
       this.reveal(council);
 
-    const clarity =
-      this.clarify(council);
+    // Se mantiene por si se utiliza en otros puntos
+    this.clarify(council);
 
-    return {
+    return updateProjectWithRevelation(
 
-      ...project,
+      project,
 
-      updatedAt:
-        new Date().toISOString(),
+      revelation
 
-      dossier: {
-
-        ...project.dossier,
-
-        clarity,
-
-        revelations: [
-
-          ...project.dossier.revelations,
-
-          revelation,
-
-        ],
-
-      },
-
-    };
+    );
 
   }
 

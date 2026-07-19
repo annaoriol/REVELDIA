@@ -2,53 +2,12 @@
 
 import Image from "next/image";
 
+import { REVEAL_AREAS } from "@/core/RevealAreas";
+
 type RevealGalleryProps = {
   selected: string | null;
   onSelect: (id: string) => void;
 };
-
-const areas = [
-  {
-    id: "identity",
-    title: "IDENTIDAD",
-    image: "/images/reveal/identity.jpg",
-  },
-  {
-    id: "purpose",
-    title: "PROPÓSITO",
-    image: "/images/reveal/purpose.jpg",
-  },
-  {
-    id: "value",
-    title: "PROPUESTA DE VALOR",
-    image: "/images/reveal/value.jpg",
-  },
-  {
-    id: "voice",
-    title: "VOZ",
-    image: "/images/reveal/voice.jpg",
-  },
-  {
-    id: "visual",
-    title: "UNIVERSO VISUAL",
-    image: "/images/reveal/visual.jpg",
-  },
-  {
-    id: "communication",
-    title: "COMUNICACIÓN",
-    image: "/images/reveal/communication.jpg",
-  },
-  {
-    id: "project",
-    title: "PROYECTO",
-    image: "/images/reveal/project.jpg",
-  },
-  {
-    id: "idea",
-    title: "IDEA",
-    image: "/images/reveal/idea.jpg",
-  },
-];
 
 export default function RevealGallery({
   selected,
@@ -56,9 +15,7 @@ export default function RevealGallery({
 }: RevealGalleryProps) {
   return (
     <section className="w-full">
-
       <header className="mb-16 text-center">
-
         <h1
           className="
             font-[var(--font-space)]
@@ -101,7 +58,6 @@ export default function RevealGallery({
         >
           ¿Qué quieres revelar hoy?
         </p>
-
       </header>
 
       <div
@@ -113,9 +69,7 @@ export default function RevealGallery({
           xl:gap-12
         "
       >
-
-        {areas.map((area) => {
-
+        {REVEAL_AREAS.map((area) => {
           const active = selected === area.id;
 
           return (
@@ -124,7 +78,6 @@ export default function RevealGallery({
               onClick={() => onSelect(area.id)}
               className="group text-left"
             >
-
               <div
                 className={`
                   overflow-hidden
@@ -139,9 +92,7 @@ export default function RevealGallery({
                   }
                 `}
               >
-
                 <div className="relative h-[420px] xl:h-[500px] 2xl:h-[560px]">
-
                   <Image
                     src={area.image}
                     alt={area.title}
@@ -160,11 +111,9 @@ export default function RevealGallery({
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
                 </div>
 
                 <div className="bg-[#090909] py-8">
-
                   <h2
                     className="
                       text-center
@@ -178,17 +127,12 @@ export default function RevealGallery({
                   >
                     {area.title}
                   </h2>
-
                 </div>
-
               </div>
-
             </button>
           );
         })}
-
       </div>
-
     </section>
   );
 }

@@ -1,9 +1,12 @@
 "use client";
 
+import MentorPanel from "./MentorPanel";
+
 export default function Workbench() {
   return (
     <>
       {/* Fondo */}
+
       <div
         className="absolute inset-0"
         style={{
@@ -15,9 +18,11 @@ export default function Workbench() {
       />
 
       {/* Oscurece ligeramente toda la mesa */}
+
       <div className="absolute inset-0 bg-black/35" />
 
-      {/* Viñeteado para dirigir la vista al centro */}
+      {/* Viñeteado */}
+
       <div
         className="absolute inset-0"
         style={{
@@ -27,6 +32,7 @@ export default function Workbench() {
       />
 
       {/* Degradado superior */}
+
       <div
         className="absolute top-0 left-0 right-0 h-40"
         style={{
@@ -36,6 +42,7 @@ export default function Workbench() {
       />
 
       {/* Degradado inferior */}
+
       <div
         className="absolute bottom-0 left-0 right-0 h-56"
         style={{
@@ -43,6 +50,8 @@ export default function Workbench() {
             "linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0))",
         }}
       />
+
+      <MentorPanel />
     </>
   );
 }

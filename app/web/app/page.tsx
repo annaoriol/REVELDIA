@@ -9,6 +9,7 @@ import LaboratorioScreen from "@/components/LaboratorioScreen";
 import Workspace from "@/components/workspace/Workspace";
 
 import { ProjectProvider } from "@/context/ProjectContext";
+import { ConversationProvider } from "@/context/ConversationContext";
 
 type Step =
   | "home"
@@ -42,7 +43,7 @@ function AppFlow() {
       );
 
     case "mentor":
-  return <Workspace />;
+      return <Workspace />;
 
     default:
       return null;
@@ -52,7 +53,9 @@ function AppFlow() {
 export default function Page() {
   return (
     <ProjectProvider>
-      <AppFlow />
+      <ConversationProvider>
+        <AppFlow />
+      </ConversationProvider>
     </ProjectProvider>
   );
 }

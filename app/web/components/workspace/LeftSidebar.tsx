@@ -1,6 +1,27 @@
 "use client";
 
+import { useProject } from "@/context/ProjectContext";
+import { CreativeDirector } from "@/core/CreativeDirector";
+
 export default function LeftSidebar() {
+  const { project } = useProject();
+
+  const director = new CreativeDirector(project);
+
+  const area = director.revealArea();
+  const specialist = director.specialist();
+
+  const stageLabels: Record<string, string> = {
+    welcome: "Inicio",
+    observing: "Observación",
+    revealing: "Revelación",
+    "light-table": "Mesa de luz",
+    ideating: "Ideación",
+    transmitting: "Transmisión",
+    positivating: "Positivado",
+    completed: "Completado",
+  };
+
   return (
     <aside
       className="
@@ -15,7 +36,6 @@ export default function LeftSidebar() {
         shadow-[0_18px_50px_rgba(0,0,0,.45)]
       "
     >
-      {/* Capa para oscurecer el fondo sin perder transparencia */}
       <div
         className="
           pointer-events-none
@@ -39,14 +59,14 @@ export default function LeftSidebar() {
       >
         <div className="space-y-10 p-8 xl:p-10">
 
-          {/* PERSPECTIVA */}
+          {/* PROYECTO */}
 
           <section>
 
             <div className="flex items-center justify-between">
 
               <p className="text-xs uppercase tracking-[0.35em] text-white/45">
-                Perspectiva
+                Proyecto
               </p>
 
               <span
@@ -59,102 +79,80 @@ export default function LeftSidebar() {
                   text-cyan-300
                 "
               >
-                Activa
+                {stageLabels[project.stage]}
               </span>
 
             </div>
 
-            <h1 className="mt-5 text-5xl font-extralight tracking-[0.06em] text-white">
-              ESENCIA
+            <h1 className="mt-5 text-4xl font-extralight tracking-[0.06em] text-white">
+              {project.title}
             </h1>
 
-            <p className="mt-6 text-lg leading-8 text-white/85">
-              Descubrir quién eres antes de decidir cómo comunicar.
-              Toda gran marca nace de una identidad clara.
+            <p className="mt-6 text-base leading-8 text-white/80">
+              Creado el{" "}
+              {new Date(project.createdAt).toLocaleDateString("es-ES")}
             </p>
 
           </section>
 
-          {/* REFERENCIAS */}
+          {/* ÁREA */}
 
-          <section className="border-t border-white/10 pt-8">
+          {area && (
+            <section className="border-t border-white/10 pt-8">
 
-            <p className="text-xs uppercase tracking-[0.35em] text-white/45">
-              Referencias visuales
-            </p>
-
-            <div className="mt-6 grid grid-cols-2 gap-4">
-
-              {[1, 2, 3, 4].map((item) => (
-
-                <div
-                  key={item}
-                  className="
-                    aspect-[4/3]
-                    overflow-hidden
-                    rounded-2xl
-                    border
-                    border-white/10
-                    bg-black/20
-                    backdrop-blur-xl
-                    transition-all
-                    duration-300
-                    hover:border-cyan-400/40
-                  "
-                >
-
-                  <img
-                    src={`/workspace/ref-${item}.jpg`}
-                    alt=""
-                    className="
-                      h-full
-                      w-full
-                      object-cover
-                      grayscale
-                      opacity-90
-                    "
-                  />
-
-                </div>
-
-              ))}
-
-            </div>
-
-          </section>
-
-          {/* IDEA CENTRAL */}
-
-          <section className="border-t border-white/10 pt-8">
-
-            <p className="text-xs uppercase tracking-[0.35em] text-white/45">
-              Idea central
-            </p>
-
-            <div
-              className="
-                mt-6
-                rounded-2xl
-                border
-                border-white/10
-                bg-black/20
-                backdrop-blur-xl
-                p-6
-              "
-            >
-
-              <p className="text-base leading-8 text-white/80">
-                Revelar antes de comunicar.
-                Toda decisión visual nace de una comprensión profunda
-                de la identidad de la marca.
+              <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+                Área activa
               </p>
 
-            </div>
+              <h2 className="mt-5 text-2xl font-light tracking-[0.06em]">
+                {area.title}
+              </h2>
 
-          </section>
+              <p className="mt-4 text-base leading-8 text-white/70">
+                {area.description}
+              </p>
+
+            </section>
+          )}
+
+          {/* ESPECIALISTA */}
+
+          {specialist && (
+            <section className="border-t border-white/10 pt-8">
+
+              <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+                Especialista
+              </p>
+
+              <h2 className="mt-5 text-2xl font-light">
+                {specialist.name}
+              </h2>
+
+              <p className="mt-4 text-base leading-8 text-white/70">
+                {specialist.role}
+              </p>
+
+              <div
+                className="
+                  mt-6
+                  rounded-2xl
+                  border
+                  border-cyan-400/20
+                  bg-cyan-400/5
+                  p-5
+                "
+              >
+                <p className="text-sm leading-7 text-cyan-100/90">
+                  {specialist.mission}
+                </p>
+              </div>
+
+            </section>
+          )}
 
         </div>
       </div>
+
     </aside>
   );
 }

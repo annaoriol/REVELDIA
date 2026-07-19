@@ -1,10 +1,10 @@
 import { Project } from "@/types/project";
 import { Revelation } from "@/types/revelation";
-import { LaboratoryStage } from "./CreativeDirector";
+import { ProjectStage } from "@/types/ProjectStage";
 
 export interface DecisionResult {
 
-  stage: LaboratoryStage;
+  stage: ProjectStage;
 
   readyForLightTable: boolean;
 
@@ -32,7 +32,7 @@ export function evaluateProject(
 
     return {
 
-      stage: "idear",
+      stage: "ideating",
 
       readyForLightTable: false,
 
@@ -50,7 +50,7 @@ export function evaluateProject(
 
     return {
 
-      stage: "revelar",
+      stage: "revealing",
 
       readyForLightTable: false,
 
@@ -71,7 +71,7 @@ export function evaluateProject(
 
     return {
 
-      stage: "revelar",
+      stage: "revealing",
 
       readyForLightTable: false,
 
@@ -89,7 +89,7 @@ export function evaluateProject(
 
     return {
 
-      stage: "mesa-de-luz",
+      stage: "light-table",
 
       readyForLightTable: true,
 
@@ -105,7 +105,7 @@ export function evaluateProject(
 
   return {
 
-    stage: "positivar",
+    stage: "positivating",
 
     readyForLightTable: true,
 
