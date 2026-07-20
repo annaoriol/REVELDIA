@@ -11,9 +11,11 @@ import {
 import { useProject } from "@/context/ProjectContext";
 
 import { registerObservation } from "@/core/ObservationEngine";
+import { updateDossier } from "@/core/DossierEngine";
 import { LaboratoryEngine } from "@/core/LaboratoryEngine";
 
 import { Observation } from "@/types/observation";
+import { Project } from "@/types/project";
 
 export interface ConversationMessage {
   id: string;
@@ -23,16 +25,15 @@ export interface ConversationMessage {
 
 interface ConversationContextValue {
   messages: ConversationMessage[];
-
   initialize: (question: string) => void;
-
   submitAnswer: (answer: string) => void;
-
   reset: () => void;
 }
 
 const ConversationContext =
-  createContext<ConversationContextValue | null>(null);
+  createContext<ConversationContextValue | null>(
+    null
+  );
 
 export function ConversationProvider({
   children,
@@ -74,16 +75,6 @@ export function ConversationProvider({
 
     if (!text) return;
 
-    const laboratory =
-      new LaboratoryEngine(project);
-
-    const context =
-      laboratory.context();
-
-    if (!context) {
-      return;
-    }
-
     const lastMentor =
       [...messages]
         .reverse()
@@ -92,41 +83,83 @@ export function ConversationProvider({
             message.role === "mentor"
         );
 
-    const observation: Omit<
-      Observation,
-      "keywords" | "confidence"
-    > = {
-      id: crypto.randomUUID(),
+    let updatedProject: Project | null =
+      null;
 
-      laboratory:
-        context.area.id as Observation["laboratory"],
+    updateProject((current) => {
+      const laboratory =
+        new LaboratoryEngine(current);
 
-      image: "",
+      const context =
+        laboratory.context();
 
-      question:
-        lastMentor?.content ?? "",
+      if (!context) {
+        updatedProject = current;
+        return current;
+      }
 
-      answer: text,
-
-      createdAt:
-        new Date().toISOString(),
-    };
-
-    updateProject((current) =>
-      registerObservation(
-        current,
-        observation
-      )
-    );
-
-    setMessages((previous) => [
-      ...previous,
-      {
+      const observation: Omit<
+        Observation,
+        "keywords" | "confidence"
+      > = {
         id: crypto.randomUUID(),
-        role: "user",
-        content: text,
-      },
-    ]);
+
+        laboratory:
+          context.area.id as Observation["laboratory"],
+
+        image: "",
+
+        question:
+          lastMentor?.content ?? "",
+
+        answer: text,
+
+        createdAt:
+          new Date().toISOString(),
+      };
+
+      const withObservation =
+        registerObservation(
+          current,
+          observation
+        );
+
+      updatedProject =
+        updateDossier(
+          withObservation
+        );
+
+      return updatedProject;
+    });
+
+    const nextQuestion =
+      updatedProject
+        ? new LaboratoryEngine(
+            updatedProject
+          ).nextQuestion()
+        : null;
+
+    setMessages((previous) => {
+      const updated: ConversationMessage[] =
+        [
+          ...previous,
+          {
+            id: crypto.randomUUID(),
+            role: "user",
+            content: text,
+          },
+        ];
+
+      if (nextQuestion) {
+        updated.push({
+          id: crypto.randomUUID(),
+          role: "mentor",
+          content: nextQuestion,
+        });
+      }
+
+      return updated;
+    });
   }
 
   function reset() {
@@ -154,7 +187,9 @@ export function ConversationProvider({
 
 export function useConversation() {
   const context =
-    useContext(ConversationContext);
+    useContext(
+      ConversationContext
+    );
 
   if (!context) {
     throw new Error(

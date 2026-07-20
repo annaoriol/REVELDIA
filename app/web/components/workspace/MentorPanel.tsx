@@ -33,35 +33,6 @@ export default function MentorPanel() {
   }, [
     project.id,
     messages.length,
-    laboratory,
-    initialize,
-  ]);
-
-  useEffect(() => {
-    if (messages.length === 0) return;
-
-    const nextQuestion =
-      laboratory.nextQuestion();
-
-    if (!nextQuestion) return;
-
-    const last =
-      messages[messages.length - 1];
-
-    if (
-      last.role === "mentor" &&
-      last.content === nextQuestion
-    ) {
-      return;
-    }
-
-    if (last.role === "user") {
-      initialize(nextQuestion);
-    }
-  }, [
-    project.dossier.observations.length,
-    messages,
-    laboratory,
     initialize,
   ]);
 
