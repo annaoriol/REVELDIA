@@ -1,4 +1,4 @@
-import { ObservationContext } from "@/types/ObservationContext";
+import { ObservationContext } from "@/legacy/types/ObservationContext";
 import { LabResult } from "@/types/LabResult";
 
 export const StrategySpecialist = {

@@ -1,4 +1,4 @@
-import { ObservationContext } from "@/types/ObservationContext";
+import { ObservationContext } from "@/legacy/types/ObservationContext";
 
 export function buildObservationContext(
   answer: string

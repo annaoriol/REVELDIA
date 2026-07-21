@@ -1,4 +1,4 @@
-import { observations, Observation } from "@/data/mentor/observations";
+import { observations, Observation } from "@/legacy/data/mentor/observations";
 import { Project } from "@/types/project";
 
 export function nextObservation(

@@ -2,10 +2,10 @@ import { Project } from "@/types/project";
 import { Laboratory } from "@/types/observation";
 
 import { registerObservation } from "@/core/ObservationEngine";
-import { buildObservationContext } from "@/core/ObservationContext";
+import { buildObservationContext } from "@/legacy/core/ObservationContext";
 
-import { consultCouncil } from "@/laboratory/reveal/Council";
-import { CreativeDirector } from "@/director/CreativeDirector";
+import { consultCouncil } from "@/legacy/laboratory/reveal/Council";
+import { CreativeDirector } from "@/legacy/director/CreativeDirector";
 
 export function executeRevealProcess(
 

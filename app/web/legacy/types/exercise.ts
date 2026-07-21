@@ -1,4 +1,4 @@
-import { Laboratory } from "@/data/mentor/observations";
+import { Laboratory } from "@/legacy/data/mentor/observations";
 
 export type ExercisePhase =
   | "observe"

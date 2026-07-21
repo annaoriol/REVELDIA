@@ -48,7 +48,7 @@ export class CreativeDirector {
     if (!seed) {
       return undefined;
     }
-
+    console.log("RevealArea:", getRevealArea(seed.id));
     return getRevealArea(seed.id);
   }
 

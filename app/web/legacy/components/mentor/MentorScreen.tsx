@@ -9,7 +9,7 @@ import RevealLoading from "./RevealLoading";
 import RevelationCard from "./RevelationCard";
 import DossierIndicator from "./DossierIndicator";
 
-import { observations } from "@/data/mentor/observations";
+import { observations } from "@/legacy/data/mentor/observations";
 
 import { useProject } from "@/context/ProjectContext";
 

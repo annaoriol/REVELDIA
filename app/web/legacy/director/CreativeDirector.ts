@@ -4,7 +4,7 @@ import { Clarity } from "@/types/Clarity";
 import { Project } from "@/types/project";
 
 import { generateRevelation } from "@/core/RevelationEngine";
-import { buildClarity } from "@/core/ClarityEngine";
+import { buildClarity } from "@/legacy/core/ClarityEngine";
 import { updateProjectWithRevelation } from "@/core/ProjectUpdater";
 
 export class CreativeDirector {

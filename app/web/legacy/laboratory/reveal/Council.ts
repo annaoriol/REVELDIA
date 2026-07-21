@@ -1,4 +1,4 @@
-import { ObservationContext } from "@/types/ObservationContext";
+import { ObservationContext } from "@/legacy/types/ObservationContext";
 import { CouncilResult } from "@/types/CouncilResult";
 
 import { specialists } from "./specialists";
