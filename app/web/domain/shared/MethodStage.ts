@@ -1,0 +1,15 @@
+export type MethodStage =
+  | "intention"
+  | "references"
+  | "style"
+  | "creative-direction"
+  | "specialists"
+  | "synthesis"
+  | "revelation"
+  | "positivado"
+  | "creative-system"
+  | "creation"
+  | "production"
+  | "adaptation"
+  | "editorial-direction"
+  | "export";

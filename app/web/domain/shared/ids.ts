@@ -1,0 +1,11 @@
+export type ProjectId = string;
+export type IntentionId = string;
+export type ReferenceId = string;
+export type StyleId = string;
+export type SpecialistId = string;
+export type SpecialistAnalysisId = string;
+export type SynthesisId = string;
+export type RevelationId = string;
+export type CreativeSystemId = string;
+export type ContentPieceId = string;
+export type ExportArtifactId = string;
