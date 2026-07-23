@@ -6,22 +6,30 @@ import TopBar from "./TopBar";
 
 type AppShellProps = {
   children: ReactNode;
+  showTopBar?: boolean;
+  showStatusBar?: boolean;
 };
 
-export default function AppShell({ children }: AppShellProps) {
+export default function AppShell({
+  children,
+  showTopBar = true,
+  showStatusBar = true,
+}: AppShellProps) {
   return (
-    <div className="min-h-screen bg-[#090909] text-white">
-      <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[280px_1fr]">
+    <div className="min-h-screen overflow-hidden bg-[#090909] text-white">
+      <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)]">
         <Sidebar />
 
-        <div className="flex min-h-screen flex-col">
-          <TopBar />
+        <div className="flex min-h-screen min-w-0 flex-col">
+          {showTopBar && <TopBar />}
 
-          <main className="flex-1 overflow-auto px-6 py-8 md:px-10 lg:px-12">
-            {children}
+          <main className="flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12">
+            <div className="mx-auto w-full max-w-[1800px]">
+              {children}
+            </div>
           </main>
 
-          <StatusBar />
+          {showStatusBar && <StatusBar />}
         </div>
       </div>
     </div>

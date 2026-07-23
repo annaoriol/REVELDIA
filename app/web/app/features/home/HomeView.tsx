@@ -1,46 +1,88 @@
 import Image from "next/image";
 
-import Button from "../../components/primitives/Button";
+type HomeViewProps = {
+  onReveal?: () => void;
+};
 
-export default function HomeView() {
+export default function HomeView({ onReveal }: HomeViewProps) {
   return (
-    <section className="grid min-h-full gap-10 lg:grid-cols-[0.45fr_0.55fr] lg:gap-14">
-      <div className="flex items-center py-8 lg:py-16">
+    <section className="grid min-h-[calc(100vh-120px)] items-stretch gap-12 lg:grid-cols-[1fr_0.95fr] lg:gap-16">
+      {/* Columna izquierda */}
+      <div className="flex items-start pt-12 lg:pt-14">
         <div className="w-full max-w-2xl">
-          <h1 className="font-[var(--font-space)] text-6xl font-light tracking-[0.14em] text-white md:text-8xl">
-            RƎVELA
-          </h1>
+          <div className="inline-block">
+            <h1 className="font-[var(--font-space)] text-6xl font-light tracking-[0.16em] text-white md:text-8xl">
+              R<span className="text-[#0391A1]">Ǝ</span>VELA
+            </h1>
 
-          <p className="mt-8 text-sm uppercase tracking-[0.36em] text-[#0391A1]">
-            LABORATORIO CREATIVO
-          </p>
+            <p className="mt-2 flex w-full justify-between font-[var(--font-space)] text-lg uppercase text-[#0391A1]">
+              <span>L</span>
+              <span>A</span>
+              <span>B</span>
+              <span>O</span>
+              <span>R</span>
+              <span>A</span>
+              <span>T</span>
+              <span>O</span>
+              <span>R</span>
+              <span>I</span>
+              <span>O</span>
 
-          <p className="mt-16 max-w-xl text-4xl font-light leading-tight text-white md:text-6xl">
-            Cada revelación amplía tu forma de pensar.
-          </p>
+              <span className="w-6" />
 
-          <p className="mt-10 max-w-xl text-xl leading-9 text-[#A3A3A3]">
-            Descubre conexiones, define una dirección y construye una identidad
-            que evoluciona con cada decisión.
-          </p>
-
-          <div className="mt-14">
-            <Button className="w-full max-w-sm py-4 text-base">
-              RƎVÉLATE
-            </Button>
+              <span>C</span>
+              <span>R</span>
+              <span>E</span>
+              <span>A</span>
+              <span>T</span>
+              <span>I</span>
+              <span>V</span>
+              <span>O</span>
+            </p>
           </div>
+
+          <h2 className="mt-16 max-w-xl text-4xl font-light leading-[1.05] text-white md:text-6xl">
+            Cada revelación amplía
+            <br />
+            tu forma de pensar
+          </h2>
+
+          <p className="mt-12 max-w-xl text-xl leading-9 text-[#A3A3A3]">
+            Amplía tu mirada, conecta disciplinas y expresa una identidad
+            coherente en cualquier formato.
+          </p>
+
+          <button
+            type="button"
+            onClick={onReveal}
+            className="group mt-16 inline-flex items-center gap-5 transition-all duration-300 hover:opacity-80"
+          >
+            <span className="font-[var(--font-space)] text-[2rem] font-light tracking-[0.12em] text-white md:text-[2.6rem]">
+              R<span className="text-[#0391A1]">Ǝ</span>VELAR
+            </span>
+
+            <span
+              aria-hidden="true"
+              className="text-3xl text-[#0391A1] transition-transform duration-300 group-hover:translate-x-1"
+            >
+              →
+            </span>
+          </button>
         </div>
       </div>
 
-      <div className="relative min-h-[460px] overflow-hidden rounded-2xl lg:min-h-full">
-        <Image
-          src="/images/home/editorial.jpg"
-          alt="Laboratorio creativo editorial"
-          fill
-          priority
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          className="object-cover"
-        />
+      {/* Columna derecha */}
+      <div className="flex h-full items-end justify-end">
+        <div className="relative h-full min-h-[720px] w-full overflow-hidden rounded-2xl">
+          <Image
+            src="/images/home/editorial.jpg"
+            alt="Laboratorio fotográfico"
+            fill
+            priority
+            sizes="(max-width:1024px) 100vw, 50vw"
+            className="object-cover object-center"
+          />
+        </div>
       </div>
     </section>
   );

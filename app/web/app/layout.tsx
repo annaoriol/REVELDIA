@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+
 import "./globals.css";
 
 const inter = Inter({
@@ -27,7 +28,7 @@ export default function RootLayout({
       lang="es"
       className={`${inter.variable} ${spaceGrotesk.variable}`}
     >
-      <body className="min-h-screen bg-[#090909] text-white font-[var(--font-inter)]">
+      <body className="min-h-screen bg-[#090909] font-[var(--font-inter)] text-white">
         {children}
       </body>
     </html>

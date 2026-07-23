@@ -8,19 +8,17 @@ import { useProject } from "@/context/ProjectContext";
 import { selectRevealArea } from "@/core/ProjectUpdater";
 
 type LaboratorioScreenProps = {
-  onComplete: () => void;
+  onCompleteAction: () => void;
 };
 
 export default function LaboratorioScreen({
-  onComplete,
+  onCompleteAction,
 }: LaboratorioScreenProps) {
-
   const [selected, setSelected] = useState<string | null>(null);
 
   const { project, replaceProject } = useProject();
 
   function handleSelect(id: string) {
-
     setSelected(id);
 
     const updatedProject = selectRevealArea(
@@ -31,9 +29,8 @@ export default function LaboratorioScreen({
     replaceProject(updatedProject);
 
     setTimeout(() => {
-      onComplete();
+      onCompleteAction();
     }, 250);
-
   }
 
   return (
