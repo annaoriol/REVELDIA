@@ -1,188 +1,55 @@
-const processItems = [
-  {
-    title: "IDEAR",
-    active: false,
-    completed: true,
-  },
-  {
-    title: "RƎVELAR",
-    active: true,
-    completed: false,
-  },
-  {
-    title: "MESA DE LUZ",
-    active: false,
-    completed: false,
-  },
-  {
-    title: "POSITIVAR",
-    active: false,
-    completed: false,
-  },
-  {
-    title: "TRANSMITIR",
-    active: false,
-    completed: false,
-  },
-];
-
 export default function Sidebar() {
   return (
-    <aside className="flex h-screen flex-col border-r border-white/10 bg-[#090909] px-10 py-12">
-
-      {/* Marca */}
-
+    <aside className="min-h-0 border-b border-white/10 bg-[#090909] px-6 py-6 lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-8 lg:py-10">
       <div>
-        <h1 className="font-[var(--font-space)] text-4xl font-light tracking-[0.16em]">
+        <h2 className="font-[var(--font-space)] text-3xl font-light tracking-[0.16em]">
           R<span className="text-[#0391A1]">Ǝ</span>VELA
-        </h1>
+        </h2>
 
         <p className="mt-3 text-sm uppercase tracking-[0.35em] text-white/40">
           Laboratorio Creativo
         </p>
       </div>
 
-      {/* Proyecto */}
-
-      <div className="mt-14 border-t border-white/10 pt-8">
+      <section className="mt-10 border-t border-white/10 pt-8">
         <p className="text-[11px] uppercase tracking-[0.35em] text-white/35">
-          Proyecto
+          Método
         </p>
 
-        <h2 className="mt-4 text-2xl font-extralight">
-          Sin título
-        </h2>
-
-        <p className="mt-2 text-sm text-white/40">
-          Descubriendo la esencia de la marca
-        </p>
-      </div>
-
-      {/* Proceso */}
-
-      <div className="mt-12">
-        <p className="text-[11px] uppercase tracking-[0.35em] text-white/35">
-          Proceso
-        </p>
-
-        <nav aria-label="Proceso" className="mt-8">
-          <ul className="space-y-7">
-            {processItems.map((item) => (
-              <li key={item.title}>
-                <button className="group flex items-center gap-4 transition-all duration-300">
-
-                  <span
-                    className={`
-                      h-2.5
-                      w-2.5
-                      rounded-full
-                      transition-all
-                      ${
-                        item.active
-                          ? "bg-[#0391A1] shadow-[0_0_12px_#0391A1]"
-                          : item.completed
-                          ? "bg-[#0391A1]"
-                          : "bg-white/15 group-hover:bg-white/40"
-                      }
-                    `}
-                  />
-
-                  <span
-                    className={`
-                      font-[var(--font-space)]
-                      text-lg
-                      tracking-[0.08em]
-                      ${
-                        item.active
-                          ? "text-white"
-                          : "text-white/45 group-hover:text-white"
-                      }
-                    `}
-                  >
-                    {item.title === "RƎVELAR" ? (
-                      <>
-                        R
-                        <span className="text-[#0391A1]">Ǝ</span>
-                        VELAR
-                      </>
-                    ) : (
-                      item.title
-                    )}
-                  </span>
-
-                </button>
-              </li>
-            ))}
+        <nav aria-label="Metodo" className="mt-6">
+          <ul className="space-y-4 text-sm text-white/55">
+            <li>Intención</li>
+            <li>Referencias</li>
+            <li>Estilo</li>
+            <li>Síntesis</li>
+            <li>Revelación</li>
           </ul>
         </nav>
-      </div>
+      </section>
 
-      {/* Referencias */}
-
-      <div className="mt-14 border-t border-white/10 pt-8">
-
+      <section className="mt-10 border-t border-white/10 pt-8">
         <p className="text-[11px] uppercase tracking-[0.35em] text-white/35">
-          Referencias
+          Estado
         </p>
 
-        <div className="mt-5 space-y-3 text-sm">
-
-          <div className="flex items-center justify-between">
-            <span className="text-white/80">
-              Aportadas
-            </span>
-
-            <span className="text-[#0391A1]">
-              3
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className="text-white/80">
-              Sugeridas
-            </span>
-
-            <span className="text-white/35">
-              —
-            </span>
-          </div>
-
+        <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="text-sm text-white/70">
+            Placeholder de progreso del laboratorio.
+          </p>
         </div>
+      </section>
 
-      </div>
-
-      {/* Sesión */}
-
-      <div className="mt-auto border-t border-white/10 pt-8">
-
+      <section className="mt-10 border-t border-white/10 pt-8">
         <p className="text-[11px] uppercase tracking-[0.35em] text-white/35">
-          Sesión
+          Especialista
         </p>
 
-        <div className="mt-5 space-y-3 text-sm">
-
-          <div className="flex items-center justify-between">
-            <span className="text-white/80">
-              Tiempo
-            </span>
-
-            <span className="text-white/40">
-              00:12
-            </span>
-          </div>
-
-          <button className="block text-white/80 transition hover:text-white">
-            Guardar
-          </button>
-
-          <button className="block text-white/80 transition hover:text-white">
-            Exportar
-          </button>
-
+        <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="text-sm text-white/70">
+            Placeholder del especialista activo.
+          </p>
         </div>
-
-      </div>
-
+      </section>
     </aside>
   );
 }
