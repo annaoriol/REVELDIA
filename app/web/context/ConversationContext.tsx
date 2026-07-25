@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useMemo,
   useState,
@@ -40,13 +41,12 @@ export function ConversationProvider({
 }: {
   children: ReactNode;
 }) {
-  const { project, updateProject } =
-    useProject();
+  const { updateProject } = useProject();
 
   const [messages, setMessages] =
     useState<ConversationMessage[]>([]);
 
-  function initialize(question: string) {
+  const initialize = useCallback((question: string) => {
     setMessages((previous) => {
       const last =
         previous[previous.length - 1];
@@ -68,9 +68,9 @@ export function ConversationProvider({
         },
       ];
     });
-  }
+  }, []);
 
-  function submitAnswer(answer: string) {
+  const submitAnswer = useCallback((answer: string) => {
     const text = answer.trim();
 
     if (!text) return;
@@ -160,11 +160,11 @@ export function ConversationProvider({
 
       return updated;
     });
-  }
+  }, [messages, updateProject]);
 
-  function reset() {
+  const reset = useCallback(() => {
     setMessages([]);
-  }
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -173,7 +173,7 @@ export function ConversationProvider({
       submitAnswer,
       reset,
     }),
-    [messages]
+    [initialize, messages, reset, submitAnswer]
   );
 
   return (

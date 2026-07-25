@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 const frames = Array.from({ length: 24 }, (_, i) => ({
@@ -20,13 +21,13 @@ export default function Filmstrip() {
   const [selected, setSelected] = useState(1);
 
   return (
-    <div className="workspace-panel flex h-full flex-col overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/42 shadow-[0_18px_60px_rgba(0,0,0,.30)] backdrop-blur-2xl">
 
       {/* ================= MINIATURAS ================= */}
 
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
 
-        <div className="flex h-full items-center gap-4 px-18">
+        <div className="flex h-full items-center gap-[clamp(0.65rem,1vw,1rem)] px-[clamp(1rem,4vw,4.5rem)]">
 
           {frames.map((frame) => (
 
@@ -36,8 +37,8 @@ export default function Filmstrip() {
               className={`
                 group
                 relative
-                h-[86px]
-                w-[132px]
+                h-[clamp(64px,8vh,86px)]
+                w-[clamp(96px,10vw,132px)]
                 shrink-0
                 overflow-hidden
                 rounded-2xl
@@ -52,12 +53,12 @@ export default function Filmstrip() {
               `}
             >
 
-              <img
+              <Image
                 src={frame.image}
                 alt=""
+                fill
+                sizes="132px"
                 className="
-                  h-full
-                  w-full
                   object-cover
                   grayscale
                   transition-all
@@ -93,16 +94,17 @@ export default function Filmstrip() {
 
       {/* ================= BARRA INFERIOR ================= */}
 
-      <div className="flex h-[46px] items-center justify-between border-t border-white/10 bg-black/70 px-8 backdrop-blur-xl">
+      <div className="flex h-[clamp(38px,4.8vh,46px)] items-center justify-between gap-6 border-t border-white/10 bg-black/70 px-[clamp(1rem,2vw,2rem)] backdrop-blur-xl">
 
-        <div className="flex items-center gap-8">
+        <div className="flex min-w-0 items-center gap-[clamp(1rem,2vw,2rem)] overflow-x-auto">
 
           {menu.map((item) => (
 
             <button
               key={item}
               className="
-                text-[14px]
+                whitespace-nowrap
+                text-[clamp(11px,0.8vw,14px)]
                 uppercase
                 tracking-[0.28em]
                 text-white/60
@@ -119,6 +121,8 @@ export default function Filmstrip() {
 
         <div
           className="
+            hidden
+            lg:block
             text-[13px]
             uppercase
             tracking-[0.34em]

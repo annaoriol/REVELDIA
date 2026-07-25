@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 
+import Inspector from "../panels/Inspector";
 import Sidebar from "../navigation/Sidebar";
-import ReferencesPanel from "../workspace/ReferencesPanel";
-import WorkspacePanel from "../workspace/WorkspacePanel";
-import StatusBar from "./StatusBar";
-import TopBar from "./TopBar";
+import Workspace from "../workspace/Workspace";
+import Footer from "./Footer";
+import Header from "./Header";
 
 type AppShellProps = {
-  children: ReactNode;
+  children?: ReactNode;
   showTopBar?: boolean;
   showStatusBar?: boolean;
 };
@@ -18,18 +18,18 @@ export default function AppShell({
   showStatusBar = true,
 }: AppShellProps) {
   return (
-    <div className="flex min-h-screen flex-col overflow-hidden bg-[#090909] text-white">
-      {showTopBar && <TopBar />}
+    <div className="flex h-dvh min-h-dvh max-h-dvh flex-col overflow-hidden bg-[var(--revela-background)] text-[var(--revela-text)]">
+      {showTopBar && <Header />}
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden lg:grid-cols-[280px_minmax(0,1fr)_320px]">
+      <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden lg:grid-cols-[clamp(15rem,18vw,18rem)_minmax(0,1fr)_clamp(17rem,22vw,22rem)] lg:grid-rows-1">
         <Sidebar />
 
-        <WorkspacePanel>{children}</WorkspacePanel>
+        <Workspace>{children}</Workspace>
 
-        <ReferencesPanel />
+        <Inspector />
       </div>
 
-      {showStatusBar && <StatusBar />}
+      {showStatusBar && <Footer />}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useProject } from "@/context/ProjectContext";
 import { useConversation } from "@/context/ConversationContext";
@@ -18,8 +18,10 @@ export default function MentorPanel() {
 
   const [answer, setAnswer] = useState("");
 
-  const laboratory =
-    new LaboratoryEngine(project);
+  const laboratory = useMemo(
+    () => new LaboratoryEngine(project),
+    [project]
+  );
 
   useEffect(() => {
     if (messages.length > 0) return;
@@ -32,6 +34,7 @@ export default function MentorPanel() {
     }
   }, [
     project.id,
+    laboratory,
     messages.length,
     initialize,
   ]);
@@ -67,21 +70,23 @@ export default function MentorPanel() {
     >
       <div
         className="
-          w-[760px]
-          max-w-[78vw]
-          rounded-3xl
+          w-[min(760px,calc(100vw-2rem))]
+          max-w-[calc(100vw-2rem)]
+          lg:max-w-[calc(100vw-34rem)]
+          xl:max-w-[calc(100vw-45rem)]
+          rounded-[1.5rem]
           border
           border-white/10
-          bg-black/45
+          bg-black/42
           backdrop-blur-3xl
-          shadow-[0_30px_80px_rgba(0,0,0,.45)]
-          px-14
-          py-12
+          shadow-[0_24px_70px_rgba(0,0,0,.36)]
+          px-[clamp(1.5rem,3vw,3.5rem)]
+          py-[clamp(1.75rem,3vw,3rem)]
         "
       >
         <p
           className="
-            text-xs
+            text-[clamp(0.68rem,0.72vw,0.78rem)]
             uppercase
             tracking-[0.40em]
             text-[#55C1D4]
@@ -90,14 +95,14 @@ export default function MentorPanel() {
           {laboratory.context()?.specialist.name}
         </p>
 
-        <div className="mt-8 space-y-6 max-h-[340px] overflow-y-auto">
+        <div className="mt-[clamp(1.5rem,2.4vw,2rem)] max-h-[min(34vh,340px)] space-y-6 overflow-y-auto">
           {messages.map((message) => (
             <div key={message.id}>
               <p
                 className={
                   message.role === "mentor"
-                    ? "text-3xl font-light leading-relaxed text-white"
-                    : "text-xl leading-relaxed text-white/80"
+                    ? "text-[clamp(1.35rem,2vw,1.9rem)] font-light leading-relaxed text-white"
+                    : "text-[clamp(1rem,1.25vw,1.25rem)] leading-relaxed text-white/80"
                 }
               >
                 {message.content}
@@ -108,13 +113,13 @@ export default function MentorPanel() {
 
         <div
           className="
-            mt-12
+            mt-[clamp(1.75rem,3vw,3rem)]
             rounded-2xl
             border
             border-white/10
             bg-black/30
-            px-6
-            py-5
+            px-[clamp(1rem,1.7vw,1.5rem)]
+            py-[clamp(0.9rem,1.5vw,1.25rem)]
           "
         >
           <input
@@ -127,7 +132,7 @@ export default function MentorPanel() {
             className="
               w-full
               bg-transparent
-              text-lg
+              text-[clamp(1rem,1vw,1.125rem)]
               text-white
               outline-none
               placeholder:text-white/30

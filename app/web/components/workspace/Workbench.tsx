@@ -21,6 +21,18 @@ export default function Workbench() {
 
       <div className="absolute inset-0 bg-black/35" />
 
+      {/* Textura editorial compartida con la entrada */}
+
+      <div
+        className="absolute inset-0 opacity-[0.08] mix-blend-screen"
+        style={{
+          backgroundImage: "url('/images/home/editorial.jpg')",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
+      />
+
       {/* Viñeteado */}
 
       <div

@@ -1,55 +1,56 @@
-export default function Sidebar() {
+"use client";
+
+import { memo } from "react";
+
+import { useSceneNavigation } from "@/app/hooks/useSceneNavigation";
+
+import NavigationItem from "./NavigationItem";
+
+function Sidebar() {
+  const { activeSceneId, items, setScene } = useSceneNavigation();
+
   return (
-    <aside className="min-h-0 border-b border-white/10 bg-[#090909] px-6 py-6 lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-8 lg:py-10">
-      <div>
-        <h2 className="font-[var(--font-space)] text-3xl font-light tracking-[0.16em]">
+    <aside className="min-h-0 overflow-y-auto border-b border-white/10 bg-[var(--revela-background)] px-[clamp(1rem,1.6vw,1.75rem)] py-[clamp(1rem,1.8vw,2rem)] lg:border-b-0 lg:border-r">
+      <div className="flex items-end justify-between gap-4 lg:block">
+        <div>
+        <h2 className="font-[var(--font-space)] text-[clamp(1.55rem,1.75vw,2.15rem)] font-light tracking-[0.16em]">
           R<span className="text-[#0391A1]">Ǝ</span>VELA
         </h2>
 
-        <p className="mt-3 text-sm uppercase tracking-[0.35em] text-white/40">
+        <p className="mt-3 text-[clamp(0.68rem,0.65vw,0.82rem)] uppercase tracking-[0.32em] text-white/40">
           Laboratorio Creativo
+        </p>
+        </div>
+
+        <p className="hidden text-right text-xs uppercase tracking-[0.28em] text-white/30 sm:block lg:hidden">
+          Método
         </p>
       </div>
 
-      <section className="mt-10 border-t border-white/10 pt-8">
+      <section className="mt-[clamp(1.5rem,2.2vw,2.4rem)] border-t border-white/10 pt-[clamp(1rem,1.4vw,1.5rem)]">
         <p className="text-[11px] uppercase tracking-[0.35em] text-white/35">
-          Método
+          Recorrido
         </p>
 
-        <nav aria-label="Metodo" className="mt-6">
-          <ul className="space-y-4 text-sm text-white/55">
-            <li>Intención</li>
-            <li>Referencias</li>
-            <li>Estilo</li>
-            <li>Síntesis</li>
-            <li>Revelación</li>
+        <nav
+          aria-label="Recorrido del metodo RƎVELA"
+          className="mt-4"
+        >
+          <ul className="grid gap-1 sm:grid-cols-2 lg:grid-cols-1">
+            {items.map((scene) => (
+              <li key={scene.id}>
+                <NavigationItem
+                  scene={scene}
+                  active={activeSceneId === scene.id}
+                  onSelect={setScene}
+                />
+              </li>
+            ))}
           </ul>
         </nav>
-      </section>
-
-      <section className="mt-10 border-t border-white/10 pt-8">
-        <p className="text-[11px] uppercase tracking-[0.35em] text-white/35">
-          Estado
-        </p>
-
-        <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <p className="text-sm text-white/70">
-            Placeholder de progreso del laboratorio.
-          </p>
-        </div>
-      </section>
-
-      <section className="mt-10 border-t border-white/10 pt-8">
-        <p className="text-[11px] uppercase tracking-[0.35em] text-white/35">
-          Especialista
-        </p>
-
-        <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <p className="text-sm text-white/70">
-            Placeholder del especialista activo.
-          </p>
-        </div>
       </section>
     </aside>
   );
 }
+
+export default memo(Sidebar);

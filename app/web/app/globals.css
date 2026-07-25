@@ -4,6 +4,8 @@
 
   /* ========= COLORS ========= */
 
+  color-scheme: dark;
+
   --background: #090909;
   --surface: #111111;
   --surface-2: #1B1B1B;
@@ -20,6 +22,38 @@
 
   --radius:9999px;
 
+  /* ========= REVELA DESIGN SYSTEM ========= */
+
+  --revela-background: #090909;
+  --revela-workspace: #0c0c0b;
+  --revela-surface: rgba(255, 255, 255, 0.035);
+  --revela-surface-raised: rgba(255, 255, 255, 0.055);
+  --revela-text: #f7f4ef;
+  --revela-text-muted: rgba(247, 244, 239, 0.62);
+  --revela-text-subtle: rgba(247, 244, 239, 0.34);
+  --revela-accent: #55c1d4;
+  --revela-accent-strong: #75d7e7;
+  --revela-border: rgba(255, 255, 255, 0.1);
+  --revela-radius-sm: 0.75rem;
+  --revela-radius-md: 1rem;
+  --revela-radius-lg: 1.35rem;
+  --revela-space-page: clamp(1rem, 2.4vw, 3rem);
+  --revela-shadow-panel: 0 24px 80px rgba(0, 0, 0, 0.34);
+
+}
+
+[data-theme="light"] {
+
+  color-scheme: light;
+  --revela-background: #f5f2ec;
+  --revela-workspace: #ede9df;
+  --revela-surface: rgba(255, 255, 255, 0.64);
+  --revela-surface-raised: rgba(255, 255, 255, 0.82);
+  --revela-text: #121212;
+  --revela-text-muted: rgba(18, 18, 18, 0.62);
+  --revela-text-subtle: rgba(18, 18, 18, 0.36);
+  --revela-border: rgba(18, 18, 18, 0.1);
+
 }
 
 html,
@@ -27,6 +61,8 @@ body{
 
   background:var(--background);
   color:var(--text);
+  min-height:100dvh;
+  overflow:hidden;
 
 }
 

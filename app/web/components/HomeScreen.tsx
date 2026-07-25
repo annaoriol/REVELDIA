@@ -11,145 +11,50 @@ export default function HomeScreen({
   onStart,
 }: HomeScreenProps) {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black text-white">
+    <main className="min-h-dvh bg-[#090909] text-white">
+      <section className="relative min-h-dvh overflow-hidden">
+        <Image
+          src="/images/home/editorial.jpg"
+          alt="Laboratorio creativo editorial"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
 
-      {/* Imagen de fondo */}
+        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(3,145,161,0.16),transparent_32%),linear-gradient(90deg,rgba(0,0,0,0.64),rgba(0,0,0,0.22)_52%,rgba(0,0,0,0.56))]" />
 
-      <Image
-        src="/images/home/editorial.jpg"
-        alt="RƎVELA"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+        <div className="relative z-10 flex min-h-dvh items-center px-[clamp(1.5rem,7vw,8rem)] py-[clamp(4rem,7vw,7rem)]">
+          <div className="max-w-[720px]">
+            <div className="w-fit">
+              <Logo />
 
-      {/* Oscurecer */}
+              <p className="mt-3 text-[clamp(0.72rem,0.8vw,0.95rem)] uppercase tracking-[0.46em] text-[#55C1D4]">
+                Laboratorio Creativo
+              </p>
+            </div>
 
-      <div className="absolute inset-0 bg-black/45" />
-
-      {/* Degradado */}
-
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-transparent" />
-
-      {/* Branding */}
-
-     <header className="absolute inset-x-0 top-8 z-20 flex flex-col items-center">
-
-  <div
-    style={{
-      transform: "scale(1.5)",
-      transformOrigin: "center",
-    }}
-  >
-    <Logo />
-  </div>
-
-  <p
-    className="
-      mt-10
-      font-[var(--font-inter)]
-      font-medium
-      uppercase
-      tracking-[0.55em]
-      text-[#55C1D4]
-    "
-    style={{
-      fontSize: "clamp(22px,1.4vw,34px)",
-    }}
-  >
-    LABORATORIO CREATIVO
-  </p>
-
-</header>
-
-      {/* Contenido */}
-
-      <section className="relative z-10 flex min-h-screen items-center">
-
-        <div className="w-full pl-[6vw]">
-
-          <div className="max-w-[1200px]">
-
-            <p
-              className="
-                mb-10
-                font-[var(--font-inter)]
-                text-lg
-                uppercase
-                tracking-[0.55em]
-                text-[#55C1D4]
-              "
-            >
-
-            </p>
-
-            <h1
-              className="
-                font-[var(--font-space)]
-                font-light
-                uppercase
-                leading-[0.84]
-                tracking-[-0.04em]
-                text-white
-              "
-              style={{
-                fontSize: "clamp(120px,10vw,220px)",
-              }}
-            >
-              RƎVELA
-              <br />
-              TU
-              <br />
-              CONTENIDO
-            </h1>
-
-            <p
-              className="
-                mt-12
-                max-w-[900px]
-                font-[var(--font-inter)]
-                text-white/85
-              "
-              style={{
-                fontSize: "clamp(34px,2vw,46px)",
-                lineHeight: "1.45",
-              }}
-            >
-              Los especialistas te acompañan para interpretar,
-              positivar y transmitir con identidad.
+            <p className="mt-[clamp(4.5rem,10vw,9rem)] max-w-[580px] font-[var(--font-space)] text-[clamp(1.55rem,2.7vw,3.45rem)] font-light leading-[1.14] tracking-[0.01em] text-white/90">
+              Cada revelación amplía tu forma de pensar.
             </p>
 
             <button
+              type="button"
               onClick={onStart}
-              className="
-                mt-20
-                h-24
-                w-[800px]
-                rounded-full
-                border
-                border-[#55C1D4]
-                font-[var(--font-inter)]
-                text-2xl
-                font-medium
-                uppercase
-                tracking-[0.35em]
-                text-[#55C1D4]
-                transition-all
-                duration-300
-                hover:bg-[#55C1D4]
-                hover:text-black
-              "
+              className="group mt-[clamp(3rem,6vw,6rem)] inline-flex cursor-pointer items-center gap-3 font-[var(--font-space)] text-[clamp(0.92rem,1vw,1.08rem)] font-medium uppercase tracking-[0.28em] text-[#55C1D4] transition-colors duration-300 hover:text-white"
             >
-              RƎVÉLATE →
+              Entrar
+              <span
+                aria-hidden="true"
+                className="transition-transform group-hover:translate-x-1"
+              >
+                →
+              </span>
             </button>
-
           </div>
-
         </div>
-
       </section>
-
     </main>
   );
 }

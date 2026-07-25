@@ -8,7 +8,7 @@ import Filmstrip from "./Filmstrip";
 
 export default function Workspace() {
   return (
-    <main className="relative h-screen w-screen overflow-hidden bg-[#090909] text-white">
+    <main className="relative h-dvh w-screen overflow-hidden bg-[#090909] text-white">
 
       {/* Imagen de fondo */}
       <Workbench />
@@ -17,9 +17,9 @@ export default function Workspace() {
       <header
         className="absolute left-0 right-0 z-40"
         style={{
-          top: "22px",
-          paddingLeft: "24px",
-          paddingRight: "24px",
+          top: "clamp(14px, 2.1vh, 22px)",
+          paddingLeft: "clamp(14px, 2vw, 24px)",
+          paddingRight: "clamp(14px, 2vw, 24px)",
         }}
       >
         <TopBar />
@@ -27,12 +27,12 @@ export default function Workspace() {
 
       {/* Panel izquierdo */}
       <aside
-        className="absolute z-30"
+        className="absolute z-30 hidden lg:block"
         style={{
-          top: "108px",
-          left: "24px",
-          width: "320px",
-          bottom: "170px",
+          top: "clamp(90px, 11vh, 108px)",
+          left: "clamp(14px, 2vw, 24px)",
+          width: "clamp(240px, 18vw, 320px)",
+          bottom: "clamp(126px, 17vh, 170px)",
         }}
       >
         <LeftSidebar />
@@ -40,12 +40,12 @@ export default function Workspace() {
 
       {/* Panel derecho */}
       <aside
-        className="absolute z-30"
+        className="absolute z-30 hidden xl:block"
         style={{
-          top: "108px",
-          right: "24px",
-          width: "320px",
-          bottom: "170px",
+          top: "clamp(90px, 11vh, 108px)",
+          right: "clamp(14px, 2vw, 24px)",
+          width: "clamp(260px, 19vw, 320px)",
+          bottom: "clamp(126px, 17vh, 170px)",
         }}
       >
         <RightDossier />
@@ -55,10 +55,10 @@ export default function Workspace() {
       <section
         className="absolute left-0 right-0 z-30"
         style={{
-          bottom: "20px",
-          height: "150px",
-          paddingLeft: "60px",
-          paddingRight: "60px",
+          bottom: "clamp(12px, 2vh, 20px)",
+          height: "clamp(110px, 15vh, 150px)",
+          paddingLeft: "clamp(14px, 4vw, 60px)",
+          paddingRight: "clamp(14px, 4vw, 60px)",
         }}
       >
         <Filmstrip />

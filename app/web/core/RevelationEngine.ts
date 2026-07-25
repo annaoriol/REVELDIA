@@ -4,6 +4,8 @@ import { Revelation } from "@/types/revelation";
 export function generateRevelation(
   _council: CouncilResult
 ): Revelation {
+  void _council;
+
   return {
     id: "pending-revelation",
     title: "Revelación pendiente",

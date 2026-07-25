@@ -13,12 +13,18 @@ export default function TopBar() {
   return (
     <header
       className="
-        workspace-panel
-        h-full
+        h-[clamp(56px,7vh,72px)]
         w-full
+        overflow-hidden
+        rounded-2xl
+        border
+        border-white/10
+        bg-black/42
+        shadow-[0_18px_60px_rgba(0,0,0,.30)]
+        backdrop-blur-2xl
       "
     >
-      <div className="flex h-full items-center justify-between px-8">
+      <div className="flex h-full items-center justify-between px-[clamp(1rem,2vw,2rem)]">
 
         {/* LOGO */}
 
@@ -26,7 +32,7 @@ export default function TopBar() {
 
           <h1
             className="
-              text-[15px]
+              text-[clamp(13px,0.9vw,15px)]
               font-light
               tracking-[0.18em]
               text-[#55C1D4]
@@ -40,7 +46,7 @@ export default function TopBar() {
             className="
               hidden
               xl:block
-              text-[12px]
+              text-[clamp(10px,0.75vw,12px)]
               uppercase
               tracking-[0.42em]
               text-white/45
@@ -70,7 +76,7 @@ export default function TopBar() {
               rounded-xl
               px-5
               py-3
-              text-[15px]
+              text-[clamp(13px,0.85vw,15px)]
               text-white/75
               transition
               hover:bg-white/5
@@ -89,7 +95,7 @@ export default function TopBar() {
               rounded-xl
               px-5
               py-3
-              text-[17px]
+              text-[clamp(13px,0.9vw,16px)]
               text-white/75
               transition
               hover:bg-white/5
@@ -108,7 +114,7 @@ export default function TopBar() {
               rounded-xl
               px-5
               py-3
-              text-[17px]
+              text-[clamp(13px,0.9vw,16px)]
               text-white/75
               transition
               hover:bg-white/5
