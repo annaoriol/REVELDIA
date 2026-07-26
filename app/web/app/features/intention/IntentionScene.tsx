@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 
 import Button from "@/app/components/ui/Button";
 import SectionTitle from "@/app/components/ui/SectionTitle";
+import { useRevealStore } from "@/app/stores/useRevealStore";
 
 const intentionSchema = z.object({
   intention: z
@@ -16,6 +17,10 @@ const intentionSchema = z.object({
 type IntentionFormValues = z.infer<typeof intentionSchema>;
 
 export default function IntentionScene() {
+  const updateIntention = useRevealStore(
+    (state) => state.updateIntention
+  );
+
   const {
     formState: { errors },
     handleSubmit,
@@ -37,7 +42,15 @@ export default function IntentionScene() {
         type: "manual",
         message: issue?.message ?? "Revisa la intención.",
       });
+
+      return;
     }
+
+    updateIntention({
+      whatToReveal: parsed.data.intention,
+      whatToTransmit: "",
+      context: "",
+    });
   }
 
   return (

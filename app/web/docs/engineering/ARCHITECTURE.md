@@ -22,29 +22,59 @@ The shell does not disappear between scenes. The active scene changes inside the
 
 ## Scene Flow
 
-The method is represented in `app/core/orchestrator/method-scenes.ts`.
+Home
 
-Current loaded scenes:
+↓
 
-- Bienvenida
-- Intención
-- Observación
-- Referencias
-- Mesa de Luz
+Projects
 
-Reserved scenes:
+↓
 
-- Director Creativo
-- Especialistas
-- RƎVELACIÓN
-- Positivado
-- Sistema
-- Creación
-- Producción
-- Adaptación
-- Exportación
+RƎVELAR
 
-Reserved scenes are visible in navigation but locked until their sprint defines the actual behavior.
+↓
+
+Laboratorio
+
+↓
+
+Mesa de Luz
+
+↓
+
+Director Creativo
+
+↓
+
+Especialistas
+
+↓
+
+RƎVELACIÓN
+
+↓
+
+Positivado
+
+↓
+
+Sistema Creativo
+
+↓
+
+Creación
+
+↓
+
+Producción
+
+↓
+
+Adaptación
+
+↓
+
+Exportación
 
 ## Boundaries
 

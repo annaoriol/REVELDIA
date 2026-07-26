@@ -26,10 +26,88 @@ export type SceneStatus =
   | "locked"
   | "complete";
 
+export interface ProjectDNA {
+  intention: ProjectDNAIntention;
+  observations: ProjectDNAObservation[];
+  references: ProjectDNAReference[];
+  creativeDirection: ProjectDNACreativeDirection;
+  specialistAnalyses: ProjectDNASpecialistAnalysis[];
+  revelation: ProjectDNARevelation | null;
+  positivation: ProjectDNAPositivation | null;
+  creativeSystem: ProjectDNACreativeSystem | null;
+}
+
+export interface ProjectDNAIntention {
+  whatToReveal: string;
+  whatToTransmit: string;
+  context: string;
+  updatedAt: string | null;
+}
+
+export interface ProjectDNAObservation {
+  id: string;
+  question: string;
+  answer: string;
+  evidenceIds: string[];
+  createdAt: string;
+}
+
+export interface ProjectDNAReference {
+  id: string;
+  kind:
+    | "visual"
+    | "narrative"
+    | "cultural"
+    | "emotional"
+    | "conceptual"
+    | "editorial"
+    | "cinematic";
+  description: string;
+  meaning: string;
+  createdAt: string;
+}
+
+export interface ProjectDNACreativeDirection {
+  criteria: string[];
+  decisions: string[];
+  updatedAt: string | null;
+}
+
+export interface ProjectDNASpecialistAnalysis {
+  id: string;
+  specialist: string;
+  findings: string[];
+  evidenceIds: string[];
+  createdAt: string;
+}
+
+export interface ProjectDNARevelation {
+  hypothesis: string;
+  evidenceIds: string[];
+  confidence: number;
+  createdAt: string;
+}
+
+export interface ProjectDNAPositivation {
+  principles: string[];
+  rules: string[];
+  updatedAt: string;
+}
+
+export interface ProjectDNACreativeSystem {
+  identity: string;
+  narrative: string;
+  tone: string;
+  visualLanguage: string;
+  editorialRules: string[];
+  updatedAt: string;
+}
+
 export interface Project {
   id: string;
   name: string;
   status: ProjectStatus;
+  dna: ProjectDNA;
   createdAt: string;
   updatedAt: string;
 }
