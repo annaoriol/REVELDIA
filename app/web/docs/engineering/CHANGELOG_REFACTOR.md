@@ -39,3 +39,23 @@ Compatibility:
 - No interface markup, navigation configuration or legacy code was changed.
 - Existing project fields remain stable.
 - Reserved scenes can adopt the explicit actions when their real inputs are implemented.
+
+## 2026-07-26 · Sprint 04 · Observation scene writes to DNA
+
+Decision:
+
+- `app/features/observation/ObservationScene.tsx` records observations through the existing `registerObservation()` domain action.
+- Observations are stored in `project.dna.observations`.
+- Each observation keeps a question, answer, generated id, creation date and an empty evidence link surface.
+
+Reason:
+
+- Observation is part of the Laboratory and must modify the Project DNA directly through explicit method language.
+- The scene now captures discovery signals without producing creative decisions.
+- `evidenceIds` prepares the structure for references and evidence relationships without adding persistence or new architecture.
+
+Compatibility:
+
+- AppShell, navigation and scene routing remain unchanged.
+- No legacy code was removed or migrated.
+- Persistence remains out of scope.
