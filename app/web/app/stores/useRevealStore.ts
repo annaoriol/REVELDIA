@@ -91,22 +91,24 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
     get().setScene("intention");
   },
   updateIntention: (intention) => {
-    const now = new Date().toISOString();
+  const now = new Date().toISOString();
 
-    set((state) => ({
-      project: {
-        ...state.project,
-        dna: {
-          ...state.project.dna,
-          intention: {
-            ...intention,
-            updatedAt: now,
-          },
+  set((state) => ({
+    project: {
+      ...state.project,
+      dna: {
+        ...state.project.dna,
+        intention: {
+          ...intention,
+          updatedAt: now,
         },
-        updatedAt: now,
       },
-    }));
-  },
+      updatedAt: now,
+    },
+  }));
+
+  get().setScene("observation");
+},
   registerObservation: (observation) => {
     const now = new Date().toISOString();
 
@@ -127,7 +129,10 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
         updatedAt: now,
       },
     }));
+    
+    get().setScene("references");
   },
+  
   registerReference: (reference) => {
     const now = new Date().toISOString();
 

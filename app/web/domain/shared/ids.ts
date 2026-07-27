@@ -1,5 +1,6 @@
 export type ProjectId = string;
 export type IntentionId = string;
+export type ObservationId = string;
 export type ReferenceId = string;
 export type StyleId = string;
 export type SpecialistId = string;
