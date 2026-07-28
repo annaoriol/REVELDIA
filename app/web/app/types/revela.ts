@@ -153,6 +153,35 @@ export interface Memory {
   lastSyncedAt: string | null;
 }
 
+export interface Group {
+  /**
+   * Identificador único del grupo.
+   */
+  id: string;
+
+  /**
+   * Nombre visible del grupo.
+   */
+  name: string;
+
+  /**
+   * IDs de las referencias pertenecientes al grupo.
+   */
+  itemIds: string[];
+
+  /**
+   * Color editorial del grupo.
+   * Preparado para futuras versiones.
+   */
+  color?: string;
+
+  /**
+   * Permite plegar el grupo en la interfaz.
+   * Preparado para futuras versiones.
+   */
+  collapsed?: boolean;
+}
+
 export interface Selection {
   id: string | null;
   type: "scene" | "panel" | "asset" | "note" | null;
@@ -189,6 +218,7 @@ export interface RevealState {
   history: SceneId[];
   memory: Memory;
   lightTable: Reference[];
+  lightTableGroups: Group[];
   selection: Selection;
   preferences: Preferences;
   loading: LoadingState;

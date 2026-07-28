@@ -47,6 +47,16 @@ type RevealActions = {
   toggleLightTable: (reference: Reference) => void;
   moveLightTableReference: (fromIndex: number, toIndex: number) => void;
   reorderLightTable: (ids: string[]) => void;
+  createGroup: (name: string) => void;
+  renameGroup: (groupId: string, name: string) => void;
+  deleteGroup: (groupId: string) => void;
+  addItemToGroup: (itemId: string, groupId: string) => void;
+  removeItemFromGroup: (itemId: string) => void;
+  moveItemBetweenGroups: (
+    itemId: string,
+    fromGroupId: string | null,
+    toGroupId: string | null
+  ) => void;
   clearLightTable: () => void;
   isInLightTable: (id: string) => boolean;
   setSelection: (selection: Selection) => void;
@@ -60,6 +70,24 @@ type RevealActions = {
 };
 
 type RevealStore = RevealState & RevealActions;
+
+function orderGroupsByLightTable(
+  groups: RevealState["lightTableGroups"],
+  lightTable: Reference[]
+) {
+  const orderById = new Map(
+    lightTable.map((reference, index) => [reference.id, index])
+  );
+
+  return groups.map((group) => ({
+    ...group,
+    itemIds: [...group.itemIds].sort(
+      (firstId, secondId) =>
+        (orderById.get(firstId) ?? Number.MAX_SAFE_INTEGER) -
+        (orderById.get(secondId) ?? Number.MAX_SAFE_INTEGER)
+    ),
+  }));
+}
 
 export const useRevealStore = create<RevealStore>((set, get) => ({
   ...initialRevealState,
@@ -261,6 +289,10 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
 
       return {
         lightTable: nextLightTable,
+        lightTableGroups: state.lightTableGroups.map((group) => ({
+          ...group,
+          itemIds: group.itemIds.filter((itemId) => itemId !== id),
+        })),
         project: {
           ...state.project,
           updatedAt: now,
@@ -303,6 +335,10 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
 
       return {
         lightTable: nextLightTable,
+        lightTableGroups: orderGroupsByLightTable(
+          state.lightTableGroups,
+          nextLightTable
+        ),
         project: {
           ...state.project,
           updatedAt: now,
@@ -344,12 +380,199 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
 
       return {
         lightTable: nextLightTable,
+        lightTableGroups: orderGroupsByLightTable(
+          state.lightTableGroups,
+          nextLightTable
+        ),
         project: {
           ...state.project,
           updatedAt: now,
         },
       };
     });
+  },
+  createGroup: (name) => {
+  const now = new Date().toISOString();
+  const trimmedName = name.trim();
+
+  if (!trimmedName) {
+    return;
+  }
+
+  set((state) => ({
+    lightTableGroups: [
+      ...state.lightTableGroups,
+      {
+        id: crypto.randomUUID(),
+        name: trimmedName,
+        itemIds: [],
+        color: undefined,
+        collapsed: false,
+      },
+    ],
+    project: {
+      ...state.project,
+      updatedAt: now,
+    },
+  }));
+},
+
+  renameGroup: (groupId, name) => {
+    const now = new Date().toISOString();
+    const trimmedName = name.trim();
+
+    if (!trimmedName) {
+      return;
+    }
+
+    set((state) => {
+      const nextGroups = state.lightTableGroups.map((group) =>
+        group.id === groupId
+          ? {
+              ...group,
+              name: trimmedName,
+            }
+          : group
+      );
+
+      if (
+        nextGroups.every(
+          (group, index) => group === state.lightTableGroups[index]
+        )
+      ) {
+        return state;
+      }
+
+      return {
+        lightTableGroups: nextGroups,
+        project: {
+          ...state.project,
+          updatedAt: now,
+        },
+      };
+    });
+  },
+  deleteGroup: (groupId) => {
+    const now = new Date().toISOString();
+
+    set((state) => {
+      const nextGroups = state.lightTableGroups.filter(
+        (group) => group.id !== groupId
+      );
+
+      if (nextGroups.length === state.lightTableGroups.length) {
+        return state;
+      }
+
+      return {
+        lightTableGroups: nextGroups,
+        project: {
+          ...state.project,
+          updatedAt: now,
+        },
+      };
+    });
+  },
+  addItemToGroup: (itemId, groupId) => {
+    const now = new Date().toISOString();
+
+    set((state) => {
+      if (!state.lightTableGroups.some((group) => group.id === groupId)) {
+        return state;
+      }
+
+      if (!state.lightTable.some((reference) => reference.id === itemId)) {
+        return state;
+      }
+
+      let didChange = false;
+      const nextGroups = state.lightTableGroups.map((group) => {
+        const itemIdsWithoutItem = group.itemIds.filter((id) => id !== itemId);
+
+        if (group.id !== groupId) {
+          if (itemIdsWithoutItem.length !== group.itemIds.length) {
+            didChange = true;
+            return {
+              ...group,
+              itemIds: itemIdsWithoutItem,
+            };
+          }
+
+          return group;
+        }
+
+        if (group.itemIds.includes(itemId)) {
+          return group;
+        }
+
+        didChange = true;
+
+        return {
+          ...group,
+          itemIds: [...itemIdsWithoutItem, itemId],
+        };
+      });
+
+      if (!didChange) {
+        return state;
+      }
+
+      return {
+        lightTableGroups: orderGroupsByLightTable(
+          nextGroups,
+          state.lightTable
+        ),
+        project: {
+          ...state.project,
+          updatedAt: now,
+        },
+      };
+    });
+  },
+  removeItemFromGroup: (itemId) => {
+    const now = new Date().toISOString();
+
+    set((state) => {
+      let didChange = false;
+      const nextGroups = state.lightTableGroups.map((group) => {
+        const nextItemIds = group.itemIds.filter((id) => id !== itemId);
+
+        if (nextItemIds.length === group.itemIds.length) {
+          return group;
+        }
+
+        didChange = true;
+
+        return {
+          ...group,
+          itemIds: nextItemIds,
+        };
+      });
+
+      if (!didChange) {
+        return state;
+      }
+
+      return {
+        lightTableGroups: nextGroups,
+        project: {
+          ...state.project,
+          updatedAt: now,
+        },
+      };
+    });
+  },
+  moveItemBetweenGroups: (itemId, fromGroupId, toGroupId) => {
+    if (fromGroupId === toGroupId) {
+      return;
+    }
+
+    if (!toGroupId) {
+      get().removeItemFromGroup(itemId);
+      return;
+    }
+
+    get().addItemToGroup(itemId, toGroupId);
   },
   clearLightTable: () => {
     const now = new Date().toISOString();
@@ -361,6 +584,10 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
 
       return {
         lightTable: [],
+        lightTableGroups: state.lightTableGroups.map((group) => ({
+          ...group,
+          itemIds: [],
+        })),
         project: {
           ...state.project,
           updatedAt: now,

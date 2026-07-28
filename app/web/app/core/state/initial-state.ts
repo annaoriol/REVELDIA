@@ -47,6 +47,7 @@ export const initialRevealState: RevealState = {
     lastSyncedAt: null,
   },
   lightTable: [],
+  lightTableGroups: [],
   selection: {
     id: null,
     type: null,

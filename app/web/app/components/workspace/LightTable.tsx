@@ -5,6 +5,7 @@ import {
   DndContext,
   KeyboardSensor,
   PointerSensor,
+  useDroppable,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -16,22 +17,38 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useMemo, useState, type ReactNode } from "react";
 
+import Input from "@/app/components/forms/Input";
 import Button from "@/app/components/ui/Button";
 import Card from "@/app/components/ui/Card";
 import EmptyState from "@/app/components/ui/EmptyState";
 import type { Reference } from "@/app/features/references/data";
 import { useRevealStore } from "@/app/stores/useRevealStore";
+import type { Group } from "@/app/types";
+
+const UNGROUPED_CONTAINER_ID = "light-table:ungrouped";
+const GROUP_CONTAINER_PREFIX = "light-table:group:";
+
+function getGroupContainerId(groupId: string) {
+  return `${GROUP_CONTAINER_PREFIX}${groupId}`;
+}
 
 type SortableReferenceCardProps = {
   index: number;
   reference: Reference;
+  currentGroupId: string | null;
+  groups: Group[];
+  onGroupChange: (itemId: string, groupId: string | null) => void;
   onRemove: (id: string) => void;
 };
 
 function SortableReferenceCard({
   index,
   reference,
+  currentGroupId,
+  groups,
+  onGroupChange,
   onRemove,
 }: SortableReferenceCardProps) {
   const {
@@ -108,21 +125,117 @@ function SortableReferenceCard({
             ))}
           </div>
 
-          <Button
-            variant="quiet"
-            className="shrink-0 px-0 text-xs"
-            onClick={() => onRemove(reference.id)}
-          >
-            Eliminar
-          </Button>
+          <div className="flex shrink-0 items-center gap-3">
+            <label className="sr-only" htmlFor={`group-${reference.id}`}>
+              Grupo de {reference.title}
+            </label>
+
+            <select
+              id={`group-${reference.id}`}
+              className="max-w-[9rem] rounded-full border border-white/10 bg-black/35 px-3 py-2 text-xs text-white/64 outline-none transition-colors focus:border-cyan-300/50"
+              value={currentGroupId ?? ""}
+              onChange={(event) =>
+                onGroupChange(reference.id, event.target.value || null)
+              }
+            >
+              <option value="">Sin grupo</option>
+              {groups.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+
+            <Button
+              variant="quiet"
+              className="px-0 text-xs"
+              onClick={() => onRemove(reference.id)}
+            >
+              Eliminar
+            </Button>
+          </div>
         </div>
       </Card>
     </div>
   );
 }
 
+type ReferenceGroupSectionProps = {
+  id: string;
+  title: string;
+  references: Reference[];
+  groups: Group[];
+  itemGroupIds: Map<string, string>;
+  onGroupChange: (itemId: string, groupId: string | null) => void;
+  onRemove: (id: string) => void;
+  children?: ReactNode;
+};
+
+function ReferenceGroupSection({
+  id,
+  title,
+  references,
+  groups,
+  itemGroupIds,
+  onGroupChange,
+  onRemove,
+  children,
+}: ReferenceGroupSectionProps) {
+  const { setNodeRef, isOver } = useDroppable({ id });
+
+  return (
+    <section
+      ref={setNodeRef}
+      className={`rounded-2xl border border-white/10 bg-black/16 p-4 transition-colors ${
+        isOver ? "border-cyan-300/40 bg-cyan-300/[0.035]" : ""
+      }`}
+    >
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.3em] text-white/35">
+            Grupo editorial
+          </p>
+          <h3 className="mt-2 font-[var(--font-space)] text-2xl font-light tracking-[0.04em] text-white">
+            {title}
+          </h3>
+        </div>
+
+        {children}
+      </div>
+
+      <SortableContext
+        items={references.map((reference) => reference.id)}
+        strategy={rectSortingStrategy}
+      >
+        {references.length ? (
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {references.map((reference, index) => (
+              <SortableReferenceCard
+                key={reference.id}
+                index={index}
+                reference={reference}
+                currentGroupId={itemGroupIds.get(reference.id) ?? null}
+                groups={groups}
+                onGroupChange={onGroupChange}
+                onRemove={onRemove}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-white/10 px-5 py-8 text-sm leading-6 text-white/42">
+            Arrastra referencias aquí o usa el selector de grupo.
+          </div>
+        )}
+      </SortableContext>
+    </section>
+  );
+}
+
 export default function LightTable() {
   const lightTable = useRevealStore((state) => state.lightTable);
+  const lightTableGroups = useRevealStore(
+    (state) => state.lightTableGroups
+  );
   const removeFromLightTable = useRevealStore(
     (state) => state.removeFromLightTable
   );
@@ -132,7 +245,23 @@ export default function LightTable() {
   const clearLightTable = useRevealStore(
     (state) => state.clearLightTable
   );
+  const createGroup = useRevealStore((state) => state.createGroup);
+  const renameGroup = useRevealStore((state) => state.renameGroup);
+  const deleteGroup = useRevealStore((state) => state.deleteGroup);
+  const addItemToGroup = useRevealStore(
+    (state) => state.addItemToGroup
+  );
+  const removeItemFromGroup = useRevealStore(
+    (state) => state.removeItemFromGroup
+  );
+  const moveItemBetweenGroups = useRevealStore(
+    (state) => state.moveItemBetweenGroups
+  );
   const setScene = useRevealStore((state) => state.setScene);
+  const [newGroupName, setNewGroupName] = useState("");
+  const [groupNames, setGroupNames] = useState<Record<string, string>>(
+    {}
+  );
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -140,6 +269,78 @@ export default function LightTable() {
     })
   );
   const lightTableIds = lightTable.map((reference) => reference.id);
+  const itemGroupIds = useMemo(() => {
+    const groupIds = new Map<string, string>();
+
+    for (const group of lightTableGroups) {
+      for (const itemId of group.itemIds) {
+        groupIds.set(itemId, group.id);
+      }
+    }
+
+    return groupIds;
+  }, [lightTableGroups]);
+  const ungroupedReferences = lightTable.filter(
+    (reference) => !itemGroupIds.has(reference.id)
+  );
+  const referencesByGroup = useMemo(() => {
+    const groupedReferences = new Map<string, Reference[]>();
+
+    for (const group of lightTableGroups) {
+      const itemIds = new Set(group.itemIds);
+
+      groupedReferences.set(
+        group.id,
+        lightTable.filter((reference) => itemIds.has(reference.id))
+      );
+    }
+
+    return groupedReferences;
+  }, [lightTable, lightTableGroups]);
+
+  const getGroupIdFromContainer = (id: string) => {
+    if (id === UNGROUPED_CONTAINER_ID) {
+      return null;
+    }
+
+    if (id.startsWith(GROUP_CONTAINER_PREFIX)) {
+      return id.slice(GROUP_CONTAINER_PREFIX.length);
+    }
+
+    return itemGroupIds.get(id) ?? null;
+  };
+
+  const moveItemToGroup = (
+    itemId: string,
+    targetGroupId: string | null
+  ) => {
+    const sourceGroupId = itemGroupIds.get(itemId) ?? null;
+
+    if (sourceGroupId === targetGroupId) {
+      return;
+    }
+
+    if (!targetGroupId) {
+      removeItemFromGroup(itemId);
+      return;
+    }
+
+    if (!sourceGroupId) {
+      addItemToGroup(itemId, targetGroupId);
+      return;
+    }
+
+    moveItemBetweenGroups(itemId, sourceGroupId, targetGroupId);
+  };
+
+  const handleCreateGroup = () => {
+    createGroup(newGroupName);
+    setNewGroupName("");
+  };
+
+  const handleRenameGroup = (groupId: string, fallbackName: string) => {
+    renameGroup(groupId, groupNames[groupId] ?? fallbackName);
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -148,10 +349,17 @@ export default function LightTable() {
       return;
     }
 
-    const fromIndex = lightTableIds.indexOf(String(active.id));
-    const toIndex = lightTableIds.indexOf(String(over.id));
+    const activeId = String(active.id);
+    const overId = String(over.id);
+    const targetGroupId = getGroupIdFromContainer(overId);
+    const fromIndex = lightTableIds.indexOf(activeId);
+    const toIndex = lightTableIds.indexOf(overId);
 
-    moveLightTableReference(fromIndex, toIndex);
+    if (fromIndex >= 0 && toIndex >= 0) {
+      moveLightTableReference(fromIndex, toIndex);
+    }
+
+    moveItemToGroup(activeId, targetGroupId);
   };
 
   if (!lightTable.length) {
@@ -188,6 +396,29 @@ export default function LightTable() {
           </div>
 
           <div className="flex flex-wrap gap-3">
+            <form
+              className="flex min-w-[min(100%,22rem)] flex-1 gap-2 sm:flex-initial"
+              onSubmit={(event) => {
+                event.preventDefault();
+                handleCreateGroup();
+              }}
+            >
+              <Input
+                value={newGroupName}
+                onChange={(event) => setNewGroupName(event.target.value)}
+                placeholder="Nuevo grupo"
+                aria-label="Nombre del nuevo grupo"
+              />
+
+              <Button
+                type="submit"
+                variant="ghost"
+                className="shrink-0"
+              >
+                Crear grupo
+              </Button>
+            </form>
+
             <Button
               variant="ghost"
               onClick={() => setScene("references")}
@@ -206,21 +437,67 @@ export default function LightTable() {
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          <SortableContext
-            items={lightTableIds}
-            strategy={rectSortingStrategy}
-          >
-            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {lightTable.map((reference, index) => (
-                <SortableReferenceCard
-                  key={reference.id}
-                  index={index}
-                  reference={reference}
-                  onRemove={removeFromLightTable}
-                />
-              ))}
-            </div>
-          </SortableContext>
+          <div className="space-y-5">
+            <ReferenceGroupSection
+              id={UNGROUPED_CONTAINER_ID}
+              title="Sin grupo"
+              references={ungroupedReferences}
+              groups={lightTableGroups}
+              itemGroupIds={itemGroupIds}
+              onGroupChange={moveItemToGroup}
+              onRemove={removeFromLightTable}
+            />
+
+            {lightTableGroups.map((group) => (
+              <ReferenceGroupSection
+                key={group.id}
+                id={getGroupContainerId(group.id)}
+                title={group.name}
+                references={referencesByGroup.get(group.id) ?? []}
+                groups={lightTableGroups}
+                itemGroupIds={itemGroupIds}
+                onGroupChange={moveItemToGroup}
+                onRemove={removeFromLightTable}
+              >
+                <form
+                  className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[20rem] sm:flex-row"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    handleRenameGroup(group.id, group.name);
+                  }}
+                >
+                  <Input
+                    value={groupNames[group.id] ?? group.name}
+                    onChange={(event) =>
+                      setGroupNames((currentNames) => ({
+                        ...currentNames,
+                        [group.id]: event.target.value,
+                      }))
+                    }
+                    aria-label={`Renombrar ${group.name}`}
+                  />
+
+                  <div className="flex gap-2">
+                    <Button
+                      type="submit"
+                      variant="ghost"
+                      className="shrink-0"
+                    >
+                      Renombrar
+                    </Button>
+
+                    <Button
+                      variant="quiet"
+                      className="shrink-0"
+                      onClick={() => deleteGroup(group.id)}
+                    >
+                      Eliminar
+                    </Button>
+                  </div>
+                </form>
+              </ReferenceGroupSection>
+            ))}
+          </div>
         </DndContext>
       </div>
     </section>

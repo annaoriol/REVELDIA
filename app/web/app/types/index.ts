@@ -1,6 +1,7 @@
 export type {
   ErrorState,
   FutureFeature,
+  Group,
   LoadingState,
   Memory,
   MemoryEntry,
