@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import Button from "@/app/components/ui/Button";
 import SectionTitle from "@/app/components/ui/SectionTitle";
 import { useRevealStore } from "@/app/stores/useRevealStore";
 
@@ -17,6 +18,7 @@ export default function ReferencesScene() {
   const [selectedReference, setSelectedReference] =
     useState<Reference | null>(null);
   const lightTable = useRevealStore((state) => state.lightTable);
+  const setScene = useRevealStore((state) => state.setScene);
 
   const lightTableIds = useMemo(
     () => new Set(lightTable.map((reference) => reference.id)),
@@ -56,11 +58,21 @@ export default function ReferencesScene() {
 
   return (
     <section className="mx-auto flex min-h-full w-full max-w-7xl flex-col py-[clamp(2rem,5vw,5rem)]">
-      <SectionTitle
-        eyebrow="Referencias"
-        title="Comprender sin copiar"
-        description="Las referencias ayudan a descubrir patrones, lenguajes y posibilidades para revelar una identidad propia."
-      />
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <SectionTitle
+          eyebrow="Referencias"
+          title="Comprender sin copiar"
+          description="Las referencias ayudan a descubrir patrones, lenguajes y posibilidades para revelar una identidad propia."
+        />
+
+        <Button
+          variant="ghost"
+          className="w-fit shrink-0"
+          onClick={() => setScene("light-table")}
+        >
+          Mesa de Luz · {lightTable.length}
+        </Button>
+      </div>
 
       <ReferenceSearch
         value={search}

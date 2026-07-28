@@ -45,6 +45,8 @@ type RevealActions = {
   addToLightTable: (reference: Reference) => void;
   removeFromLightTable: (id: string) => void;
   toggleLightTable: (reference: Reference) => void;
+  moveLightTableReference: (fromIndex: number, toIndex: number) => void;
+  reorderLightTable: (ids: string[]) => void;
   clearLightTable: () => void;
   isInLightTable: (id: string) => boolean;
   setSelection: (selection: Selection) => void;
@@ -273,6 +275,81 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
     }
 
     get().addToLightTable(reference);
+  },
+  moveLightTableReference: (fromIndex, toIndex) => {
+    const now = new Date().toISOString();
+
+    set((state) => {
+      const lastIndex = state.lightTable.length - 1;
+
+      if (
+        fromIndex === toIndex ||
+        fromIndex < 0 ||
+        toIndex < 0 ||
+        fromIndex > lastIndex ||
+        toIndex > lastIndex
+      ) {
+        return state;
+      }
+
+      const nextLightTable = [...state.lightTable];
+      const [movedReference] = nextLightTable.splice(fromIndex, 1);
+
+      if (!movedReference) {
+        return state;
+      }
+
+      nextLightTable.splice(toIndex, 0, movedReference);
+
+      return {
+        lightTable: nextLightTable,
+        project: {
+          ...state.project,
+          updatedAt: now,
+        },
+      };
+    });
+  },
+  reorderLightTable: (ids) => {
+    const now = new Date().toISOString();
+
+    set((state) => {
+      if (ids.length !== state.lightTable.length) {
+        return state;
+      }
+
+      const referencesById = new Map(
+        state.lightTable.map((reference) => [reference.id, reference])
+      );
+
+      const nextLightTable: Reference[] = [];
+
+      for (const id of ids) {
+        const reference = referencesById.get(id);
+
+        if (!reference) {
+          return state;
+        }
+
+        nextLightTable.push(reference);
+      }
+
+      const hasSameOrder = state.lightTable.every(
+        (reference, index) => reference.id === ids[index]
+      );
+
+      if (hasSameOrder) {
+        return state;
+      }
+
+      return {
+        lightTable: nextLightTable,
+        project: {
+          ...state.project,
+          updatedAt: now,
+        },
+      };
+    });
   },
   clearLightTable: () => {
     const now = new Date().toISOString();
