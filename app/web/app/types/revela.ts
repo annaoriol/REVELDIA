@@ -1,3 +1,5 @@
+import type { Reference } from "@/app/features/references/data";
+
 export type ProjectStatus =
   | "draft"
   | "active"
@@ -186,6 +188,7 @@ export interface RevealState {
   navigation: Navigation;
   history: SceneId[];
   memory: Memory;
+  lightTable: Reference[];
   selection: Selection;
   preferences: Preferences;
   loading: LoadingState;

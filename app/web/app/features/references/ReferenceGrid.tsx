@@ -4,11 +4,13 @@ import ReferenceCard from "./ReferenceCard";
 interface ReferenceGridProps {
   items: Reference[];
   onSelect?: (reference: Reference) => void;
+  lightTableIds?: ReadonlySet<string>;
 }
 
 export default function ReferenceGrid({
   items,
   onSelect,
+  lightTableIds,
 }: ReferenceGridProps) {
   if (!items.length) {
     return (
@@ -27,6 +29,7 @@ export default function ReferenceGrid({
           key={item.id}
           item={item}
           onSelect={onSelect}
+          isInLightTable={lightTableIds?.has(item.id) ?? false}
         />
       ))}
     </div>

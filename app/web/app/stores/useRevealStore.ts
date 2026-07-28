@@ -4,6 +4,7 @@ import { create } from "zustand";
 
 import { getSceneById } from "@/app/core/orchestrator/method-scenes";
 import { initialRevealState } from "@/app/core/state/initial-state";
+import type { Reference } from "@/app/features/references/data";
 import type {
   ProjectDNACreativeDirection,
   ProjectDNACreativeSystem,
@@ -41,6 +42,11 @@ type RevealActions = {
   updateCreativeSystem: (
     creativeSystem: Omit<ProjectDNACreativeSystem, "updatedAt">
   ) => void;
+  addToLightTable: (reference: Reference) => void;
+  removeFromLightTable: (id: string) => void;
+  toggleLightTable: (reference: Reference) => void;
+  clearLightTable: () => void;
+  isInLightTable: (id: string) => boolean;
   setSelection: (selection: Selection) => void;
   clearSelection: () => void;
   setLoading: (
@@ -221,6 +227,72 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
         updatedAt: now,
       },
     }));
+  },
+  addToLightTable: (reference) => {
+    const now = new Date().toISOString();
+
+    set((state) => {
+      if (state.lightTable.some((item) => item.id === reference.id)) {
+        return state;
+      }
+
+      return {
+        lightTable: [...state.lightTable, reference],
+        project: {
+          ...state.project,
+          updatedAt: now,
+        },
+      };
+    });
+  },
+  removeFromLightTable: (id) => {
+    const now = new Date().toISOString();
+
+    set((state) => {
+      const nextLightTable = state.lightTable.filter(
+        (reference) => reference.id !== id
+      );
+
+      if (nextLightTable.length === state.lightTable.length) {
+        return state;
+      }
+
+      return {
+        lightTable: nextLightTable,
+        project: {
+          ...state.project,
+          updatedAt: now,
+        },
+      };
+    });
+  },
+  toggleLightTable: (reference) => {
+    if (get().isInLightTable(reference.id)) {
+      get().removeFromLightTable(reference.id);
+      return;
+    }
+
+    get().addToLightTable(reference);
+  },
+  clearLightTable: () => {
+    const now = new Date().toISOString();
+
+    set((state) => {
+      if (!state.lightTable.length) {
+        return state;
+      }
+
+      return {
+        lightTable: [],
+        project: {
+          ...state.project,
+          updatedAt: now,
+        },
+      };
+    });
+  },
+  isInLightTable: (id) => {
+    return get().lightTable.some((reference) => reference.id === id);
   },
   setSelection: (selection) => {
     set({ selection });

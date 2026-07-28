@@ -3,8 +3,10 @@
 import { useMemo, useState } from "react";
 
 import SectionTitle from "@/app/components/ui/SectionTitle";
+import { useRevealStore } from "@/app/stores/useRevealStore";
 
-import { references } from "./data";
+import { references, type Reference } from "./data";
+import ReferenceDetail from "./ReferenceDetail";
 import ReferenceFilters from "./ReferenceFilters";
 import ReferenceGrid from "./ReferenceGrid";
 import ReferenceSearch from "./ReferenceSearch";
@@ -12,6 +14,14 @@ import ReferenceSearch from "./ReferenceSearch";
 export default function ReferencesScene() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("Todas");
+  const [selectedReference, setSelectedReference] =
+    useState<Reference | null>(null);
+  const lightTable = useRevealStore((state) => state.lightTable);
+
+  const lightTableIds = useMemo(
+    () => new Set(lightTable.map((reference) => reference.id)),
+    [lightTable]
+  );
 
   const filteredReferences = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -36,6 +46,14 @@ export default function ReferencesScene() {
     });
   }, [search, filter]);
 
+  const handleSelectReference = (reference: Reference) => {
+    setSelectedReference(reference);
+  };
+
+  const handleCloseDetail = () => {
+    setSelectedReference(null);
+  };
+
   return (
     <section className="mx-auto flex min-h-full w-full max-w-7xl flex-col py-[clamp(2rem,5vw,5rem)]">
       <SectionTitle
@@ -56,6 +74,14 @@ export default function ReferencesScene() {
 
       <ReferenceGrid
         items={filteredReferences}
+        onSelect={handleSelectReference}
+        lightTableIds={lightTableIds}
+      />
+
+      <ReferenceDetail
+        reference={selectedReference}
+        open={selectedReference !== null}
+        onClose={handleCloseDetail}
       />
     </section>
   );
