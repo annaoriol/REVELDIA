@@ -14,6 +14,7 @@ export class AddCreativeDirection {
       ...input.project,
       dna: {
         ...input.project.dna,
+        creativeDirector: input.creativeDirection,
         creativeDirection: input.creativeDirection,
       },
     };

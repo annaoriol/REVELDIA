@@ -134,6 +134,10 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
       ...state.project,
       dna: {
         ...state.project.dna,
+        identity: {
+          ...intention,
+          updatedAt: now,
+        },
         intention: {
           ...intention,
           updatedAt: now,
@@ -198,6 +202,10 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
         ...state.project,
         dna: {
           ...state.project.dna,
+          creativeDirector: {
+            ...creativeDirection,
+            updatedAt: now,
+          },
           creativeDirection: {
             ...creativeDirection,
             updatedAt: now,

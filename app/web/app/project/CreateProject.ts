@@ -16,14 +16,38 @@ export class CreateProject {
       createdAt: now,
       updatedAt: now,
       dna: {
+        identity: {
+          whatToReveal: "",
+          whatToTransmit: "",
+          context: "",
+          updatedAt: null,
+        },
+        references: [],
+        lightTable: {
+          referenceIds: [],
+          groupIds: [],
+          updatedAt: null,
+        },
+        relationships: [],
+        observations: [],
+        insights: [],
+        sensoryLanguage: {
+          terms: [],
+          updatedAt: null,
+        },
+        sensoryDNA: null,
+        creativeDirector: {
+          criteria: [],
+          decisions: [],
+          updatedAt: null,
+        },
+        expressions: [],
         intention: {
           whatToReveal: "",
           whatToTransmit: "",
           context: "",
           updatedAt: null,
         },
-        observations: [],
-        references: [],
         creativeDirection: {
           criteria: [],
           decisions: [],

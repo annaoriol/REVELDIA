@@ -11,14 +11,38 @@ export const initialRevealState: RevealState = {
     name: "Proyecto RƎVELA",
     status: "draft",
     dna: {
+      identity: {
+        whatToReveal: "",
+        whatToTransmit: "",
+        context: "",
+        updatedAt: null,
+      },
+      references: [],
+      lightTable: {
+        referenceIds: [],
+        groupIds: [],
+        updatedAt: null,
+      },
+      relationships: [],
+      observations: [],
+      insights: [],
+      sensoryLanguage: {
+        terms: [],
+        updatedAt: null,
+      },
+      sensoryDNA: null,
+      creativeDirector: {
+        criteria: [],
+        decisions: [],
+        updatedAt: null,
+      },
+      expressions: [],
       intention: {
         whatToReveal: "",
         whatToTransmit: "",
         context: "",
         updatedAt: null,
       },
-      observations: [],
-      references: [],
       creativeDirection: {
         criteria: [],
         decisions: [],
@@ -48,6 +72,8 @@ export const initialRevealState: RevealState = {
   },
   lightTable: [],
   lightTableGroups: [],
+  relationships: [],
+  connections: [],
   selection: {
     id: null,
     type: null,

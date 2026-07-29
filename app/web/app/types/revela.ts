@@ -29,22 +29,40 @@ export type SceneStatus =
   | "complete";
 
 export interface ProjectDNA {
-  intention: ProjectDNAIntention;
-  observations: ProjectDNAObservation[];
+  identity: ProjectDNAIdentity;
   references: ProjectDNAReference[];
+  lightTable: ProjectDNALightTable;
+  relationships: ProjectDNARelationship[];
+  observations: ProjectDNAObservation[];
+  insights: ProjectDNAInsight[];
+  sensoryLanguage: ProjectDNASensoryLanguage;
+  sensoryDNA: ProjectDNASensoryDNA | null;
+  creativeDirector: ProjectDNACreativeDirector;
+  expressions: ProjectDNAExpression[];
+
+  /** @deprecated Use identity. */
+  intention: ProjectDNAIntention;
+  /** @deprecated Use sensoryLanguage and sensoryDNA. */
   creativeDirection: ProjectDNACreativeDirection;
+  /** @deprecated Specialist analysis is no longer a primary Sprint 06 stage. */
   specialistAnalyses: ProjectDNASpecialistAnalysis[];
+  /** @deprecated Use insights and sensoryDNA. */
   revelation: ProjectDNARevelation | null;
+  /** @deprecated Use sensoryDNA. */
   positivation: ProjectDNAPositivation | null;
+  /** @deprecated Use sensoryDNA and expressions. */
   creativeSystem: ProjectDNACreativeSystem | null;
 }
 
-export interface ProjectDNAIntention {
+export interface ProjectDNAIdentity {
   whatToReveal: string;
   whatToTransmit: string;
   context: string;
   updatedAt: string | null;
 }
+
+/** @deprecated Use ProjectDNAIdentity. */
+export type ProjectDNAIntention = ProjectDNAIdentity;
 
 export interface ProjectDNAObservation {
   id: string;
@@ -66,6 +84,79 @@ export interface ProjectDNAReference {
     | "cinematic";
   description: string;
   meaning: string;
+  createdAt: string;
+}
+
+export interface ProjectDNALightTable {
+  referenceIds: string[];
+  groupIds: string[];
+  updatedAt: string | null;
+}
+
+export type RelationshipType =
+  | "supports"
+  | "contrasts"
+  | "inspires"
+  | "extends"
+  | "avoids";
+
+export interface ProjectDNARelationship {
+  id: string;
+  fromId: string;
+  toId: string;
+  type: RelationshipType;
+  note?: string;
+  strength?: number;
+  createdAt: string;
+}
+
+export interface ProjectDNAInsight {
+  id: string;
+  statement: string;
+  sourceIds: string[];
+  confidence: number;
+  createdAt: string;
+}
+
+export type SensoryChannel =
+  | "visual"
+  | "verbal"
+  | "material"
+  | "spatial"
+  | "motion"
+  | "sound";
+
+export interface ProjectDNASensoryTerm {
+  id: string;
+  channel: SensoryChannel;
+  value: string;
+  meaning: string;
+}
+
+export interface ProjectDNASensoryLanguage {
+  terms: ProjectDNASensoryTerm[];
+  updatedAt: string | null;
+}
+
+export interface ProjectDNASensoryDNA {
+  identity: string;
+  principles: string[];
+  rules: string[];
+  signature: string;
+  updatedAt: string;
+}
+
+export interface ProjectDNACreativeDirector {
+  criteria: string[];
+  decisions: string[];
+  updatedAt: string | null;
+}
+
+export interface ProjectDNAExpression {
+  id: string;
+  format: string;
+  brief: string;
+  sourceIds: string[];
   createdAt: string;
 }
 
@@ -154,34 +245,25 @@ export interface Memory {
 }
 
 export interface Group {
-  /**
-   * Identificador único del grupo.
-   */
   id: string;
-
-  /**
-   * Nombre visible del grupo.
-   */
   name: string;
-
-  /**
-   * IDs de las referencias pertenecientes al grupo.
-   */
   itemIds: string[];
-
-  /**
-   * Color editorial del grupo.
-   * Preparado para futuras versiones.
-   */
   color?: string;
-
-  /**
-   * Permite plegar el grupo en la interfaz.
-   * Preparado para futuras versiones.
-   */
   collapsed?: boolean;
 }
 
+/** @deprecated Use RelationshipType. */
+export type RelationType = RelationshipType;
+
+/** @deprecated Use ProjectDNARelationship for domain data. */
+export interface Connection {
+  id: string;
+  from: string;
+  to: string;
+  relation: RelationType;
+  note?: string;
+  strength?: number;
+}
 export interface Selection {
   id: string | null;
   type: "scene" | "panel" | "asset" | "note" | null;
@@ -216,12 +298,25 @@ export interface RevealState {
   scene: Workspace;
   navigation: Navigation;
   history: SceneId[];
+
   memory: Memory;
+
   lightTable: Reference[];
+
   lightTableGroups: Group[];
+
+  relationships: ProjectDNARelationship[];
+
+  /** @deprecated Use relationships. */
+  connections: Connection[];
+
   selection: Selection;
+
   preferences: Preferences;
+
   loading: LoadingState;
+
   errors: ErrorState[];
+
   future: FutureFeature[];
 }
