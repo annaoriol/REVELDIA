@@ -61,9 +61,9 @@ function SortableReferenceCard({
   } = useSortable({ id: reference.id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  transform: `${CSS.Transform.toString(transform)} rotate(${(index % 5) - 2}deg)`,
+  transition,
+};
 
   return (
     <div
@@ -74,16 +74,18 @@ function SortableReferenceCard({
       }`}
     >
       <Card
-        className={`group overflow-hidden rounded-2xl border-white/10 bg-black/28 p-0 transition-colors duration-300 hover:border-cyan-300/35 ${
-          isDragging ? "border-cyan-300/45" : ""
-        }`}
-      >
-        <div className="relative aspect-[4/3] overflow-hidden">
+  className={`group border-0 bg-transparent p-0 shadow-none transition-all duration-300 ${
+    isDragging
+      ? "scale-105"
+      : "hover:-translate-y-1"
+  }`}
+>
+        <div className="relative overflow-hidden rounded-sm bg-transparent">
           <img
-            src={reference.image}
-            alt={reference.title}
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+  src={reference.image}
+  alt={reference.title}
+  className="block h-auto w-[320px] object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+/>
           <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5" />
 
           <button
@@ -98,22 +100,10 @@ function SortableReferenceCard({
             </span>
           </button>
 
-          <div className="absolute inset-x-0 bottom-0 p-5">
-            <p className="text-[10px] uppercase tracking-[0.34em] text-cyan-300/75">
-              {reference.category}
-            </p>
-
-            <h3 className="mt-2 font-[var(--font-space)] text-3xl font-light leading-none tracking-[0.04em] text-white">
-              {reference.title}
-            </h3>
-
-            <p className="mt-3 line-clamp-2 text-sm leading-6 text-white/68">
-              {reference.description}
-            </p>
-          </div>
+      
         </div>
 
-        <div className="flex items-center justify-between gap-4 border-t border-white/10 px-5 py-4">
+        <div className="flex items-center justifxy-between gap-4 border-t border-white/10 px-5 py-4">
           <div className="flex min-w-0 flex-wrap gap-2">
             {reference.keywords.slice(0, 2).map((keyword) => (
               <span
@@ -185,47 +175,45 @@ function ReferenceGroupSection({
 
   return (
     <section
-      ref={setNodeRef}
-      className={`rounded-2xl border border-white/10 bg-black/16 p-4 transition-colors ${
-        isOver ? "border-cyan-300/40 bg-cyan-300/[0.035]" : ""
-      }`}
-    >
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-white/35">
-            Grupo editorial
-          </p>
-          <h3 className="mt-2 font-[var(--font-space)] text-2xl font-light tracking-[0.04em] text-white">
-            {title}
-          </h3>
-        </div>
-
-        {children}
-      </div>
+  ref={setNodeRef}
+  className={`relative py-4 transition-colors ${
+    isOver ? "ring-2 ring-cyan-300/40 rounded-xl" : ""
+  }`}
+>
 
       <SortableContext
         items={references.map((reference) => reference.id)}
         strategy={rectSortingStrategy}
       >
         {references.length ? (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {references.map((reference, index) => (
-              <SortableReferenceCard
-                key={reference.id}
-                index={index}
-                reference={reference}
-                currentGroupId={itemGroupIds.get(reference.id) ?? null}
-                groups={groups}
-                onGroupChange={onGroupChange}
-                onRemove={onRemove}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-white/10 px-5 py-8 text-sm leading-6 text-white/42">
-            Arrastra referencias aquí o usa el selector de grupo.
-          </div>
-        )}
+  <div className="relative min-h-[700px]">
+    {references.map((reference, index) => (
+      <div
+        key={reference.id}
+        className="absolute"
+        style={{
+          left: `${80 + index * 140}px`,
+          top: `${90 + index * 45}px`,
+          transform: `rotate(${(index % 5) - 2}deg)`,
+          zIndex: index,
+        }}
+      >
+        <SortableReferenceCard
+          index={index}
+          reference={reference}
+          currentGroupId={itemGroupIds.get(reference.id) ?? null}
+          groups={groups}
+          onGroupChange={onGroupChange}
+          onRemove={onRemove}
+        />
+      </div>
+    ))}
+  </div>
+) : (
+  <div className="px-4 py-10 text-center text-sm italic text-white/45">
+    Arrastra referencias aquí.
+  </div>
+)}
       </SortableContext>
     </section>
   );

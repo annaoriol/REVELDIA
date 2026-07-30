@@ -23,9 +23,6 @@ export default function ReferenceDetail({
   const toggleLightTable = useRevealStore(
     (state) => state.toggleLightTable
   );
-  const isReferenceInLightTable = reference
-    ? lightTable.some((item) => item.id === reference.id)
-    : false;
 
   useEffect(() => {
     if (!open) return;
@@ -43,6 +40,8 @@ export default function ReferenceDetail({
     };
   }, [open, onClose]);
 
+  if (!reference) return null;
+
   return (
     <div
       aria-hidden={!open}
@@ -55,78 +54,72 @@ export default function ReferenceDetail({
     >
       <button
         type="button"
-        aria-label="Cerrar detalle de referencia"
+        aria-label="Cerrar detalle"
         onClick={onClose}
-        className="absolute inset-0 cursor-default bg-black/20 backdrop-blur-[1px]"
+        className="absolute inset-0 bg-black/20 backdrop-blur-[1px]"
       />
 
       <Panel
         aria-label="Detalle de referencia"
         className={[
-          "relative z-10 mr-[clamp(1rem,3vw,2rem)] mt-[clamp(1rem,4vh,2rem)] flex h-[calc(100dvh-clamp(2rem,8vh,4rem))] w-[min(calc(100vw-2rem),28.75rem)] flex-col overflow-hidden rounded-2xl border-white/12 bg-neutral-950/96 text-white shadow-2xl transition duration-300 ease-out",
+          "relative z-10 mr-6 mt-8 flex h-fit max-h-[80vh] w-[360px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-950/95 text-white shadow-2xl transition-all duration-300",
           open
             ? "translate-x-0 opacity-100"
             : "translate-x-8 opacity-0",
         ].join(" ")}
       >
-        {reference && (
-          <>
-            <div className="relative aspect-[4/3] shrink-0 overflow-hidden border-b border-white/10 bg-white/[0.03]">
-              <img
-                src={reference.image}
-                alt={reference.title}
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent" />
+        {/* CABECERA */}
 
-              <button
-                type="button"
-                aria-label="Cerrar panel"
-                onClick={onClose}
-                className="absolute right-4 top-4 flex size-9 items-center justify-center rounded-full border border-white/15 bg-black/45 text-lg leading-none text-white/80 transition-colors duration-200 hover:border-white/30 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+        <div className="flex items-start justify-between border-b border-white/10 px-6 py-5">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.35em] text-cyan-300/80">
+              {reference.category}
+            </p>
+
+            <h2 className="mt-2 text-3xl font-light leading-tight">
+              {reference.title}
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-lg text-white/60 transition hover:border-white/30 hover:text-white"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* CONTENIDO */}
+
+        <div className="flex flex-col px-6 py-5">
+          <p className="text-sm leading-6 text-white/70">
+            {reference.description}
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {reference.keywords.map((keyword) => (
+              <span
+                key={keyword}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-white/60"
               >
-                x
-              </button>
-            </div>
+                {keyword}
+              </span>
+            ))}
+          </div>
 
-            <div className="flex min-h-0 flex-1 flex-col px-7 py-8">
-              <p className="text-[10px] font-medium uppercase tracking-[0.36em] text-cyan-300/85">
-                {reference.category}
-              </p>
-
-              <h2 className="mt-4 text-[clamp(2rem,5vw,3.5rem)] font-light leading-[0.92] text-white">
-                {reference.title}
-              </h2>
-
-              <p className="mt-6 text-base leading-7 text-white/72">
-                {reference.description}
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-2">
-                {reference.keywords.map((keyword) => (
-                  <span
-                    key={keyword}
-                    className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1 text-xs text-white/62"
-                  >
-                    {keyword}
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-auto pt-8">
-                <Button
-                  variant="primary"
-                  className="w-full"
-                  onClick={() => toggleLightTable(reference)}
-                >
-                  {isReferenceInLightTable
-                    ? "Quitar de Mesa de Luz"
-                    : "Añadir a Mesa de Luz"}
-                </Button>
-              </div>
-            </div>
-          </>
-        )}
+          <Button
+            variant="primary"
+            className="mt-8 w-full"
+            onClick={() => {
+              toggleLightTable(reference);
+              onClose();
+            }}
+          >
+            Añadir a Mesa de Luz
+          </Button>
+        </div>
       </Panel>
     </div>
   );
