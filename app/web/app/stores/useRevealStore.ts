@@ -3,6 +3,7 @@
 import { create } from "zustand";
 
 import { getSceneById } from "@/app/core/orchestrator/method-scenes";
+import { createObservation } from "@/app/domain/observation";
 import { initialRevealState } from "@/app/core/state/initial-state";
 import type { Reference } from "@/app/features/references/data";
 import type {
@@ -25,7 +26,16 @@ type RevealActions = {
     intention: Omit<ProjectDNAIntention, "updatedAt">
   ) => void;
   registerObservation: (
-    observation: Omit<ProjectDNAObservation, "id" | "createdAt">
+    observation: Pick<
+      ProjectDNAObservation,
+      "question" | "answer" | "evidenceIds"
+    > &
+      Partial<
+        Pick<
+          ProjectDNAObservation,
+          "referenceIds" | "relationshipIds"
+        >
+      >
   ) => void;
   registerReference: (
     reference: Omit<ProjectDNAReference, "id" | "createdAt">
@@ -151,6 +161,15 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
 },
   registerObservation: (observation) => {
     const now = new Date().toISOString();
+    const nextObservation = createObservation({
+      id: crypto.randomUUID(),
+      question: observation.question,
+      answer: observation.answer,
+      evidenceIds: observation.evidenceIds,
+      referenceIds: observation.referenceIds,
+      relationshipIds: observation.relationshipIds,
+      createdAt: now,
+    });
 
     set((state) => ({
       project: {
@@ -159,11 +178,7 @@ export const useRevealStore = create<RevealStore>((set, get) => ({
           ...state.project.dna,
           observations: [
             ...state.project.dna.observations,
-            {
-              ...observation,
-              id: crypto.randomUUID(),
-              createdAt: now,
-            },
+            nextObservation,
           ],
         },
         updatedAt: now,

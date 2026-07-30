@@ -64,12 +64,23 @@ export interface ProjectDNAIdentity {
 /** @deprecated Use ProjectDNAIdentity. */
 export type ProjectDNAIntention = ProjectDNAIdentity;
 
+export type ObservationStatus =
+  | "draft"
+  | "registered"
+  | "connected"
+  | "translated-to-insight";
+
 export interface ProjectDNAObservation {
   id: string;
   question: string;
   answer: string;
   evidenceIds: string[];
+  referenceIds: string[];
+  relationshipIds: string[];
+  insightIds: string[];
+  status: ObservationStatus;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface ProjectDNAReference {
