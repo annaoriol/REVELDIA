@@ -3,6 +3,8 @@ import type {
   ProjectDNAReference,
 } from "@/app/types";
 
+import { ProjectUpdater } from "./engines/ProjectUpdater";
+
 export interface AddReferenceInput {
   project: Project;
   reference: ProjectDNAReference;
@@ -10,7 +12,7 @@ export interface AddReferenceInput {
 
 export class AddReference {
   execute(input: AddReferenceInput): Project {
-    return {
+    const updatedProject = {
       ...input.project,
       dna: {
         ...input.project.dna,
@@ -20,5 +22,7 @@ export class AddReference {
         ],
       },
     };
+
+    return ProjectUpdater.touch(updatedProject);
   }
 }
