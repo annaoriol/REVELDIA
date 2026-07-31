@@ -1,16 +1,18 @@
-import { RevealSessionId } from "./RevealSessionId";
+import { Entity } from "../shared/types";
 import { RevealSessionState } from "./RevealSessionState";
 
-export interface RevealSession {
-  id: RevealSessionId;
-
+export interface RevealSession extends Entity {
   projectId: string;
 
   title: string;
 
   state: RevealSessionState;
 
-  startedAt: Date;
+  identityId?: string;
 
-  updatedAt: Date;
+  referenceIds: string[];
+
+  observationIds: string[];
+
+  insightIds: string[];
 }
