@@ -1,259 +1,136 @@
-# RƎVELA DOMAIN
+# RƎVELA Core · Domain
 
-Version: 1.0
-
----
-
-# INTENCIÓN
-
-Define qué se quiere revelar y qué se quiere transmitir.
-
-Es el origen de todo el proceso.
+Versión: 1.0
 
 ---
 
-# REFERENCIAS
+## Propósito
 
-Proceso de descubrimiento mediante preguntas.
+Este documento define el dominio oficial de RƎVELA.
 
-Recoge referentes visuales, narrativos, culturales, emocionales y conceptuales.
+Toda nueva funcionalidad deberá apoyarse en este modelo.
 
-No busca copiar.
+La interfaz puede cambiar.
 
-Busca comprender.
+Los modelos de IA pueden cambiar.
 
----
+La tecnología puede cambiar.
 
-# ESTILO
-
-Conjunto de patrones que emergen de las referencias.
-
-El estilo no se inventa.
-
-Se descubre.
+El dominio permanece estable.
 
 ---
 
-# DIRECTOR CREATIVO
+# Principios
 
-Orquesta todo el laboratorio.
+1. El dominio es la única fuente de verdad.
 
-Hace preguntas.
+2. Cada concepto existe una sola vez.
 
-Relaciona conceptos.
+3. La interfaz nunca contiene lógica de negocio.
 
-Decide.
+4. Los agentes trabajan sobre el dominio.
 
-Nunca genera contenido directamente.
+5. Todo conocimiento pertenece a un Proyecto.
 
-Nunca depende de un modelo de IA.
+6. Cada Revelación pertenece a una Reveal Session.
 
----
+7. El ADN pertenece al Proyecto y evoluciona con todas las sesiones.
 
-# ESPECIALISTAS
-
-Agentes especializados que analizan una parte concreta del proyecto.
-
-No toman decisiones.
-
-No conocen a otros especialistas.
-
-Siempre responden al Director Creativo.
+8. Las Referencias forman parte permanente del proceso creativo.
 
 ---
 
-# SÍNTESIS
+# Entidades oficiales
 
-Integra los resultados de todos los especialistas.
+## Project
 
-Genera una visión única y coherente.
+Representa un proyecto creativo.
 
-Es la única entrada de la RƎVELACIÓN.
-
----
-
-# RƎVELACIÓN
-
-Descubrimiento central del proyecto.
-
-Define la identidad.
-
-Nunca produce contenido.
+Contiene una o varias Reveal Sessions.
 
 ---
 
-# POSITIVADO
+## Reveal Session
 
-Transforma la Revelación en conocimiento estructurado.
-
-Construye un Sistema Creativo reutilizable.
-
----
-
-# SISTEMA CREATIVO
-
-Única fuente de verdad del proyecto.
+Unidad principal de trabajo.
 
 Contiene:
 
-- identidad
-- narrativa
-- tono
-- principios
-- referencias
-- estilo
-- lenguaje visual
-- dirección artística
-- dirección cinematográfica
-- personajes
-- localizaciones
-- reglas editoriales
-- bibliotecas creativas
-
-Todo el contenido futuro nace desde aquí.
+- Conversation
+- Collections
+- Light Table
+- Observations
+- Revelations
 
 ---
 
-# CREACIÓN
+## Conversation
 
-Construye piezas de comunicación utilizando el Sistema Creativo.
-
-Nunca parte de cero.
+Registro completo de interacción entre usuario y RƎVELA.
 
 ---
 
-# PRODUCCIÓN
+## Collection
 
-Coordina la generación multimodal.
+Conjunto de referencias reveladas por el Curador.
 
-Puede producir:
-
-- texto
-- imagen
-- fotografía
-- vídeo
-- audio
-- presentaciones
-- editorial
-- web
-- redes sociales
-
-No depende de un proveedor concreto.
+Representa una hipótesis creativa.
 
 ---
 
-# ADAPTACIÓN
+## Reference
 
-Transforma un mismo contenido para distintos formatos y canales.
+Unidad mínima de conocimiento.
 
-Mantiene la coherencia.
-
----
-
-# DIRECCIÓN EDITORIAL
-
-Revisa la calidad del contenido.
-
-Comprueba:
-
-- coherencia
-- identidad
-- narrativa
-- tono
-- consistencia
-
-Puede solicitar revisiones.
+Puede pertenecer a varias Collections.
 
 ---
 
-# EXPORTACIÓN
+## Light Table
 
-Prepara los activos finales para su utilización.
-
-Puede generar:
-
-- PDF
-- DOCX
-- Markdown
-- HTML
-- JSON
-- Brand Book
-- Prompt Pack
-- Character Bible
-- Location Bible
-- Storyboard
-- Calendario Editorial
+Espacio donde el usuario relaciona referencias.
 
 ---
 
-# CAPACIDADES
+## Observation
 
-Representan lo que RƎVELA sabe hacer.
-
-Nunca conocen modelos.
+Interpretación realizada sobre referencias.
 
 ---
 
-# PROVEEDORES
+## Revelation
 
-Implementaciones externas.
-
-Ejemplos:
-
-- OpenAI
-- Anthropic
-- Google
-- Adobe
-- Seedance
-- Kling
-- Veo
-- Runway
-
-Son intercambiables.
+Conclusión obtenida tras observar patrones.
 
 ---
 
-# ADAPTADORES
+## DNA
 
-Traducen las instrucciones del Sistema Creativo al formato requerido por cada proveedor.
+Conocimiento consolidado del Proyecto.
 
-Nunca modifican el Sistema Creativo.
-
----
-
-# MEMORIA CREATIVA
-
-Conserva el conocimiento del proyecto entre sesiones.
-
-Incluye:
-
-- decisiones
-- referencias
-- personajes
-- localizaciones
-- campañas
-- prompts
-- activos
-- revisiones
+Se construye automáticamente.
 
 ---
 
-# BIBLIOTECA DE ACTIVOS
+## Creative Direction
 
-Repositorio reutilizable de:
-
-- personajes
-- localizaciones
-- estilos
-- prompts
-- fotografías
-- vídeos
-- audio
-- campañas
-- plantillas
+Decisiones finales derivadas del ADN.
 
 ---
 
-# REGLA FINAL
+# Agentes
 
-Si existe una contradicción entre el código y este documento, este documento tiene prioridad.
+- Curator
+- Observer
+- Creative Director
+- Documentarian
+
+---
+
+# Regla fundamental
+
+No puede añadirse una nueva entidad al dominio sin justificar:
+
+- su responsabilidad
+- su relación con el resto
+- por qué no pertenece a otra entidad

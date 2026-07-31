@@ -6,3 +6,4 @@ export * from "./sensory-language/SensoryLanguage";
 export * from "./sensory-dna/SensoryDNA";
 export * from "./creative-director/CreativeDirector";
 export * from "./expressions/Expression";
+export * from "./session";
