@@ -4,6 +4,7 @@ import { Reference } from "@/src/domain/references/Reference";
 import { addReference } from "../references/AddReference";
 import { moveReferenceToLightTable } from "../light-table/MoveReferenceToLightTable";
 import { observeReference } from "../observation/ObserveReference";
+import { generatePatterns } from "../patterns/GeneratePatterns";
 import { generateInsight } from "../insight/GenerateInsight";
 
 interface RevealPipelineParams {
@@ -29,13 +30,18 @@ export function revealPipeline({
     reference,
   });
 
-  const insight = generateInsight({
+  const patterns = generatePatterns({
     observations: [observation],
+  });
+
+  const insight = generateInsight({
+    patterns,
   });
 
   return {
     dossier: lightTable,
     observation,
+    patterns,
     insight,
   };
 }
