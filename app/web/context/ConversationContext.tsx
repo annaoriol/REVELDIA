@@ -11,7 +11,7 @@ import {
 
 import { useProject } from "@/context/ProjectContext";
 
-import { registerObservation } from "@/core/ObservationEngine";
+import { registerObservation } from "@/src/application/observation/RegisterObservation";
 import { updateDossier } from "@/core/DossierEngine";
 import { LaboratoryEngine } from "@/core/LaboratoryEngine";
 

@@ -1,7 +1,7 @@
 import { Project } from "@/types/project";
 import { Laboratory } from "@/types/observation";
 
-import { registerObservation } from "@/core/ObservationEngine";
+import { registerObservation } from "@/src/application/observation/RegisterObservation";
 import { buildObservationContext } from "@/legacy/core/ObservationContext";
 
 import { consultCouncil } from "@/legacy/laboratory/reveal/Council";

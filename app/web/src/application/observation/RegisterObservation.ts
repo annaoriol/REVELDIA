@@ -5,7 +5,6 @@ export function registerObservation(
   project: Project,
   observation: Omit<Observation, "keywords" | "confidence">
 ): Project {
-
   const keywords = extractKeywords(observation.answer);
 
   const completedObservation: Observation = {
@@ -15,35 +14,25 @@ export function registerObservation(
   };
 
   return {
-
     ...project,
 
     updatedAt: new Date().toISOString(),
 
     dossier: {
-
       ...project.dossier,
 
       observations: [
-
         ...project.dossier.observations,
-
         completedObservation,
-
       ],
-
     },
-
   };
-
 }
 
 function extractKeywords(text: string): string[] {
-
   return text
     .toLowerCase()
     .replace(/[.,;:!?¿¡]/g, "")
     .split(/\s+/)
     .filter((word) => word.length > 3);
-
 }
