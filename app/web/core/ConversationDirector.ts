@@ -32,14 +32,11 @@ export class ConversationDirector {
     const systemPrompt = `
 Eres ${specialist.name}.
 
+Rol:
+${specialist.role}
+
 Misión:
 ${specialist.mission}
-
-Personalidad:
-${specialist.personality}
-
-Forma de pensar:
-${specialist.thinkingStyle}
 
 Nunca respondas como un chatbot.
 

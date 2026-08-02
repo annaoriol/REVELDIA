@@ -1,7 +1,7 @@
 "use client";
 
 import { useProject } from "@/context/ProjectContext";
-import { CreativeDirector } from "@/core/CreativeDirector";
+import { CreativeDirector } from "@/src/application/creative-direction/CreativeDirector";
 
 export default function RightDossier() {
   const { project } = useProject();

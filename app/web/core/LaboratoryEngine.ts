@@ -1,12 +1,15 @@
 import { Project } from "@/types/project";
 
-import { CreativeDirector } from "./CreativeDirector";
-import { Specialist } from "./Specialists";
+import { CreativeDirector } from "@/src/application/creative-direction/CreativeDirector";
 import { RevealArea } from "@/src/data/reveal/RevealAreas";
 
 export interface LaboratoryContext {
   stage: string;
-  specialist: Specialist;
+  specialist: {
+    name: string;
+    role: string;
+    mission: string;
+  };
   area: RevealArea;
   prompt: string;
   questions: string[];
@@ -18,16 +21,10 @@ export class LaboratoryEngine {
   ) {}
 
   public context(): LaboratoryContext | null {
-    const director =
-      new CreativeDirector(
-        this.project
-      );
+    const director = new CreativeDirector(this.project);
 
-    const specialist =
-      director.specialist();
-
-    const area =
-      director.revealArea();
+    const specialist = director.specialist();
+    const area = director.revealArea();
 
     if (!specialist || !area) {
       return null;
@@ -42,20 +39,12 @@ export class LaboratoryEngine {
     };
   }
 
-  public firstQuestion():
-    | string
-    | null {
-    return (
-      this.context()
-        ?.questions[0] ?? null
-    );
+  public firstQuestion(): string | null {
+    return this.context()?.questions[0] ?? null;
   }
 
-  public nextQuestion():
-    | string
-    | null {
-    const context =
-      this.context();
+  public nextQuestion(): string | null {
+    const context = this.context();
 
     if (!context) {
       return null;
@@ -63,15 +52,9 @@ export class LaboratoryEngine {
 
     const answered =
       this.project.dossier.observations.filter(
-        (o) =>
-          o.laboratory ===
-          context.area.id
+        (o) => o.laboratory === context.area.id
       ).length;
 
-    return (
-      context.questions[
-        answered
-      ] ?? null
-    );
+    return context.questions[answered] ?? null;
   }
 }
