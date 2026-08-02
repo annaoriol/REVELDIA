@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { REVEAL_AREAS } from "@/core/RevealAreas";
+import { REVEAL_AREAS } from "@/src/data/reveal/RevealAreas";
 
 type RevealGalleryProps = {
   selected: string | null;

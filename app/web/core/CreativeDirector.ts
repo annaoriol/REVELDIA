@@ -1,7 +1,7 @@
 import { Project } from "@/types/project";
 import { Revelation } from "@/types/revelation";
 
-import { getRevealArea } from "./RevealAreas";
+import { getRevealArea } from "@/src/data/reveal/RevealAreas";
 import { getSpecialist } from "./Specialists";
 
 export type LaboratoryStage =

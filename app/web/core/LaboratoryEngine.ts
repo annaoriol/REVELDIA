@@ -2,7 +2,7 @@ import { Project } from "@/types/project";
 
 import { CreativeDirector } from "./CreativeDirector";
 import { Specialist } from "./Specialists";
-import { RevealArea } from "./RevealAreas";
+import { RevealArea } from "@/src/data/reveal/RevealAreas";
 
 export interface LaboratoryContext {
   stage: string;

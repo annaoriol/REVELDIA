@@ -2,7 +2,7 @@ import { Project } from "@/types/project";
 import { Seed } from "@/types/seed";
 import { Revelation } from "@/types/revelation";
 
-import { getRevealArea } from "./RevealAreas";
+import { getRevealArea } from "@/src/data/reveal/RevealAreas";
 
 export function updateProjectWithRevelation(
   project: Project,
