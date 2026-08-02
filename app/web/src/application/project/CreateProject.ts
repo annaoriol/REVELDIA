@@ -1,11 +1,10 @@
-import { createEmptyDossier } from "./Dossier";
-
+import { createEmptyDossier } from "@/core/Dossier";
 import { Project } from "@/types/project";
 
 export function createProject(): Project {
+  const now = new Date().toISOString();
 
   return {
-
     id: crypto.randomUUID(),
 
     title: "Nuevo proceso",
@@ -14,12 +13,10 @@ export function createProject(): Project {
 
     seed: null,
 
-    createdAt: new Date().toISOString(),
+    createdAt: now,
 
-    updatedAt: new Date().toISOString(),
+    updatedAt: now,
 
     dossier: createEmptyDossier(),
-
   };
-
 }

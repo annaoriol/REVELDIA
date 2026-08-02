@@ -8,7 +8,7 @@ import {
   useMemo,
 } from "react";
 
-import { createProject } from "@/core/Project";
+import { createProject } from "@/src/application/project/CreateProject";
 import { Project } from "@/types/project";
 import { ProjectRepository } from "@/storage/ProjectRepository";
 
