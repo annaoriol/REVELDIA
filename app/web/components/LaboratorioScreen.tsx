@@ -37,9 +37,9 @@ export default function LaboratorioScreen({
     <main className="min-h-screen w-screen overflow-x-hidden bg-black text-white">
       <div className="w-full px-20 py-12 2xl:px-28">
         <RevealGallery
-          selected={selected}
-          onSelect={handleSelect}
-        />
+  selected={selected}
+  onSelectAction={handleSelect}
+/>
       </div>
     </main>
   );

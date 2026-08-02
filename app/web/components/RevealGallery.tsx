@@ -6,12 +6,12 @@ import { REVEAL_AREAS } from "@/src/data/reveal/RevealAreas";
 
 type RevealGalleryProps = {
   selected: string | null;
-  onSelect: (id: string) => void;
+  onSelectAction: (id: string) => void;
 };
 
 export default function RevealGallery({
   selected,
-  onSelect,
+  onSelectAction,
 }: RevealGalleryProps) {
   return (
     <section className="w-full">
@@ -75,7 +75,7 @@ export default function RevealGallery({
           return (
             <button
               key={area.id}
-              onClick={() => onSelect(area.id)}
+              onClick={() => onSelectAction(area.id)}
               className="group text-left"
             >
               <div

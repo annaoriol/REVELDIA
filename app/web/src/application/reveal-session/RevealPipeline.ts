@@ -7,6 +7,11 @@ import { observeReference } from "../observation/ObserveReference";
 import { generatePatterns } from "../patterns/GeneratePatterns";
 import { generateInsight } from "../insight/GenerateInsight";
 
+import { generateCreativeDirection } from "../creative-direction/GenerateCreativeDirection";
+import { runSpecialists } from "../specialists/RunSpecialists";
+import { generateSynthesis } from "../synthesis/GenerateSynthesis";
+import { generateRevelation } from "../revelation/GenerateRevelation";
+
 interface RevealPipelineParams {
   dossier: Dossier;
   reference: Reference;
@@ -38,10 +43,39 @@ export function revealPipeline({
     patterns,
   });
 
+  const creativeDirection = generateCreativeDirection({
+    insights: [insight],
+  });
+
+  const specialistResults = runSpecialists({
+    creativeDirection,
+  });
+
+  const synthesis = generateSynthesis({
+    conclusions: specialistResults.map(
+      result => result.result
+    ),
+  });
+
+  const revelation = generateRevelation({
+    synthesis,
+  });
+
   return {
     dossier: lightTable,
+
     observation,
+
     patterns,
+
     insight,
+
+    creativeDirection,
+
+    specialistResults,
+
+    synthesis,
+
+    revelation,
   };
 }
