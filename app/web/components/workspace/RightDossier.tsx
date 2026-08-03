@@ -2,11 +2,14 @@
 
 import { useProject } from "@/context/ProjectContext";
 import { CreativeDirector } from "@/src/application/creative-direction/CreativeDirector";
+import { toDomainProject } from "@/src/application/adapters/ProjectAdapter";
 
 export default function RightDossier() {
   const { project } = useProject();
 
-  const director = new CreativeDirector(project);
+const domainProject = toDomainProject(project);
+
+const director = new CreativeDirector(domainProject);
 
   const area = director.revealArea();
   const specialist = director.specialist();

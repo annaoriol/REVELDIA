@@ -2,6 +2,7 @@ import { Project } from "@/types/project";
 
 import { CreativeDirector } from "@/src/application/creative-direction/CreativeDirector";
 import { RevealArea } from "@/src/data/reveal/RevealAreas";
+import { toDomainProject } from "@/src/application/adapters/ProjectAdapter";
 
 export interface LaboratoryContext {
   stage: string;
@@ -21,7 +22,9 @@ export class LaboratoryEngine {
   ) {}
 
   public context(): LaboratoryContext | null {
-    const director = new CreativeDirector(this.project);
+    const director = new CreativeDirector(
+  toDomainProject(this.project)
+);
 
     const specialist = director.specialist();
     const area = director.revealArea();

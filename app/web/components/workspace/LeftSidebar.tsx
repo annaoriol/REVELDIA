@@ -2,11 +2,14 @@
 
 import { useProject } from "@/context/ProjectContext";
 import { CreativeDirector } from "@/src/application/creative-direction/CreativeDirector";
+import { toDomainProject } from "@/src/application/adapters/ProjectAdapter";
 
 export default function LeftSidebar() {
   const { project } = useProject();
 
-  const director = new CreativeDirector(project);
+  const domainProject = toDomainProject(project);
+
+  const director = new CreativeDirector(domainProject);
 
   const area = director.revealArea();
   const specialist = director.specialist();
@@ -59,8 +62,6 @@ export default function LeftSidebar() {
       >
         <div className="space-y-10 p-8 xl:p-10">
 
-          {/* PROYECTO */}
-
           <section>
 
             <div className="flex items-center justify-between">
@@ -95,8 +96,6 @@ export default function LeftSidebar() {
 
           </section>
 
-          {/* ÁREA */}
-
           {area && (
             <section className="border-t border-white/10 pt-8">
 
@@ -114,8 +113,6 @@ export default function LeftSidebar() {
 
             </section>
           )}
-
-          {/* ESPECIALISTA */}
 
           {specialist && (
             <section className="border-t border-white/10 pt-8">
