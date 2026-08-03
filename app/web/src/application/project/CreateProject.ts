@@ -1,4 +1,4 @@
-import { createEmptyDossier } from "@/src/domain/dossier/CreateEmptyDossier";
+import { createEmptyDossier } from "./CreateEmptyProjectDossier";
 import { Project } from "@/types/project";
 
 export function createProject(): Project {
