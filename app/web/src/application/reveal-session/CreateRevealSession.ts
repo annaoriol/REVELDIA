@@ -18,7 +18,7 @@ export function createRevealSession({
 
     title,
 
-    state: RevealSessionState.Draft,
+    state: RevealSessionState.Identity,
 
     createdAt: now,
     updatedAt: now,
