@@ -16,14 +16,18 @@ export function observeReference({
     createdAt: now,
     updatedAt: now,
 
-    title: reference.title,
+    laboratory: "identity",
 
-    description:
+    image: "",
+
+    question: "",
+
+    answer:
       reference.description ??
-      "Observación pendiente.",
+      reference.title,
 
-    references: [reference.id],
+    keywords: reference.tags,
 
-    tags: reference.tags,
+    confidence: 0,
   };
 }

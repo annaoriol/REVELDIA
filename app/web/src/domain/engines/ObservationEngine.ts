@@ -3,18 +3,27 @@ import { Reference } from "../references/Reference";
 
 export class ObservationEngine {
   createObservation(
-    title: string,
+    _title: string,
     description: string,
-    references: Reference[],
+    _references: Reference[],
   ): Observation {
     return {
       id: crypto.randomUUID(),
+
       createdAt: new Date(),
       updatedAt: new Date(),
-      title,
-      description,
-      references: references.map(r => r.id),
-      tags: [],
+
+      laboratory: "identity",
+
+      image: "",
+
+      question: "",
+
+      answer: description,
+
+      keywords: [],
+
+      confidence: 0,
     };
   }
 }

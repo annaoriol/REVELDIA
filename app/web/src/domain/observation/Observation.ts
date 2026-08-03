@@ -1,11 +1,22 @@
 import { Entity } from "../shared/types";
 
+export type Laboratory =
+  | "identity"
+  | "visual"
+  | "narrative"
+  | "strategy"
+  | "communication";
+
 export interface Observation extends Entity {
-  title: string;
+  laboratory: Laboratory;
 
-  description: string;
+  image: string;
 
-  references: string[];
+  question: string;
 
-  tags: string[];
+  answer: string;
+
+  keywords: string[];
+
+  confidence: number;
 }
