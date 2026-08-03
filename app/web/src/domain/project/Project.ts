@@ -1,18 +1,14 @@
 import { Dossier } from "../dossier/Dossier";
+import { Seed } from "../seed/Seed";
 
 export type ProjectStage =
   | "welcome"
-  | "identity"
-  | "references"
+  | "observing"
+  | "revealing"
   | "light-table"
-  | "observation"
-  | "patterns"
-  | "insight"
-  | "creative-direction"
-  | "specialists"
-  | "synthesis"
-  | "revelation"
-  | "production"
+  | "ideating"
+  | "transmitting"
+  | "positivating"
   | "completed";
 
 export interface Project {
@@ -21,6 +17,8 @@ export interface Project {
   title: string;
 
   stage: ProjectStage;
+
+  seed: Seed | null;
 
   createdAt: Date;
 
