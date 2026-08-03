@@ -1,31 +1,12 @@
 import { Project } from "@/types/project";
 import { Seed } from "@/types/seed";
-import { Revelation } from "@/types/revelation";
 
 import { getRevealArea } from "@/src/data/reveal/RevealAreas";
-
-export function updateProjectWithRevelation(
-  project: Project,
-  revelation: Revelation
-): Project {
-  return {
-    ...project,
-    dossier: {
-      ...project.dossier,
-      revelations: [
-        ...project.dossier.revelations,
-        revelation,
-      ],
-    },
-    updatedAt: new Date().toISOString(),
-  };
-}
 
 export function selectRevealArea(
   project: Project,
   areaId: string
 ): Project {
-
   const area = getRevealArea(areaId);
 
   if (!area) {

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useProject } from "@/context/ProjectContext";
 import { useConversation } from "@/context/ConversationContext";
 
-import { LaboratoryEngine } from "@/core/LaboratoryEngine";
+import { LaboratoryEngine } from "@/src/application/laboratory/LaboratoryEngine";
 
 export default function MentorPanel() {
   const { project } = useProject();

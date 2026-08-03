@@ -5,7 +5,7 @@ import { useState } from "react";
 import RevealGallery from "./RevealGallery";
 
 import { useProject } from "@/context/ProjectContext";
-import { selectRevealArea } from "@/core/ProjectUpdater";
+import { selectRevealArea } from "@/src/application/project/SelectRevealArea";
 
 type LaboratorioScreenProps = {
   onCompleteAction: () => void;

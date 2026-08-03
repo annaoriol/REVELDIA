@@ -13,7 +13,7 @@ import { useProject } from "@/context/ProjectContext";
 
 import { registerObservation } from "@/src/application/observation/RegisterObservation";
 import { updateDossier } from "@/src/application/dossier/UpdateDossier";
-import { LaboratoryEngine } from "@/core/LaboratoryEngine";
+import { LaboratoryEngine } from "@/src/application/laboratory/LaboratoryEngine";
 
 import { Observation } from "@/types/observation";
 import { Project } from "@/types/project";

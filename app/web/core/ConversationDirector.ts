@@ -1,6 +1,6 @@
 import { Project } from "@/types/project";
 
-import { LaboratoryEngine } from "./LaboratoryEngine";
+import { LaboratoryEngine } from "@/src/application/laboratory/LaboratoryEngine";
 
 export interface ConversationTurn {
   speaker: "assistant" | "user";
