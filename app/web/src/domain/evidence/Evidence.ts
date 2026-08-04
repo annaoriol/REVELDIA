@@ -1,9 +1,21 @@
-import { Entity } from "../shared/types";
+import { EvidenceType } from "./EvidenceType";
 
-export interface Evidence extends Entity {
-  specialist: string;
+export interface Evidence {
+  id: string;
 
-  text: string;
+  title: string;
 
-  confidence: number;
+  description?: string;
+
+  type: EvidenceType;
+
+  source?: string;
+
+  url?: string;
+
+  thumbnail?: string;
+
+  tags: string[];
+
+  metadata?: Record<string, unknown>;
 }

@@ -15,6 +15,7 @@ const sceneComponents = {
       />
     ),
   }),
+
   intention: dynamic(() => import("./intention/IntentionScene"), {
     loading: () => (
       <EmptyState
@@ -23,16 +24,26 @@ const sceneComponents = {
       />
     ),
   }),
+
   observation: dynamic(() => import("./observation/ObservationScene")),
+
   references: dynamic(() => import("./references/ReferencesScene")),
+
   "light-table": dynamic(
     () => import("./light-table/LightTableScene")
   ),
+
+  "creative-director": dynamic(
+    () =>
+      import(
+        "./creative-director/CreativeDirectorScene"
+      )
+  ),
+
   planned: dynamic(() => import("./PlannedScene")),
 };
 
 const plannedSceneIds: SceneId[] = [
-  "creative-director",
   "specialists",
   "revelation",
   "positivado",
@@ -57,29 +68,36 @@ export default function SceneRenderer() {
   switch (activeSceneId) {
     case "welcome": {
       const Welcome = sceneComponents.welcome;
-
       return <Welcome />;
     }
+
     case "intention": {
       const Intention = sceneComponents.intention;
-
       return <Intention />;
     }
+
     case "observation": {
       const Observation = sceneComponents.observation;
-
       return <Observation />;
     }
+
     case "references": {
       const References = sceneComponents.references;
-
       return <References />;
     }
+
     case "light-table": {
       const LightTable = sceneComponents["light-table"];
-
       return <LightTable />;
     }
+
+    case "creative-director": {
+      const CreativeDirector =
+        sceneComponents["creative-director"];
+
+      return <CreativeDirector />;
+    }
+
     default: {
       const Planned = sceneComponents.planned;
 

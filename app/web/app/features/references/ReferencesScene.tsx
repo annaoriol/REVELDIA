@@ -17,6 +17,7 @@ export default function ReferencesScene() {
   const [filter, setFilter] = useState("Todas");
   const [selectedReference, setSelectedReference] =
     useState<Reference | null>(null);
+
   const lightTable = useRevealStore((state) => state.lightTable);
   const setScene = useRevealStore((state) => state.setScene);
 
@@ -48,30 +49,42 @@ export default function ReferencesScene() {
     });
   }, [search, filter]);
 
-  const handleSelectReference = (reference: Reference) => {
+  function handleSelectReference(reference: Reference) {
     setSelectedReference(reference);
-  };
+  }
 
-  const handleCloseDetail = () => {
+  function handleCloseDetail() {
     setSelectedReference(null);
-  };
+  }
 
   return (
     <section className="mx-auto flex min-h-full w-full max-w-7xl flex-col py-[clamp(2rem,5vw,5rem)]">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <SectionTitle
-          eyebrow="Referencias"
-          title="Comprender sin copiar"
-          description="Las referencias ayudan a descubrir patrones, lenguajes y posibilidades para revelar una identidad propia."
-        />
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <SectionTitle
+            eyebrow="Laboratorio"
+            title="Evidencias"
+            description="RƎVELA ha seleccionado estas evidencias para ayudarte a descubrir patrones, estilos y oportunidades para tu proyecto."
+          />
 
-        <Button
-          variant="ghost"
-          className="w-fit shrink-0"
-          onClick={() => setScene("light-table")}
-        >
-          Mesa de Luz · {lightTable.length}
-        </Button>
+          <Button
+            variant="ghost"
+            className="w-fit shrink-0"
+            onClick={() => setScene("creative-director")}
+          >
+            Mesa de Luz ({lightTable.length})
+          </Button>
+        </div>
+
+        <div className="flex items-center justify-between text-sm text-white/60">
+          <span>
+            {filteredReferences.length} evidencias disponibles
+          </span>
+
+          <span>
+            {lightTable.length} seleccionadas
+          </span>
+        </div>
       </div>
 
       <ReferenceSearch
