@@ -1,13 +1,66 @@
+/**
+ * Naturaleza del contenido.
+ */
+
 export type EvidenceType =
+  // Imagen
   | "image"
+  | "photography"
+  | "illustration"
+  | "artwork"
+
+  // Vídeo
   | "video"
-  | "website"
-  | "document"
-  | "book"
+  | "film"
+  | "animation"
+  | "motion"
+
+  // Audio
+  | "audio"
+  | "music"
   | "podcast"
+
+  // Branding
   | "brand"
   | "campaign"
-  | "artwork"
+  | "identity"
+
+  // Diseño
+  | "graphic-design"
+  | "editorial"
+  | "packaging"
+  | "typography"
+
+  // Digital
+  | "website"
+  | "interface"
+  | "app"
+
+  // IA
+  | "workflow"
+  | "prompt"
+
+  // Arquitectura
   | "architecture"
-  | "audio"
+  | "interior"
+  | "exhibition"
+  | "place"
+
+  // Producto
+  | "product"
+  | "object"
+
+  // Conocimiento
+  | "book"
+  | "article"
+  | "document"
+  | "research"
+  | "case-study"
+
+  // Cultura
+  | "experience"
+  | "event"
+  | "trend"
+
+  // Otros
   | "other";
