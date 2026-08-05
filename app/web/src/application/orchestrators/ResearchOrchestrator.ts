@@ -1,7 +1,11 @@
-import type { Evidence } from "../evidence";
-import type { EvidenceProvider } from "../evidence/EvidenceProvider";
+import type {
+  Evidence,
+  EvidenceProvider,
+} from "@/src/domain/evidence";
 
-import type { ResearchRequest } from "./ResearchRequest";
+import type {
+  ResearchRequest,
+} from "@/src/domain/research";
 
 export class ResearchOrchestrator {
   constructor(

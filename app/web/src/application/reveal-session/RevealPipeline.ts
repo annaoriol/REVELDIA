@@ -12,6 +12,8 @@ import { runSpecialists } from "../specialists/RunSpecialists";
 import { generateSynthesis } from "../synthesis/GenerateSynthesis";
 import { generateRevelation } from "../revelation/GenerateRevelation";
 
+import type { CreativeDNA } from "@/src/domain/creative-dna/CreativeDNA";
+
 interface RevealPipelineParams {
   dossier: Dossier;
   reference: Reference;
@@ -53,11 +55,60 @@ export function revealPipeline({
 
   const synthesis = generateSynthesis({
     conclusions: specialistResults.map(
-      result => result.result
+      (result) => result.result
     ),
   });
 
+  /**
+   * Adaptador temporal.
+   *
+   * El nuevo dominio genera CreativeDNA antes de Revelation.
+   * Mientras el flujo no esté migrado completamente,
+   * utilizamos un objeto mínimo.
+   */
+  const creativeDNA: CreativeDNA = {
+    id: crypto.randomUUID(),
+
+    projectId: dossier.projectId,
+
+    patterns: [],
+
+    essence: "",
+
+    purpose: "",
+
+    personality: [],
+
+    values: [],
+
+    positioning: "",
+
+    audience: "",
+
+    toneOfVoice: "",
+
+    visualLanguage: [],
+
+    narrativeDirection: [],
+
+    differentiators: [],
+
+    opportunities: [],
+
+    risks: [],
+
+    confidence: 0,
+
+    createdAt: new Date(),
+
+    updatedAt: new Date(),
+  };
+
   const revelation = generateRevelation({
+    projectId: dossier.projectId,
+
+    creativeDNA,
+
     synthesis,
   });
 
@@ -75,6 +126,8 @@ export function revealPipeline({
     specialistResults,
 
     synthesis,
+
+    creativeDNA,
 
     revelation,
   };

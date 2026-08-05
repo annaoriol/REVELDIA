@@ -1,32 +1,51 @@
-import { Revelation } from "@/src/domain/revelation/Revelation";
-import { Synthesis } from "@/src/domain/synthesis/Synthesis";
+import type { CreativeDNA } from "@/src/domain/creative-dna/CreativeDNA";
+import type { Revelation } from "@/src/domain/revelation/Revelation";
+import type { Synthesis } from "@/src/domain/synthesis/Synthesis";
 
-interface Params {
+interface GenerateRevelationParams {
+  projectId: string;
+  creativeDNA: CreativeDNA;
   synthesis: Synthesis;
 }
 
 export function generateRevelation({
+  projectId,
+  creativeDNA,
   synthesis,
-}: Params): Revelation {
+}: GenerateRevelationParams): Revelation {
   const now = new Date();
 
   return {
     id: crypto.randomUUID(),
 
-    createdAt: now,
+    projectId,
 
-    updatedAt: now,
+    creativeDNA,
 
     title: "RƎVELACIÓN",
 
+    summary: synthesis.summary,
+
     description: synthesis.summary,
 
-    value: "",
+    coreIdea: "",
+
+    valueProposition: "",
 
     differentiation: "",
 
-    communication: "",
+    communicationStrategy: "",
 
-    confidence: synthesis.confidence,
+    creativeDirection: [],
+
+    recommendations: [],
+
+    nextActions: [],
+
+    confidence: 1,
+
+    createdAt: now,
+
+    updatedAt: now,
   };
 }
