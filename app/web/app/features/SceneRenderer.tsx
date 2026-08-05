@@ -5,6 +5,9 @@ import dynamic from "next/dynamic";
 import EmptyState from "@/app/components/ui/EmptyState";
 import { useRevealStore } from "@/app/stores/useRevealStore";
 import type { SceneId } from "@/app/types";
+const EvidenceScene = dynamic(
+  () => import("./evidence/EvidenceScene")
+);
 
 const sceneComponents = {
   welcome: dynamic(() => import("./welcome/WelcomeScene"), {
@@ -27,7 +30,7 @@ const sceneComponents = {
 
   observation: dynamic(() => import("./observation/ObservationScene")),
 
-  references: dynamic(() => import("./references/ReferencesScene")),
+  references: EvidenceScene,
 
   "light-table": dynamic(
     () => import("./light-table/LightTableScene")
