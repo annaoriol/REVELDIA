@@ -16,21 +16,34 @@ export default function ReferenceGrid({
     return (
       <div className="mt-12 rounded-2xl border border-white/10 bg-white/[0.02] p-16 text-center">
         <p className="text-white/50">
-          No se han encontrado referencias.
+          No se han encontrado evidencias.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="mt-10 grid auto-rows-max gap-5 md:grid-cols-2 xl:grid-cols-3">
+    <div
+      className="
+        mt-8
+        grid
+        grid-cols-1
+        gap-6
+        md:grid-cols-2
+        xl:grid-cols-3
+      "
+    >
       {items.map((item) => (
-        <ReferenceCard
+        <div
           key={item.id}
-          item={item}
-          onSelect={onSelect}
-          isInLightTable={lightTableIds?.has(item.id) ?? false}
-        />
+          className="flex h-full"
+        >
+          <ReferenceCard
+            item={item}
+            onSelect={onSelect}
+            isInLightTable={lightTableIds?.has(item.id) ?? false}
+          />
+        </div>
       ))}
     </div>
   );
