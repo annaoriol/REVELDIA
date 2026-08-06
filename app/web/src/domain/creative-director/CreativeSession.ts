@@ -6,7 +6,7 @@ import type { Revelation } from "../revelation/Revelation";
 
 import type { CreativeGoal } from "./CreativeGoal";
 import type { CreativeMemory } from "./CreativeMemory";
-import type { CreativePlan } from "./CreativePlan";
+import type { CreativePlan } from "./CreativePlan.ts";
 import type { CreativeQuestion } from "./CreativeQuestion";
 import type { CreativeThought } from "./CreativeThought";
 

@@ -38,15 +38,15 @@ function WelcomeScene() {
           </p>
 
           <p className="mt-[clamp(4rem,8vw,8rem)] max-w-2xl font-[var(--font-space)] text-[clamp(1.6rem,3vw,4rem)] font-light leading-[1.12] text-white/92">
-            Cada revelación amplía tu forma de pensar.
+            Cada revelación amplía tu forma de crear
           </p>
 
           <Button
-            className="mt-[clamp(2.5rem,5vw,5rem)] px-0 text-[0.95rem] uppercase tracking-[0.28em]"
+            className="mt-[clamp(2.5rem,5vw,5rem)] px-0 text-[0.55rem] uppercase tracking-[0.28em]"
             variant="quiet"
             onClick={enterLaboratory}
           >
-            Entrar
+            Revelar
             <ArrowRight size={16} aria-hidden="true" />
           </Button>
         </div>
