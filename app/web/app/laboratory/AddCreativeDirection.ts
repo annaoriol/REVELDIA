@@ -1,22 +1,49 @@
 import type {
-  Project,
   ProjectDNACreativeDirection,
+  ProjectDNACreativeDirector,
+  ProjectDNA,
 } from "@/app/types";
 
-export interface AddCreativeDirectionInput {
-  project: Project;
+interface AddCreativeDirectionInput {
   creativeDirection: ProjectDNACreativeDirection;
 }
 
-export class AddCreativeDirection {
-  execute(input: AddCreativeDirectionInput): Project {
-    return {
-      ...input.project,
-      dna: {
-        ...input.project.dna,
-        creativeDirector: input.creativeDirection,
-        creativeDirection: input.creativeDirection,
-      },
-    };
-  }
+export function addCreativeDirection(
+  projectDNA: ProjectDNA,
+  input: AddCreativeDirectionInput
+): ProjectDNA {
+  const now = new Date().toISOString();
+
+  const previousDirector =
+    projectDNA.creativeDirector;
+
+  const creativeDirector: ProjectDNACreativeDirector = {
+    criteria: input.creativeDirection.criteria,
+    decisions: input.creativeDirection.decisions,
+
+    proposalNumber:
+      previousDirector.proposalNumber ?? 1,
+
+    exploredReferenceIds:
+      previousDirector.exploredReferenceIds ?? [],
+
+    status:
+      previousDirector.status ?? "exploring",
+
+    decision:
+      previousDirector.decision ?? null,
+
+    updatedAt: now,
+  };
+
+  return {
+    ...projectDNA,
+
+    creativeDirector,
+
+    creativeDirection: {
+      ...input.creativeDirection,
+      updatedAt: now,
+    },
+  };
 }

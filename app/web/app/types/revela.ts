@@ -28,6 +28,10 @@ export type SceneStatus =
   | "locked"
   | "complete";
 
+export type CreativeDirectorExplorationStatus =
+  | "exploring"
+  | "sufficient";
+
 export interface ProjectDNA {
   identity: ProjectDNAIdentity;
   references: ProjectDNAReference[];
@@ -37,19 +41,26 @@ export interface ProjectDNA {
   insights: ProjectDNAInsight[];
   sensoryLanguage: ProjectDNASensoryLanguage;
   sensoryDNA: ProjectDNASensoryDNA | null;
+
   creativeDirector: ProjectDNACreativeDirector;
+
   expressions: ProjectDNAExpression[];
 
   /** @deprecated Use identity. */
   intention: ProjectDNAIntention;
+
   /** @deprecated Use sensoryLanguage and sensoryDNA. */
   creativeDirection: ProjectDNACreativeDirection;
+
   /** @deprecated Specialist analysis is no longer a primary Sprint 06 stage. */
   specialistAnalyses: ProjectDNASpecialistAnalysis[];
+
   /** @deprecated Use insights and sensoryDNA. */
   revelation: ProjectDNARevelation | null;
+
   /** @deprecated Use sensoryDNA. */
   positivation: ProjectDNAPositivation | null;
+
   /** @deprecated Use sensoryDNA and expressions. */
   creativeSystem: ProjectDNACreativeSystem | null;
 }
@@ -157,9 +168,24 @@ export interface ProjectDNASensoryDNA {
   updatedAt: string;
 }
 
+/**
+ * Estado de exploración dirigido por el Director Creativo IA.
+ *
+ * El contador de propuestas representa rondas de exploración.
+ * La suficiencia es una decisión del Director, no una regla
+ * basada únicamente en el número de referencias seleccionadas.
+ */
 export interface ProjectDNACreativeDirector {
   criteria: string[];
   decisions: string[];
+
+  proposalNumber: number;
+  exploredReferenceIds: string[];
+
+  status: CreativeDirectorExplorationStatus;
+
+  decision: "continue" | "sufficient" | null;
+
   updatedAt: string | null;
 }
 
@@ -275,6 +301,7 @@ export interface Connection {
   note?: string;
   strength?: number;
 }
+
 export interface Selection {
   id: string | null;
   type: "scene" | "panel" | "asset" | "note" | null;
@@ -289,7 +316,12 @@ export interface Preferences {
 export interface FutureFeature {
   id: string;
   label: string;
-  area: "ai" | "memory" | "export" | "specialists" | "orchestration";
+  area:
+    | "ai"
+    | "memory"
+    | "export"
+    | "specialists"
+    | "orchestration";
   enabled: boolean;
 }
 
@@ -309,25 +341,17 @@ export interface RevealState {
   scene: Workspace;
   navigation: Navigation;
   history: SceneId[];
-
   memory: Memory;
-
   lightTable: Reference[];
-
   lightTableGroups: Group[];
-
   relationships: ProjectDNARelationship[];
 
   /** @deprecated Use relationships. */
   connections: Connection[];
 
   selection: Selection;
-
   preferences: Preferences;
-
   loading: LoadingState;
-
   errors: ErrorState[];
-
   future: FutureFeature[];
 }

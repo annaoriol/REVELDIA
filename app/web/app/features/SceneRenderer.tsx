@@ -2,35 +2,19 @@
 
 import dynamic from "next/dynamic";
 
-import EmptyState from "@/app/components/ui/EmptyState";
 import { useRevealStore } from "@/app/stores/useRevealStore";
 import type { SceneId } from "@/app/types";
-const EvidenceScene = dynamic(
-  () => import("./evidence/EvidenceScene")
-);
 
 const sceneComponents = {
-  welcome: dynamic(() => import("./welcome/WelcomeScene"), {
-    loading: () => (
-      <EmptyState
-        title="Cargando bienvenida"
-        description="Preparando el laboratorio."
-      />
-    ),
-  }),
+  welcome: dynamic(() => import("./welcome/WelcomeScene")),
 
-  intention: dynamic(() => import("./intention/IntentionScene"), {
-    loading: () => (
-      <EmptyState
-        title="Cargando intención"
-        description="Preparando el origen del proyecto."
-      />
-    ),
-  }),
+  intention: dynamic(() => import("./intention/IntentionScene")),
 
   observation: dynamic(() => import("./observation/ObservationScene")),
 
-  references: EvidenceScene,
+  references: dynamic(
+    () => import("./references/ReferencesScene")
+  ),
 
   "light-table": dynamic(
     () => import("./light-table/LightTableScene")
@@ -90,7 +74,9 @@ export default function SceneRenderer() {
     }
 
     case "light-table": {
-      const LightTable = sceneComponents["light-table"];
+      const LightTable =
+        sceneComponents["light-table"];
+
       return <LightTable />;
     }
 

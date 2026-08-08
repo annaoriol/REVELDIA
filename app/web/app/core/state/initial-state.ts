@@ -32,10 +32,17 @@ export const initialRevealState: RevealState = {
       },
       sensoryDNA: null,
       creativeDirector: {
-        criteria: [],
-        decisions: [],
-        updatedAt: null,
-      },
+  criteria: [],
+  decisions: [],
+
+  proposalNumber: 1,
+  exploredReferenceIds: [],
+
+  status: "exploring",
+  decision: null,
+
+  updatedAt: null,
+},
       expressions: [],
       intention: {
         whatToReveal: "",

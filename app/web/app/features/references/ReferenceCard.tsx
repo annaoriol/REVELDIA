@@ -1,101 +1,133 @@
-import Card from "@/app/components/ui/Card";
+"use client";
+
 import type { Reference } from "./data";
 
 interface ReferenceCardProps {
-  item: Reference;
-  onSelect?: (reference: Reference) => void;
-  isInLightTable?: boolean;
+  reference: Reference;
+  isInLightTable: boolean;
+  onSelect: (reference: Reference) => void;
+  onToggleLightTable: (reference: Reference) => void;
 }
 
 export default function ReferenceCard({
-  item,
+  reference,
+  isInLightTable,
   onSelect,
-  isInLightTable = false,
+  onToggleLightTable,
 }: ReferenceCardProps) {
-  const aspect =
-    item.orientation === "portrait"
-      ? "aspect-[3/4]"
-      : item.orientation === "square"
-      ? "aspect-square"
-      : "aspect-[4/3]";
-
-  function handleSelect() {
-    onSelect?.(item);
-  }
-
   return (
-    <Card
-      role="button"
-      tabIndex={0}
-      aria-label={`Examinar evidencia ${item.title}`}
-      onClick={handleSelect}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          handleSelect();
-        }
-      }}
+    <article
       className={[
-        "group overflow-hidden rounded-2xl bg-black/30 p-0 cursor-pointer transition-all duration-300",
-        "hover:-translate-y-1 hover:border-cyan-300/40",
+        "group flex h-[300px] flex-col overflow-hidden rounded-2xl border bg-black/35 transition-all duration-200",
         isInLightTable
-          ? "border border-cyan-300/60"
-          : "border border-white/10",
+          ? "border-cyan-300/70 shadow-[0_0_24px_rgba(85,193,212,0.08)]"
+          : "border-white/10 hover:border-white/25",
       ].join(" ")}
     >
-      <div className={`relative ${aspect}`}>
-        <img
-          src={item.image}
-          alt={item.title}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+      {/* =================================================
+          CONTENIDO
+      ================================================= */}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/10" />
+      <div className="flex flex-1 flex-col p-5">
 
-        {item.featured && (
-          <div className="absolute right-4 top-4 rounded-full bg-cyan-400/15 border border-cyan-300/30 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-cyan-300 backdrop-blur">
-            Destacada
+        {/* CABECERA */}
+
+        <div className="flex items-center justify-between gap-3">
+
+          <span className="rounded-full border border-cyan-300/40 px-2.5 py-1 text-[9px] uppercase tracking-[0.25em] text-cyan-300">
+            RƎVELA
+          </span>
+
+          <span className="truncate text-[9px] uppercase tracking-[0.25em] text-white/35">
+            {reference.category}
+          </span>
+
+        </div>
+
+        {/* DESTACADA */}
+
+        {reference.featured && (
+          <div className="mt-3">
+            <span className="inline-flex rounded-full border border-cyan-300/50 bg-cyan-300/10 px-2.5 py-1 text-[9px] uppercase tracking-[0.25em] text-cyan-300">
+              Destacada
+            </span>
           </div>
         )}
 
-        <div className="absolute inset-x-0 bottom-0 p-5">
+        {/* TÍTULO */}
 
-          <div className="mb-4 flex items-center justify-between">
+        <h3 className="mt-5 text-2xl font-light leading-tight text-white">
+          {reference.title}
+        </h3>
 
-            <span className="rounded-full border border-cyan-300/20 bg-black/40 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-cyan-300">
-              ✨ RƎVELA
-            </span>
+        {/* DESCRIPCIÓN */}
 
-            <span className="text-[10px] uppercase tracking-[0.24em] text-white/50">
-              {item.category}
-            </span>
+        <p className="mt-3 line-clamp-2 text-sm leading-6 text-white/55">
+          {reference.description}
+        </p>
 
-          </div>
+        {/* ESPACIO FLEXIBLE */}
 
-          <h3 className="text-3xl font-light text-white">
-            {item.title}
-          </h3>
+        <div className="flex-1" />
 
-          <p className="mt-3 line-clamp-3 text-sm leading-6 text-white/75">
-            {item.description}
-          </p>
+        {/* =================================================
+            ACCIONES
+        ================================================= */}
 
-          <div className="mt-6 flex items-center justify-between">
+        <div className="mt-5 flex flex-col gap-2">
 
-            <span className="text-xs uppercase tracking-[0.25em] text-cyan-300 transition-opacity group-hover:opacity-100">
-              Examinar →
-            </span>
+          {/* MESA DE LUZ */}
 
-            {isInLightTable && (
-              <span className="text-xs uppercase tracking-[0.25em] text-cyan-300">
-                ✓ Mesa de Luz
-              </span>
-            )}
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              onToggleLightTable(reference);
+            }}
+            aria-pressed={isInLightTable}
+            className={[
+              "flex h-10 w-full items-center justify-center rounded-xl border text-[10px] uppercase tracking-[0.25em] transition-all",
+              isInLightTable
+                ? "border-cyan-300/60 bg-cyan-300/[0.08] text-cyan-300 hover:bg-cyan-300/[0.14]"
+                : "border-white/10 text-white/50 hover:border-cyan-300/40 hover:text-cyan-300",
+            ].join(" ")}
+          >
+            {isInLightTable
+              ? "− Mesa de Luz"
+              : "+ Mesa de Luz"}
+          </button>
 
-          </div>
+          {/* EXAMINAR */}
+
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              onSelect(reference);
+            }}
+            className="
+              flex
+              h-9
+              w-full
+              items-center
+              justify-center
+              rounded-xl
+              border
+              border-white/10
+              text-[10px]
+              uppercase
+              tracking-[0.25em]
+              text-white/45
+              transition-all
+              hover:border-white/25
+              hover:text-white
+            "
+          >
+            Examinar →
+          </button>
 
         </div>
       </div>
-    </Card>
+    </article>
   );
 }

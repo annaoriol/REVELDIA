@@ -10,30 +10,21 @@ export const methodScenes: Scene[] = [
     status: "active",
   },
   {
-    id: "intention",
-    order: 1,
-    title: "Misión",
-    eyebrow: "Origen",
-    description:
-      "Define el reto creativo que quieres revelar.",
-    status: "available",
-  },
-  {
     id: "creative-director",
-    order: 2,
+    order: 1,
     title: "Director Creativo",
     eyebrow: "Guía",
     description:
-      "Comprende tu misión, investiga y propone evidencias para comenzar el revelado.",
+      "Comprende el punto de partida y conduce el proceso creativo.",
     status: "available",
   },
   {
     id: "references",
-    order: 3,
-    title: "Evidencias",
+    order: 2,
+    title: "Referencias",
     eyebrow: "Inspiración",
     description:
-      "Explora y selecciona las evidencias que inspirarán tu proyecto.",
+      "Explora y selecciona las referencias que inspirarán tu proyecto.",
     status: "available",
   },
   {
@@ -42,7 +33,7 @@ export const methodScenes: Scene[] = [
     title: "Mesa de Luz",
     eyebrow: "Relaciones",
     description:
-      "Organiza y relaciona las evidencias seleccionadas.",
+      "Organiza y relaciona las referencias seleccionadas.",
     status: "available",
   },
   {
@@ -51,7 +42,7 @@ export const methodScenes: Scene[] = [
     title: "RƎVELACIÓN",
     eyebrow: "Esencia",
     description:
-      "El Director Creativo sintetiza las evidencias y revela la esencia del proyecto.",
+      "El Director Creativo sintetiza las referencias y revela la esencia del proyecto.",
     status: "locked",
   },
 

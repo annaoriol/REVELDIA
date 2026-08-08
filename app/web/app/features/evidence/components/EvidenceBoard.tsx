@@ -17,7 +17,7 @@ export default function EvidenceBoard({
   if (!items.length) {
     return (
       <div className="rounded-2xl border border-white/10 p-10 text-center text-white/50">
-        No hay evidencias disponibles.
+        No hay referencias disponibles.
       </div>
     );
   }
