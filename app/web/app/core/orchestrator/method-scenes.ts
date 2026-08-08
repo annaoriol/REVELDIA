@@ -19,8 +19,17 @@ export const methodScenes: Scene[] = [
     status: "available",
   },
   {
-    id: "references",
+    id: "creative-director",
     order: 2,
+    title: "Director Creativo",
+    eyebrow: "Guía",
+    description:
+      "Comprende tu misión, investiga y propone evidencias para comenzar el revelado.",
+    status: "available",
+  },
+  {
+    id: "references",
+    order: 3,
     title: "Evidencias",
     eyebrow: "Inspiración",
     description:
