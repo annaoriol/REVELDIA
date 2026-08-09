@@ -1,0 +1,84 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
+import Button from "@/app/components/ui/Button";
+import SectionTitle from "@/app/components/ui/SectionTitle";
+import { useRevealStore } from "@/app/stores/useRevealStore";
+
+import UserEvidencePanel from "@/app/features/evidence/components/UserEvidencePanel";
+
+import { references, type Reference } from "./data";
+import ReferenceDetail from "./ReferenceDetail";
+import ReferenceGrid from "./ReferenceGrid";
+import ReferenceSearch from "./ReferenceSearch";
+
+export default function ReferencesScene() {
+  const [search, setSearch] = useState("");
+
+  const [selectedReference, setSelectedReference] =
+    useState<Reference | null>(null);
+
+  const lightTable = useRevealStore(
+    (state) => state.lightTable
+  );
+
+  const toggleLightTable = useRevealStore(
+    (state) => state.toggleLightTable
+  );
+
+  const setScene = useRevealStore(
+    (state) => state.setScene
+  );
+
+  const lightTableIds = useMemo(
+    () =>
+      new Set(
+        lightTable.map(
+          (reference) => reference.id
+        )
+      ),
+    [lightTable]
+  );
+
+  const filteredReferences = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query.length) {
+      return references;
+    }
+
+    return references.filter((reference) => {
+      return (
+        reference.title
+          .toLowerCase()
+          .includes(query) ||
+        reference.category
+          .toLowerCase()
+          .includes(query) ||
+        reference.description
+          .toLowerCase()
+          .includes(query) ||
+        reference.keywords.some((keyword) =>
+          keyword
+            .toLowerCase()
+            .includes(query)
+        )
+      );
+    });
+  }, [search]);
+
+  function handleSelectReference(
+    reference: Reference
+  ) {
+    setSelectedReference(reference);
+  }
+
+  function handleCloseDetail() {
+    setSelectedReference(null);
+  }
+
+  return (
+    
+  );
+}

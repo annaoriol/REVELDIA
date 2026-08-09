@@ -34,13 +34,25 @@ export default function ReferenceCard({
 
         <div className="flex items-center justify-between gap-3">
 
+          <span className="rounded-full border border-cyan-300/40 px-2.5 py-1 text-[9px] uppercase tracking-[0.25em] text-cyan-300">
+            RƎVELA
+          </span>
+
           <span className="truncate text-[9px] uppercase tracking-[0.25em] text-white/35">
             {reference.category}
           </span>
 
         </div>
 
+        {/* DESTACADA */}
 
+        {reference.featured && (
+          <div className="mt-3">
+            <span className="inline-flex rounded-full border border-cyan-300/50 bg-cyan-300/10 px-2.5 py-1 text-[9px] uppercase tracking-[0.25em] text-cyan-300">
+              Destacada
+            </span>
+          </div>
+        )}
 
         {/* TÍTULO */}
 

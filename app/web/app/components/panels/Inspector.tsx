@@ -5,55 +5,40 @@ import { memo } from "react";
 import EmptyState from "@/app/components/ui/EmptyState";
 import { useRevealStore } from "@/app/stores/useRevealStore";
 
-function RevealWord({
-  suffix,
-  active = false,
-  prefix = "",
-}: {
-  suffix: string;
-  active?: boolean;
-  prefix?: string;
-}) {
-  return (
-    <>
-      {prefix && (
-        <span
-          className={
-            active ? "text-white" : "text-white/35"
-          }
-        >
-          {prefix}
-        </span>
-      )}
-
-      <span
-        className={
-          active ? "text-white" : "text-white/35"
-        }
-      >
-        R
-      </span>
-
-      <span className="text-cyan-300">
-        Ǝ
-      </span>
-
-      <span
-        className={
-          active ? "text-white" : "text-white/35"
-        }
-      >
-        {suffix}
-      </span>
-    </>
-  );
-}
-
 function Inspector() {
-  const activeScene = useRevealStore((state) =>
-    state.navigation.items.find(
-      (item) => item.id === state.scene.activeSceneId
-    )
+  const project = useRevealStore(
+    (state) => state.project
+  );
+
+  const activeSceneId = useRevealStore(
+    (state) => state.scene.activeSceneId
+  );
+
+  const activeScene = useRevealStore(
+    (state) =>
+      state.navigation.items.find(
+        (item) => item.id === activeSceneId
+      ) ?? null
+  );
+
+  const intention =
+    project.dna.identity;
+
+  const creativeDirector =
+    project.dna.creativeDirector;
+
+  const lightTable = useRevealStore(
+    (state) => state.lightTable
+  );
+
+  const observations = useRevealStore(
+    (state) =>
+      state.project.dna.observations
+  );
+
+  const relationships = useRevealStore(
+    (state) =>
+      state.project.dna.relationships
   );
 
   const selection = useRevealStore(
@@ -64,47 +49,36 @@ function Inspector() {
     (state) => state.future
   );
 
-  const lightTable = useRevealStore(
-    (state) => state.lightTable
-  );
-
-  const project = useRevealStore(
-    (state) => state.project
-  );
-
-  const creativeDirector = useRevealStore(
-    (state) => state.project.dna.creativeDirector
-  );
-
-  const intention = useRevealStore(
-    (state) => state.project.dna.intention
-  );
-
-  const observations = useRevealStore(
-    (state) => state.project.dna.observations
-  );
-
-  const relationships = useRevealStore(
-    (state) => state.project.dna.relationships
-  );
+  const exploreCreativeDirector =
+    useRevealStore(
+      (state) =>
+        state.exploreCreativeDirector
+    );
 
   const isWelcome =
     activeScene?.id === "welcome";
 
   const isCreativeDirector =
-    activeScene?.id === "creative-director";
+    activeScene?.id ===
+    "creative-director";
 
   const isReferences =
     activeScene?.id === "references";
 
-  const methodItems = useRevealStore(
-    (state) => state.navigation.items
-  );
+const isLightTable =
+  activeScene?.id === "light-table";
+
+  const methodItems =
+    useRevealStore(
+      (state) =>
+        state.navigation.items
+    );
 
   const currentIndex = Math.max(
     0,
     methodItems.findIndex(
-      (item) => item.id === activeScene?.id
+      (item) =>
+        item.id === activeScene?.id
     )
   );
 
@@ -115,25 +89,30 @@ function Inspector() {
     creativeDirector.proposalNumber;
 
   const exploredCount =
-    creativeDirector.exploredReferenceIds.length;
+    creativeDirector
+      .exploredReferenceIds.length;
 
   const selectedCount =
     lightTable.length;
 
   const creativeDirectorStatus =
-    creativeDirector.status === "sufficient"
+    creativeDirector.status ===
+    "sufficient"
       ? "Material suficiente"
       : "Explorando";
 
   const decision =
     creativeDirector.decision;
 
+  const handleProposeMore =
+    () => {
+      exploreCreativeDirector();
+    };
+
   return (
     <aside className="flex h-full min-h-0 flex-col overflow-y-auto border-l border-white/10 bg-black/20 px-5 py-6">
 
-      {/* =================================================
-          CABECERA
-      ================================================= */}
+      {/* CABECERA */}
 
       <section>
         <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
@@ -148,13 +127,76 @@ function Inspector() {
       </section>
 
       {/* =================================================
+          PROYECTO ACTIVO
+      ================================================= */}
+
+      {!isWelcome && (
+        <section className="mt-7 rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.025] p-5">
+
+          <div className="flex items-center justify-between gap-3">
+
+            <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+              Proyecto
+            </p>
+
+            <span className="text-[0.58rem] uppercase tracking-[0.22em] text-cyan-300/70">
+              Activo
+            </span>
+
+          </div>
+
+          <h3 className="mt-3 text-xl font-light text-white">
+            {project.name}
+          </h3>
+
+          <div className="mt-5 border-t border-white/10 pt-5">
+
+            <p className="text-[0.62rem] uppercase tracking-[0.24em] text-white/30">
+              RƎVELAR
+            </p>
+
+            <p className="mt-2 text-sm leading-6 text-white/65">
+              {intention.whatToReveal ||
+                "Intención pendiente"}
+            </p>
+
+          </div>
+
+          <div className="mt-4">
+
+            <p className="text-[0.62rem] uppercase tracking-[0.24em] text-white/30">
+              Transmitir
+            </p>
+
+            <p className="mt-2 text-sm leading-6 text-white/55">
+              {intention.whatToTransmit ||
+                "Pendiente"}
+            </p>
+
+          </div>
+
+          <div className="mt-4">
+
+            <p className="text-[0.62rem] uppercase tracking-[0.24em] text-white/30">
+              Contexto
+            </p>
+
+            <p className="mt-2 text-sm leading-6 text-white/55">
+              {intention.context ||
+                "Pendiente"}
+            </p>
+
+          </div>
+
+        </section>
+      )}
+
+      {/* =================================================
           HOME
       ================================================= */}
 
       {isWelcome && (
         <div className="mt-7 space-y-5">
-
-          {/* PROYECTO */}
 
           <section className="rounded-[var(--revela-radius-md)] border border-white/10 bg-white/[0.025] p-5">
 
@@ -174,19 +216,11 @@ function Inspector() {
 
           </section>
 
-          {/* =================================================
-              EL RƎVELADO
-          ================================================= */}
-
           <section className="rounded-[var(--revela-radius-md)] border border-white/10 bg-white/[0.025] p-5">
 
             <p className="text-[0.68rem] uppercase tracking-[0.28em]">
 
-              <RevealWord
-                prefix="El "
-                suffix="VELADO"
-                active={true}
-              />
+              El VELADO
 
             </p>
 
@@ -196,10 +230,12 @@ function Inspector() {
                 (item, index) => {
 
                   const isCurrent =
-                    index === currentIndex;
+                    index ===
+                    currentIndex;
 
                   const isPast =
-                    index < currentIndex;
+                    index <
+                    currentIndex;
 
                   const textState =
                     isCurrent
@@ -226,7 +262,9 @@ function Inspector() {
                       >
                         {isPast
                           ? "✓"
-                          : String(index + 1).padStart(
+                          : String(
+                              index + 1
+                            ).padStart(
                               2,
                               "0"
                             )}
@@ -241,10 +279,7 @@ function Inspector() {
 
                         {item.id ===
                         "revelation" ? (
-                          <RevealWord
-                            suffix="VELACIÓN"
-                            active={isCurrent}
-                          />
+                          "VELACIÓN"
                         ) : item.id ===
                           "welcome" ? (
                           "Bienvenida"
@@ -263,8 +298,6 @@ function Inspector() {
 
           </section>
 
-          {/* MATERIAL */}
-
           <section className="rounded-[var(--revela-radius-md)] border border-white/10 bg-white/[0.025] p-5">
 
             <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
@@ -274,6 +307,7 @@ function Inspector() {
             <div className="mt-4 space-y-3 text-sm">
 
               <div className="flex items-center justify-between">
+
                 <span className="text-white/45">
                   Intención
                 </span>
@@ -283,9 +317,11 @@ function Inspector() {
                     ? "Definida"
                     : "Pendiente"}
                 </span>
+
               </div>
 
               <div className="flex items-center justify-between">
+
                 <span className="text-white/45">
                   Referencias
                 </span>
@@ -293,9 +329,11 @@ function Inspector() {
                 <span className="text-white/60">
                   {lightTable.length}
                 </span>
+
               </div>
 
               <div className="flex items-center justify-between">
+
                 <span className="text-white/45">
                   Observaciones
                 </span>
@@ -303,9 +341,11 @@ function Inspector() {
                 <span className="text-white/60">
                   {observations.length}
                 </span>
+
               </div>
 
               <div className="flex items-center justify-between">
+
                 <span className="text-white/45">
                   Conexiones
                 </span>
@@ -313,6 +353,7 @@ function Inspector() {
                 <span className="text-white/60">
                   {relationships.length}
                 </span>
+
               </div>
 
             </div>
@@ -329,8 +370,6 @@ function Inspector() {
       {isCreativeDirector && (
         <div className="mt-7 space-y-5">
 
-          {/* INTENCIÓN */}
-
           <section className="rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.035] p-5">
 
             <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
@@ -340,6 +379,7 @@ function Inspector() {
             <div className="mt-5 space-y-5">
 
               <div>
+
                 <p className="text-[0.65rem] uppercase tracking-[0.22em] text-white/30">
                   Qué queremos revelar
                 </p>
@@ -348,9 +388,11 @@ function Inspector() {
                   {intention.whatToReveal ||
                     "Pendiente"}
                 </p>
+
               </div>
 
               <div>
+
                 <p className="text-[0.65rem] uppercase tracking-[0.22em] text-white/30">
                   Qué queremos transmitir
                 </p>
@@ -359,9 +401,11 @@ function Inspector() {
                   {intention.whatToTransmit ||
                     "Pendiente"}
                 </p>
+
               </div>
 
               <div>
+
                 <p className="text-[0.65rem] uppercase tracking-[0.22em] text-white/30">
                   Contexto
                 </p>
@@ -370,13 +414,12 @@ function Inspector() {
                   {intention.context ||
                     "Pendiente"}
                 </p>
+
               </div>
 
             </div>
 
           </section>
-
-          {/* SIGUIENTE PASO */}
 
           <section className="rounded-[var(--revela-radius-md)] border border-white/10 bg-white/[0.025] p-5">
 
@@ -395,8 +438,6 @@ function Inspector() {
 
           </section>
 
-          {/* MATERIAL */}
-
           <section className="rounded-[var(--revela-radius-md)] border border-white/10 bg-white/[0.025] p-5">
 
             <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
@@ -406,6 +447,7 @@ function Inspector() {
             <div className="mt-4 space-y-3 text-sm">
 
               <div className="flex items-center justify-between">
+
                 <span className="text-white/45">
                   Referencias
                 </span>
@@ -413,9 +455,11 @@ function Inspector() {
                 <span className="text-white/60">
                   {lightTable.length}
                 </span>
+
               </div>
 
               <div className="flex items-center justify-between">
+
                 <span className="text-white/45">
                   Observaciones
                 </span>
@@ -423,6 +467,7 @@ function Inspector() {
                 <span className="text-white/60">
                   {observations.length}
                 </span>
+
               </div>
 
             </div>
@@ -431,71 +476,140 @@ function Inspector() {
 
         </div>
       )}
+{/* =================================================
+    MESA DE LUZ
+================================================= */}
 
+{isLightTable && (
+  <div className="mt-7 space-y-5">
+
+    <section className="rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.035] p-5">
+
+      <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+        Mesa de Luz
+      </p>
+
+      <h3 className="mt-3 text-xl font-light text-white">
+        Selección del proyecto
+      </h3>
+
+      <p className="mt-3 text-sm leading-6 text-white/50">
+        Aquí organizas las referencias que has
+        decidido conservar para continuar
+        observando, relacionando y revelando.
+      </p>
+
+      <div className="mt-5 border-t border-white/10 pt-5">
+
+        <div className="flex items-center justify-between">
+
+          <span className="text-[0.65rem] uppercase tracking-[0.22em] text-white/30">
+            Referencias
+          </span>
+
+          <span className="text-sm text-cyan-300">
+            {lightTable.length}
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section className="rounded-[var(--revela-radius-md)] border border-white/10 bg-white/[0.025] p-5">
+
+      <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+        Intención
+      </p>
+
+      <div className="mt-4 space-y-4">
+
+        <div>
+
+          <p className="text-[0.62rem] uppercase tracking-[0.22em] text-white/30">
+            RƎVELAR
+          </p>
+
+          <p className="mt-2 text-sm leading-6 text-white/60">
+            {intention.whatToReveal ||
+              "Pendiente"}
+          </p>
+
+        </div>
+
+        <div>
+
+          <p className="text-[0.62rem] uppercase tracking-[0.22em] text-white/30">
+            Transmitir
+          </p>
+
+          <p className="mt-2 text-sm leading-6 text-white/50">
+            {intention.whatToTransmit ||
+              "Pendiente"}
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section className="rounded-[var(--revela-radius-md)] border border-white/10 bg-white/[0.025] p-5">
+
+      <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+        Director Creativo
+      </p>
+
+      <div className="mt-4 flex items-center justify-between">
+
+        <span className="text-sm text-white/50">
+          Exploración
+        </span>
+
+        <span className="text-sm text-white/70">
+          Propuesta{" "}
+          {creativeDirector.proposalNumber}
+        </span>
+
+      </div>
+
+      <div className="mt-3 flex items-center justify-between">
+
+        <span className="text-sm text-white/50">
+          Referencias exploradas
+        </span>
+
+        <span className="text-sm text-white/70">
+          {
+            creativeDirector
+              .exploredReferenceIds
+              .length
+          }
+        </span>
+
+      </div>
+
+    </section>
+
+  </div>
+)}
       {/* =================================================
-          REFERENCIAS · DIRECTOR CREATIVO
+          REFERENCIAS
       ================================================= */}
 
       {isReferences && (
-        <section className="mt-7 rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.035] p-5">
+        <div className="mt-7 space-y-5">
 
-          <div className="flex items-center gap-3">
+          <section className="rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.035] p-5">
 
-            <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
-              Director Creativo IA
-            </p>
+            <div className="flex items-center gap-3">
 
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
-
-            <span className="text-xs text-white/45">
-              {creativeDirectorStatus}
-            </span>
-
-          </div>
-
-          <div className="mt-5">
-
-            <p className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
-              Exploración
-            </p>
-
-            <div className="mt-2 flex items-baseline justify-between gap-3">
-
-              <p className="text-lg font-light text-white">
-                Propuesta {proposalNumber}
+              <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                Director Creativo IA
               </p>
 
-              <span className="text-xs text-white/35">
-                {exploredCount} exploradas
-              </span>
-
-            </div>
-
-          </div>
-
-          <div className="mt-5 border-t border-white/10 pt-5">
-
-            <div className="flex items-center justify-between">
-
-              <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
-                Material reunido
-              </span>
-
-              <span className="text-sm text-white/60">
-                {selectedCount}
-              </span>
-
-            </div>
-
-          </div>
-
-          <div className="mt-5 border-t border-white/10 pt-5">
-
-            <div className="flex items-center justify-between">
-
-              <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
-                Estado
-              </span>
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
 
               <span className="text-xs text-white/45">
                 {creativeDirectorStatus}
@@ -503,41 +617,144 @@ function Inspector() {
 
             </div>
 
-            <div className="mt-3 h-px bg-white/10">
+            <div className="mt-5">
 
-              <div
-                className={[
-                  "h-px transition-all duration-500",
-                  creativeDirectorStatus ===
-                  "Material suficiente"
-                    ? "w-full bg-cyan-300"
-                    : exploredCount > 0
-                      ? "w-1/2 bg-cyan-300/60"
-                      : "w-[12%] bg-cyan-300/40",
-                ].join(" ")}
-              />
+              <p className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
+                Exploración
+              </p>
+
+              <div className="mt-2 flex items-baseline justify-between gap-3">
+
+                <p className="text-lg font-light text-white">
+                  Propuesta{" "}
+                  {proposalNumber}
+                </p>
+
+                <span className="text-xs text-white/35">
+                  {exploredCount} exploradas
+                </span>
+
+              </div>
 
             </div>
 
-          </div>
+            <div className="mt-5 border-t border-white/10 pt-5">
 
-          {decision && (
-            <div className="mt-5 rounded-xl border border-cyan-300/10 bg-black/20 px-4 py-3">
+              <div className="flex items-center justify-between">
 
-              <p className="text-[0.62rem] uppercase tracking-[0.24em] text-white/30">
-                Decisión
-              </p>
+                <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
+                  Material reunido
+                </span>
 
-              <p className="mt-2 text-sm text-white/70">
-                {decision === "sufficient"
-                  ? "Preparado para avanzar"
-                  : "Continuar explorando"}
-              </p>
+                <span className="text-sm text-white/60">
+                  {selectedCount}
+                </span>
+
+              </div>
 
             </div>
-          )}
 
-        </section>
+            <div className="mt-5 border-t border-white/10 pt-5">
+
+              <div className="flex items-center justify-between">
+
+                <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
+                  Estado
+                </span>
+
+                <span className="text-xs text-white/45">
+                  {creativeDirectorStatus}
+                </span>
+
+              </div>
+
+              <div className="mt-3 h-px bg-white/10">
+
+                <div
+                  className={[
+                    "h-px transition-all duration-500",
+                    creativeDirectorStatus ===
+                    "Material suficiente"
+                      ? "w-full bg-cyan-300"
+                      : exploredCount > 0
+                        ? "w-1/2 bg-cyan-300/60"
+                        : "w-[12%] bg-cyan-300/40",
+                  ].join(" ")}
+                />
+
+              </div>
+
+            </div>
+
+            {/* ACCIÓN DEL DIRECTOR */}
+
+            <div className="mt-5 border-t border-white/10 pt-5">
+
+              <button
+                type="button"
+                onClick={
+                  handleProposeMore
+                }
+                className="group w-full rounded-xl border border-cyan-300/25 bg-cyan-300/[0.04] px-4 py-4 text-left transition-all duration-300 hover:border-cyan-300/60 hover:bg-cyan-300/[0.08]"
+              >
+
+                <div className="flex items-center justify-between gap-4">
+
+                  <div>
+
+                    <p className="font-[var(--font-space)] text-sm tracking-[0.08em] text-white">
+
+                      <span className="text-white">
+                        R
+                      </span>
+
+                      <span className="text-cyan-300">
+                        Ǝ
+                      </span>
+
+                      <span className="text-white">
+                        VELA
+                      </span>
+
+                    </p>
+
+                    <p className="mt-2 text-xs leading-5 text-white/45">
+                      Proponer más referencias
+                      para continuar la exploración.
+                    </p>
+
+                  </div>
+
+                  <span className="text-lg text-cyan-300 transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+
+                </div>
+
+              </button>
+
+            </div>
+
+            {decision && (
+              <div className="mt-5 rounded-xl border border-cyan-300/10 bg-black/20 px-4 py-3">
+
+                <p className="text-[0.62rem] uppercase tracking-[0.24em] text-white/30">
+                  Decisión
+                </p>
+
+                <p className="mt-2 text-sm text-white/70">
+                  {decision ===
+                  "sufficient"
+                    ? "Preparado para avanzar"
+                    : "Continuar explorando"}
+                </p>
+
+              </div>
+            )}
+
+          </section>
+
+        </div>
       )}
 
       {/* =================================================
@@ -547,7 +764,6 @@ function Inspector() {
       {!isWelcome &&
         !isCreativeDirector &&
         !isReferences && (
-
           <div className="mt-6 space-y-5">
 
             <EmptyState
@@ -570,6 +786,7 @@ function Inspector() {
               <div className="mt-4 space-y-3 text-sm">
 
                 <div className="flex items-center justify-between">
+
                   <span className="text-white/45">
                     Referencias
                   </span>
@@ -577,9 +794,11 @@ function Inspector() {
                   <span className="text-white/60">
                     {lightTable.length}
                   </span>
+
                 </div>
 
                 <div className="flex items-center justify-between">
+
                   <span className="text-white/45">
                     Observaciones
                   </span>
@@ -587,9 +806,11 @@ function Inspector() {
                   <span className="text-white/60">
                     {observations.length}
                   </span>
+
                 </div>
 
                 <div className="flex items-center justify-between">
+
                   <span className="text-white/45">
                     Conexiones
                   </span>
@@ -597,6 +818,7 @@ function Inspector() {
                   <span className="text-white/60">
                     {relationships.length}
                   </span>
+
                 </div>
 
               </div>
@@ -625,24 +847,26 @@ function Inspector() {
 
               <ul className="mt-4 space-y-3 text-sm text-white/50">
 
-                {future.map((feature) => (
-                  <li
-                    key={feature.id}
-                    className="flex items-center justify-between gap-3"
-                  >
+                {future.map(
+                  (feature) => (
+                    <li
+                      key={feature.id}
+                      className="flex items-center justify-between gap-3"
+                    >
 
-                    <span>
-                      {feature.label}
-                    </span>
+                      <span>
+                        {feature.label}
+                      </span>
 
-                    <span className="text-xs uppercase tracking-[0.18em] text-white/28">
-                      {feature.enabled
-                        ? "Activo"
-                        : "Plan"}
-                    </span>
+                      <span className="text-xs uppercase tracking-[0.18em] text-white/28">
+                        {feature.enabled
+                          ? "Activo"
+                          : "Plan"}
+                      </span>
 
-                  </li>
-                ))}
+                    </li>
+                  )
+                )}
 
               </ul>
 

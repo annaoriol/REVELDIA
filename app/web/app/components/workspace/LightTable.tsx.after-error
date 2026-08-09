@@ -65,15 +65,14 @@ function ReferenceCanvasCard({
   index,
   onMove,
   onRemove,
-  onExamine,
 }: {
   reference: Reference;
   position: Point;
   index: number;
   onMove: (id: string, point: Point) => void;
   onRemove: (id: string) => void;
-  onExamine: (reference: Reference) => void;
 }) {
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const draggingRef = useRef(false);
   const pointerOffsetRef = useRef<Point>({
@@ -210,6 +209,7 @@ function ReferenceCanvasCard({
       >
 
         {/* VISTA COMPACTA */}
+        {(
           <div className="relative">
 
             {hasImage ? (
@@ -282,9 +282,13 @@ function ReferenceCanvasCard({
               </p>
             </div>
           </div>
+        )}
 
+        {/* INFORMACIÓN AMPLIADA */}
+}
 
         {/* ACCIONES DE LA VISTA COMPACTA */}
+        {(
           <div className="
             flex
             items-center
@@ -311,7 +315,7 @@ function ReferenceCanvasCard({
               }}
               onClick={(event) => {
                 event.stopPropagation();
-                onExamine(reference);
+                setDetailOpen(true);
               }}
               className="
                 flex
@@ -351,18 +355,20 @@ function ReferenceCanvasCard({
             </button>
 
           </div>
-
+        )}
 
       </Card>
+
+      <ReferenceDetail
+        reference={reference}
+        open={detailOpen}
+        onClose={() => setDetailOpen(false)}
+      />
     </div>
   );
 }
 
 export default function LightTable() {
-  const [selectedReference, setSelectedReference] =
-    useState<Reference | null>(null);
-
-
   const lightTable =
     useRevealStore(
       (state) => state.lightTable
@@ -636,9 +642,6 @@ export default function LightTable() {
                 onRemove={
                   removeFromLightTable
                 }
-            onExamine={(reference) =>
-              setSelectedReference(reference)
-            }
               />
             )
           )}
@@ -651,14 +654,6 @@ export default function LightTable() {
           </div>
         </div>
       </div>
-    
-      
-      <ReferenceDetail
-        reference={selectedReference}
-        open={selectedReference !== null}
-        onClose={() => setSelectedReference(null)}
-      />
-
-</section>
+    </section>
   );
 }

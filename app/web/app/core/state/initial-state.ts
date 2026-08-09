@@ -34,9 +34,11 @@ export const initialRevealState: RevealState = {
       creativeDirector: {
   criteria: [],
   decisions: [],
+  decisionHistory: [],
 
   proposalNumber: 1,
   exploredReferenceIds: [],
+  proposedReferenceIds: [],
 
   status: "exploring",
   decision: null,

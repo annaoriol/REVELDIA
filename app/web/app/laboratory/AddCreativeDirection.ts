@@ -20,6 +20,9 @@ export function addCreativeDirection(
   const creativeDirector: ProjectDNACreativeDirector = {
     criteria: input.creativeDirection.criteria,
     decisions: input.creativeDirection.decisions,
+    decisionHistory: previousDirector.decisionHistory ?? [],
+    proposedReferenceIds:
+      previousDirector.proposedReferenceIds ?? [],
 
     proposalNumber:
       previousDirector.proposalNumber ?? 1,

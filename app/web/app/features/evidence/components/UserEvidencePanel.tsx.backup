@@ -91,21 +91,12 @@ export default function UserEvidencePanel() {
      * registerReference genera el ID real
      * dentro del store.
      */
-    const imageUrl =
-      selectedFile.type.startsWith("image/")
-        ? URL.createObjectURL(selectedFile)
-        : undefined;
-
     registerReference({
       kind,
-      title: selectedFile.name,
       description: selectedFile.name,
       meaning:
         meaning.trim() ||
         `Referencia aportada por la persona: ${selectedFile.name}`,
-      image: imageUrl,
-      fileName: selectedFile.name,
-      mimeType: selectedFile.type,
     });
 
     /*

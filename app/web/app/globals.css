@@ -77,3 +77,59 @@ button{
   cursor:pointer;
 
 }
+
+/* ============================================================
+   RƎVELA · MESA DE LUZ · FOCUS MODE
+   ============================================================ */
+
+body.revela-light-table-focus {
+  background: #020202;
+}
+
+/* El entorno completo pierde presencia */
+body.revela-light-table-focus > * {
+  transition:
+    filter 320ms ease,
+    opacity 320ms ease;
+}
+
+/* Oscurecemos la aplicación completa */
+body.revela-light-table-focus
+  > * {
+  filter: brightness(0.42) saturate(0.72);
+}
+
+/*
+   La Mesa de Luz vuelve a recuperar luminosidad
+   mediante el selector que añadiremos al contenedor.
+*/
+body.revela-light-table-focus
+  [data-revela-light-table] {
+  filter: none;
+  opacity: 1;
+}
+
+/* El fondo exterior queda prácticamente negro */
+body.revela-light-table-focus::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9000;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(0, 0, 0, 0.04) 0%,
+      rgba(0, 0, 0, 0.18) 48%,
+      rgba(0, 0, 0, 0.42) 100%
+    );
+}
+
+/* La Mesa de Luz queda por encima de la veladura */
+body.revela-light-table-focus
+  [data-revela-light-table] {
+  position: relative;
+  z-index: 9001;
+}
+

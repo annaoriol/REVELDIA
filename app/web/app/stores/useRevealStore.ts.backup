@@ -293,41 +293,13 @@ export const useRevealStore =
       const now =
         new Date().toISOString();
 
-      const id =
-        crypto.randomUUID();
-
       const newReference:
         ProjectDNAReference = {
-        id,
+        id: crypto.randomUUID(),
 
         ...reference,
 
         createdAt: now,
-      };
-
-      const lightTableReference:
-        Reference = {
-        id,
-
-        title:
-          reference.title,
-
-        category:
-          "Aportada",
-
-        image:
-          reference.image ?? "",
-
-        orientation:
-          "landscape",
-
-        description:
-          reference.description,
-
-        keywords: [
-          reference.kind,
-          "aportada",
-        ],
       };
 
       set((state) => ({
@@ -338,18 +310,15 @@ export const useRevealStore =
             ...state.project.dna,
 
             references: [
-              ...state.project.dna.references,
+              ...state.project.dna
+                .references,
+
               newReference,
             ],
           },
 
           updatedAt: now,
         },
-
-        lightTable: [
-          ...state.lightTable,
-          lightTableReference,
-        ],
       }));
     },
 

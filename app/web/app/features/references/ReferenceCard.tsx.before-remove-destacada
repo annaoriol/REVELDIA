@@ -40,7 +40,15 @@ export default function ReferenceCard({
 
         </div>
 
+        {/* DESTACADA */}
 
+        {reference.featured && (
+          <div className="mt-3">
+            <span className="inline-flex rounded-full border border-cyan-300/50 bg-cyan-300/10 px-2.5 py-1 text-[9px] uppercase tracking-[0.25em] text-cyan-300">
+              Destacada
+            </span>
+          </div>
+        )}
 
         {/* TÍTULO */}
 

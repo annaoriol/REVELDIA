@@ -96,6 +96,7 @@ export interface ProjectDNAObservation {
 
 export interface ProjectDNAReference {
   id: string;
+
   kind:
     | "visual"
     | "narrative"
@@ -104,8 +105,19 @@ export interface ProjectDNAReference {
     | "conceptual"
     | "editorial"
     | "cinematic";
+
+  title: string;
+
   description: string;
+
   meaning: string;
+
+  image?: string;
+
+  fileName?: string;
+
+  mimeType?: string;
+
   createdAt: string;
 }
 
@@ -175,12 +187,23 @@ export interface ProjectDNASensoryDNA {
  * La suficiencia es una decisión del Director, no una regla
  * basada únicamente en el número de referencias seleccionadas.
  */
+export interface ProjectDNACreativeDirectorDecision {
+  proposalNumber: number;
+  decision: "continue" | "sufficient";
+  exploredReferenceIds: string[];
+  reason: string;
+  nextExploration: string | null;
+  createdAt: string;
+}
+
 export interface ProjectDNACreativeDirector {
   criteria: string[];
   decisions: string[];
+  decisionHistory: ProjectDNACreativeDirectorDecision[];
 
   proposalNumber: number;
   exploredReferenceIds: string[];
+  proposedReferenceIds: string[];
 
   status: CreativeDirectorExplorationStatus;
 
