@@ -1,0 +1,1140 @@
+"use client";
+
+import { create } from "zustand";
+
+import { getSceneById } from "@/app/core/orchestrator/method-scenes";
+import { createObservation } from "@/app/domain/observation";
+import { initialRevealState } from "@/app/core/state/initial-state";
+import { CreativeDirectorEngine } from "@/app/core/creative-director/CreativeDirectorEngine";
+
+import type { Reference } from "@/app/features/references/data";
+import { references as revelaReferences } from "@/app/features/references/data";
+
+import type {
+  ProjectDNACreativeDirection,
+  ProjectDNACreativeSystem,
+  ProjectDNAIntention,
+  ProjectDNAObservation,
+  ProjectDNAPositivation,
+  ProjectDNAReference,
+  ProjectDNARevelation,
+  RevealState,
+  SceneId,
+  Selection,
+} from "@/app/types";
+
+type RevealActions = {
+  setScene: (sceneId: SceneId) => void;
+
+  enterLaboratory: () => void;
+
+  updateIntention: (
+    intention: Omit<ProjectDNAIntention, "updatedAt">
+  ) => void;
+
+  registerObservation: (
+    observation: Pick<
+      ProjectDNAObservation,
+      "question" | "answer" | "evidenceIds"
+    > &
+      Partial<
+        Pick<
+          ProjectDNAObservation,
+          "referenceIds" | "relationshipIds"
+        >
+      >
+  ) => void;
+
+  registerReference: (
+    reference: Omit<ProjectDNAReference, "id" | "createdAt">
+  ) => void;
+
+  updateCreativeDirection: (
+    creativeDirection: Omit<
+      ProjectDNACreativeDirection,
+      "updatedAt"
+    >
+  ) => void;
+
+  evaluateCreativeDirector: () => void;
+
+  exploreCreativeDirector: () => void;
+
+  revealIdentity: (
+    revelation: Omit<ProjectDNARevelation, "createdAt">
+  ) => void;
+
+  positivateRevelation: (
+    positivation: Omit<ProjectDNAPositivation, "updatedAt">
+  ) => void;
+
+  updateCreativeSystem: (
+    creativeSystem: Omit<ProjectDNACreativeSystem, "updatedAt">
+  ) => void;
+
+  addToLightTable: (reference: Reference) => void;
+
+  removeFromLightTable: (id: string) => void;
+
+  clearLightTable: () => void;
+
+  toggleLightTable: (reference: Reference) => void;
+
+  moveLightTableReference: (
+    fromIndex: number,
+    toIndex: number
+  ) => void;
+
+  reorderLightTable: (ids: string[]) => void;
+
+  createGroup: (name: string) => void;
+
+  renameGroup: (
+    groupId: string,
+    name: string
+  ) => void;
+
+  deleteGroup: (groupId: string) => void;
+
+  addItemToGroup: (
+    itemId: string,
+    groupId: string
+  ) => void;
+
+  removeItemFromGroup: (
+    itemId: string,
+    groupId?: string
+  ) => void;
+
+  moveItemBetweenGroups: (
+    itemId: string,
+    sourceGroupId: string,
+    targetGroupId: string
+  ) => void;
+
+  setSelection: (
+    selection: Selection
+  ) => void;
+
+  clearSelection: () => void;
+
+  setLoading: (
+    key: keyof RevealState["loading"],
+    value: boolean
+  ) => void;
+
+  pushError: (
+    message: string
+  ) => void;
+
+  clearErrors: () => void;
+};
+
+export type RevealStore =
+  RevealState & RevealActions;
+
+export const useRevealStore =
+  create<RevealStore>((set, get) => ({
+    ...initialRevealState,
+
+    setScene: (sceneId) => {
+      const scene =
+        getSceneById(sceneId);
+
+      set((state) => ({
+        scene: {
+          activeSceneId: scene.id,
+          sceneTitle: scene.title,
+          sceneDescription:
+            scene.description,
+        },
+
+        navigation: {
+          ...state.navigation,
+          activeSceneId: scene.id,
+        },
+
+        history:
+          state.history.includes(scene.id)
+            ? state.history
+            : [
+                ...state.history,
+                scene.id,
+              ],
+      }));
+    },
+
+    enterLaboratory: () => {
+      const firstLaboratoryScene =
+        getSceneById("intention");
+
+      set((state) => ({
+        scene: {
+          activeSceneId:
+            firstLaboratoryScene.id,
+
+          sceneTitle:
+            firstLaboratoryScene.title,
+
+          sceneDescription:
+            firstLaboratoryScene.description,
+        },
+
+        navigation: {
+          ...state.navigation,
+
+          activeSceneId:
+            firstLaboratoryScene.id,
+        },
+
+        history:
+          state.history.includes(
+            firstLaboratoryScene.id
+          )
+            ? state.history
+            : [
+                ...state.history,
+                firstLaboratoryScene.id,
+              ],
+      }));
+    },
+
+    updateIntention: (
+      intention
+    ) => {
+      const now =
+        new Date().toISOString();
+
+      set((state) => ({
+        project: {
+          ...state.project,
+
+          dna: {
+            ...state.project.dna,
+
+            identity: {
+              ...state.project.dna.identity,
+
+              ...intention,
+
+              updatedAt: now,
+            },
+          },
+
+          updatedAt: now,
+        },
+      }));
+    },
+
+    registerObservation: (
+      observation
+    ) => {
+      const now =
+        new Date().toISOString();
+
+      const createdObservation =
+        createObservation({
+          id: crypto.randomUUID(),
+
+          createdAt: now,
+
+          question:
+            observation.question,
+
+          answer:
+            observation.answer,
+
+          evidenceIds:
+            observation.evidenceIds,
+
+          referenceIds:
+            observation.referenceIds ?? [],
+
+          relationshipIds:
+            observation.relationshipIds ?? [],
+        });
+
+      const storedObservation:
+        ProjectDNAObservation = {
+        ...createdObservation,
+
+        createdAt:
+          createdObservation.createdAt ??
+          now,
+
+        updatedAt:
+          createdObservation.updatedAt ??
+          now,
+      };
+
+      set((state) => ({
+        project: {
+          ...state.project,
+
+          dna: {
+            ...state.project.dna,
+
+            observations: [
+              ...state.project.dna
+                .observations,
+
+              storedObservation,
+            ],
+          },
+
+          updatedAt: now,
+        },
+      }));
+    },
+
+    registerReference: (
+      reference
+    ) => {
+      const now =
+        new Date().toISOString();
+
+      const id =
+        crypto.randomUUID();
+
+      const newReference:
+        ProjectDNAReference = {
+        id,
+
+        ...reference,
+
+        createdAt: now,
+      };
+
+      const lightTableReference:
+        Reference = {
+        id,
+
+        title:
+          reference.title,
+
+        category:
+          "Aportada",
+
+        image:
+          reference.image ?? "",
+
+        orientation:
+          "landscape",
+
+        description:
+          reference.description,
+
+        keywords: [
+          reference.kind,
+          "aportada",
+        ],
+      };
+
+      set((state) => ({
+        project: {
+          ...state.project,
+
+          dna: {
+            ...state.project.dna,
+
+            references: [
+              ...state.project.dna.references,
+              newReference,
+            ],
+          },
+
+          updatedAt: now,
+        },
+
+        lightTable: [
+          ...state.lightTable,
+          lightTableReference,
+        ],
+      }));
+    },
+
+    updateCreativeDirection: (
+      creativeDirection
+    ) => {
+      const now =
+        new Date().toISOString();
+
+      set((state) => ({
+        project: {
+          ...state.project,
+
+          dna: {
+            ...state.project.dna,
+
+            creativeDirection: {
+              ...state.project.dna
+                .creativeDirection,
+
+              ...creativeDirection,
+
+              updatedAt: now,
+            },
+          },
+
+          updatedAt: now,
+        },
+      }));
+    },
+
+    evaluateCreativeDirector: () => {
+      const state = get();
+
+      const creativeDirector =
+        state.project.dna
+          .creativeDirector;
+
+      const exploredReferenceIds =
+        Array.from(
+          new Set([
+            ...creativeDirector
+              .exploredReferenceIds,
+
+            ...state.lightTable.map(
+              (reference) =>
+                reference.id
+            ),
+
+            ...state.project.dna.references.map(
+              (reference) =>
+                reference.id
+            ),
+          ])
+        );
+
+      const input = {
+        intention: {
+          whatToReveal:
+            state.project.dna.identity
+              .whatToReveal,
+
+          whatToTransmit:
+            state.project.dna.identity
+              .whatToTransmit,
+
+          context:
+            state.project.dna.identity
+              .context,
+        },
+
+        revelaReferences:
+          revelaReferences.map(
+            (reference) =>
+              reference.id
+          ),
+
+        userReferences:
+          state.project.dna.references.map(
+            (reference) =>
+              reference.id
+          ),
+
+        selectedReferences:
+          state.lightTable.map(
+            (reference) =>
+              reference.id
+          ),
+
+        proposalNumber:
+          creativeDirector
+            .proposalNumber,
+
+        exploredReferenceIds,
+      };
+
+      const engine =
+        new CreativeDirectorEngine();
+
+      const evaluation =
+        engine.evaluate(input);
+
+      const now =
+        new Date().toISOString();
+
+      set((state) => ({
+        project: {
+          ...state.project,
+
+          dna: {
+            ...state.project.dna,
+
+            creativeDirector: {
+              ...state.project.dna
+                .creativeDirector,
+
+              proposalNumber:
+                evaluation.proposalNumber,
+
+              exploredReferenceIds:
+                evaluation.exploredReferenceIds,
+
+              status:
+                evaluation.status,
+
+              decision:
+                evaluation.decision,
+
+              criteria:
+                evaluation.nextExploration
+                  ? [
+                      ...state.project.dna
+                        .creativeDirector
+                        .criteria,
+
+                      evaluation.nextExploration,
+                    ]
+                  : state.project.dna
+                      .creativeDirector
+                      .criteria,
+
+              decisions: [
+                ...state.project.dna
+                  .creativeDirector
+                  .decisions,
+
+                evaluation.reason,
+              ],
+
+              decisionHistory: [
+                ...state.project.dna
+                  .creativeDirector
+                  .decisionHistory,
+
+                {
+                  proposalNumber:
+                    evaluation.proposalNumber,
+
+                  decision:
+                    evaluation.decision,
+
+                  exploredReferenceIds:
+                    evaluation.exploredReferenceIds,
+
+                  reason:
+                    evaluation.reason,
+
+                  nextExploration:
+                    evaluation.nextExploration,
+
+                  createdAt: now,
+                },
+              ],
+
+              updatedAt: now,
+            },
+          },
+
+          updatedAt: now,
+        },
+      }));
+    },
+
+    exploreCreativeDirector: () => {
+      const state = get();
+
+      const creativeDirector =
+        state.project.dna.creativeDirector;
+
+      const input = {
+        intention: {
+          whatToReveal:
+            state.project.dna.identity.whatToReveal,
+
+          whatToTransmit:
+            state.project.dna.identity.whatToTransmit,
+
+          context:
+            state.project.dna.identity.context,
+        },
+
+        revelaReferences:
+          revelaReferences.map(
+            (reference) => reference.id
+          ),
+
+        userReferences:
+          state.project.dna.references.map(
+            (reference) => reference.id
+          ),
+
+        selectedReferences:
+          state.lightTable.map(
+            (reference) => reference.id
+          ),
+
+        proposalNumber:
+          creativeDirector.proposalNumber,
+
+        exploredReferenceIds:
+          creativeDirector.exploredReferenceIds,
+      };
+
+      const engine =
+        new CreativeDirectorEngine();
+
+      const evaluation =
+        engine.evaluate(input);
+
+      /*
+       * Toda referencia que el Director
+       * presenta en una ronda pasa a formar
+       * parte de su exploración.
+       *
+       * La propuesta y la selección son
+       * estados diferentes:
+       *
+       * exploredReferenceIds
+       * = referencias consideradas por RƎVELA
+       *
+       * proposedReferenceIds
+       * = referencias presentadas en la ronda actual
+       *
+       * lightTable
+       * = referencias elegidas por la persona
+       */
+
+      const nextExploredReferenceIds =
+        Array.from(
+          new Set([
+            ...creativeDirector.exploredReferenceIds,
+            ...evaluation.nextReferenceIds,
+          ])
+        );
+
+      const nextProposedReferenceIds =
+        Array.from(
+          new Set(
+            evaluation.nextReferenceIds
+          )
+        );
+
+      const now =
+        new Date().toISOString();
+
+      set((state) => ({
+        project: {
+          ...state.project,
+
+          dna: {
+            ...state.project.dna,
+
+            creativeDirector: {
+              ...state.project.dna.creativeDirector,
+
+              proposalNumber:
+                evaluation.proposalNumber,
+
+              exploredReferenceIds:
+                nextExploredReferenceIds,
+
+              proposedReferenceIds:
+                nextProposedReferenceIds,
+
+              status:
+                evaluation.status,
+
+              decision:
+                evaluation.decision,
+
+              criteria:
+                evaluation.nextExploration
+                  ? [
+                      ...state.project.dna.creativeDirector.criteria,
+                      evaluation.nextExploration,
+                    ]
+                  : state.project.dna.creativeDirector.criteria,
+
+              decisions: [
+                ...state.project.dna.creativeDirector.decisions,
+                evaluation.reason,
+              ],
+
+              decisionHistory: [
+                ...state.project.dna.creativeDirector.decisionHistory,
+
+                {
+                  proposalNumber:
+                    evaluation.proposalNumber,
+
+                  decision:
+                    evaluation.decision,
+
+                  exploredReferenceIds:
+                    nextExploredReferenceIds,
+
+                  reason:
+                    evaluation.reason,
+
+                  nextExploration:
+                    evaluation.nextExploration,
+
+                  createdAt: now,
+                },
+              ],
+
+              updatedAt: now,
+            },
+          },
+
+          updatedAt: now,
+        },
+      }));
+    },
+
+    revealIdentity: (
+      revelation
+    ) => {
+      const now =
+        new Date().toISOString();
+
+      set((state) => ({
+        project: {
+          ...state.project,
+
+          dna: {
+            ...state.project.dna,
+
+            revelation: {
+              ...revelation,
+
+              createdAt: now,
+            },
+          },
+
+          updatedAt: now,
+        },
+      }));
+    },
+
+    positivateRevelation: (
+      positivation
+    ) => {
+      const now =
+        new Date().toISOString();
+
+      set((state) => ({
+        project: {
+          ...state.project,
+
+          dna: {
+            ...state.project.dna,
+
+            positivation: {
+              ...positivation,
+
+              updatedAt: now,
+            },
+          },
+
+          updatedAt: now,
+        },
+      }));
+    },
+
+    updateCreativeSystem: (
+      creativeSystem
+    ) => {
+      const now =
+        new Date().toISOString();
+
+      set((state) => ({
+        project: {
+          ...state.project,
+
+          dna: {
+            ...state.project.dna,
+
+            creativeSystem: {
+              ...creativeSystem,
+
+              updatedAt: now,
+            },
+          },
+
+          updatedAt: now,
+        },
+      }));
+    },
+
+    addToLightTable: (
+      reference
+    ) => {
+      set((state) => {
+        const alreadyExists =
+          state.lightTable.some(
+            (item) =>
+              item.id === reference.id
+          );
+
+        if (alreadyExists) {
+          return state;
+        }
+
+        return {
+          ...state,
+
+          lightTable: [
+            ...state.lightTable,
+            reference,
+          ],
+        };
+      });
+    },
+
+    removeFromLightTable: (
+      id
+    ) => {
+      set((state) => ({
+        ...state,
+
+        lightTable:
+          state.lightTable.filter(
+            (reference) =>
+              reference.id !== id
+          ),
+      }));
+    },
+
+    clearLightTable: () => {
+      set((state) => ({
+        ...state,
+        lightTable: [],
+        lightTableGroups: [],
+      }));
+    },
+
+    toggleLightTable: (
+      reference
+    ) => {
+      set((state) => {
+        const exists =
+          state.lightTable.some(
+            (item) =>
+              item.id === reference.id
+          );
+
+        return {
+          ...state,
+
+          lightTable: exists
+            ? state.lightTable.filter(
+                (item) =>
+                  item.id !==
+                  reference.id
+              )
+            : [
+                ...state.lightTable,
+                reference,
+              ],
+        };
+      });
+    },
+
+    moveLightTableReference: (
+      fromIndex,
+      toIndex
+    ) => {
+      set((state) => {
+        const items = [
+          ...state.lightTable,
+        ];
+
+        if (
+          fromIndex < 0 ||
+          toIndex < 0 ||
+          fromIndex >= items.length ||
+          toIndex >= items.length
+        ) {
+          return state;
+        }
+
+        const [
+          movedItem,
+        ] = items.splice(
+          fromIndex,
+          1
+        );
+
+        items.splice(
+          toIndex,
+          0,
+          movedItem
+        );
+
+        return {
+          ...state,
+
+          lightTable: items,
+        };
+      });
+    },
+
+    reorderLightTable: (
+      ids
+    ) => {
+      set((state) => {
+        const byId =
+          new Map(
+            state.lightTable.map(
+              (reference) => [
+                reference.id,
+                reference,
+              ]
+            )
+          );
+
+        const reordered =
+          ids
+            .map((id) =>
+              byId.get(id)
+            )
+            .filter(
+              (
+                reference
+              ): reference is Reference =>
+                Boolean(reference)
+            );
+
+        return {
+          ...state,
+
+          lightTable: reordered,
+        };
+      });
+    },
+
+    createGroup: (
+      name
+    ) => {
+      const trimmedName =
+        name.trim();
+
+      if (!trimmedName) {
+        return;
+      }
+
+      const group = {
+        id: crypto.randomUUID(),
+        name: trimmedName,
+        itemIds: [],
+      };
+
+      set((state) => ({
+        ...state,
+
+        lightTableGroups: [
+          ...state.lightTableGroups,
+          group,
+        ],
+      }));
+    },
+
+    renameGroup: (
+      groupId,
+      name
+    ) => {
+      const trimmedName =
+        name.trim();
+
+      if (!trimmedName) {
+        return;
+      }
+
+      set((state) => ({
+        ...state,
+
+        lightTableGroups:
+          state.lightTableGroups.map(
+            (group) =>
+              group.id === groupId
+                ? {
+                    ...group,
+                    name: trimmedName,
+                  }
+                : group
+          ),
+      }));
+    },
+
+    deleteGroup: (
+      groupId
+    ) => {
+      set((state) => ({
+        ...state,
+
+        lightTableGroups:
+          state.lightTableGroups.filter(
+            (group) =>
+              group.id !== groupId
+          ),
+      }));
+    },
+
+    addItemToGroup: (
+      itemId,
+      groupId
+    ) => {
+      set((state) => ({
+        ...state,
+
+        lightTableGroups:
+          state.lightTableGroups.map(
+            (group) => {
+              if (
+                group.id !== groupId
+              ) {
+                return group;
+              }
+
+              if (
+                group.itemIds.includes(
+                  itemId
+                )
+              ) {
+                return group;
+              }
+
+              return {
+                ...group,
+
+                itemIds: [
+                  ...group.itemIds,
+                  itemId,
+                ],
+              };
+            }
+          ),
+      }));
+    },
+
+    removeItemFromGroup: (
+      itemId,
+      groupId
+    ) => {
+      set((state) => ({
+        ...state,
+
+        lightTableGroups:
+          state.lightTableGroups.map(
+            (group) => {
+              if (
+                groupId &&
+                group.id !== groupId
+              ) {
+                return group;
+              }
+
+              return {
+                ...group,
+
+                itemIds:
+                  group.itemIds.filter(
+                    (id) => id !== itemId
+                  ),
+              };
+            }
+          ),
+      }));
+    },
+
+    moveItemBetweenGroups: (
+      itemId,
+      sourceGroupId,
+      targetGroupId
+    ) => {
+      set((state) => ({
+        ...state,
+
+        lightTableGroups:
+          state.lightTableGroups.map(
+            (group) => {
+              if (
+                group.id === sourceGroupId
+              ) {
+                return {
+                  ...group,
+
+                  itemIds:
+                    group.itemIds.filter(
+                      (id) => id !== itemId
+                    ),
+                };
+              }
+
+              if (
+                group.id === targetGroupId
+              ) {
+                return {
+                  ...group,
+
+                  itemIds:
+                    group.itemIds.includes(itemId)
+                      ? group.itemIds
+                      : [
+                          ...group.itemIds,
+                          itemId,
+                        ],
+                };
+              }
+
+              return group;
+            }
+          ),
+      }));
+    },
+
+    setSelection: (
+      selection
+    ) => {
+      set({
+        selection,
+      });
+    },
+
+    clearSelection: () => {
+      set({
+        selection: {
+          id: null,
+          type: null,
+        },
+      });
+    },
+
+    setLoading: (
+      key,
+      value
+    ) => {
+      set((state) => ({
+        loading: {
+          ...state.loading,
+
+          [key]: value,
+        },
+      }));
+    },
+
+    pushError: (
+      message
+    ) => {
+      set((state) => ({
+        errors: [
+          ...state.errors,
+
+          {
+            id: crypto.randomUUID(),
+            message,
+          },
+        ],
+      }));
+    },
+
+    clearErrors: () => {
+      set({
+        errors: [],
+      });
+    },
+  }));

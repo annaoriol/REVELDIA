@@ -114,12 +114,6 @@ export interface ProjectDNAReference {
 
   image?: string;
 
-  /*
-   * Recurso audiovisual original de la referencia.
-   * Puede ser una imagen, vídeo, PDF u otro recurso local.
-   */
-  mediaUrl?: string;
-
   fileName?: string;
 
   mimeType?: string;

@@ -89,9 +89,6 @@ export default function ReferenceDetail({
     (item) => item.id === currentReference.id
   );
 
-  const isUserReference =
-    projectReference !== undefined;
-
   function handleToggleLightTable() {
     toggleLightTable(currentReference);
 
@@ -319,15 +316,14 @@ export default function ReferenceDetail({
 
           <div>
             <p className="text-[10px] uppercase tracking-[0.35em] text-cyan-300">
-              {isUserReference
-                ? "Tu inspiración"
-                : "Inspiración"}
+              Inspiración
             </p>
 
             <p className="mt-5 text-sm leading-7 text-white/60">
-              {isUserReference
-                ? "Esta referencia forma parte de tu campo de inspiración. La has aportado para que RƎVELA conozca mejor tu mirada, tus gustos y aquello que quieres incorporar al proyecto."
-                : "Esta referencia forma parte del campo de inspiración que RƎVELA está explorando para descubrir patrones, estilos y posibilidades para el proyecto."}
+              Esta referencia forma parte del campo
+              de inspiración que RƎVELA está
+              explorando para descubrir patrones,
+              estilos y posibilidades para el proyecto.
             </p>
           </div>
         </div>

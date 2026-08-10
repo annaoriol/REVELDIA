@@ -1,0 +1,664 @@
+"use client";
+
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
+
+import Button from "@/app/components/ui/Button";
+import Card from "@/app/components/ui/Card";
+import EmptyState from "@/app/components/ui/EmptyState";
+import type { Reference } from "@/app/features/references/data";
+import ReferenceDetail from "@/app/features/references/ReferenceDetail";
+import { useRevealStore } from "@/app/stores/useRevealStore";
+
+type Point = {
+  x: number;
+  y: number;
+};
+
+type Positions = Record<string, Point>;
+
+const CARD_WIDTH = 230;
+const CARD_HEIGHT = 245;
+const CANVAS_PADDING = 24;
+
+function getInitialPosition(
+  index: number,
+  containerWidth: number
+): Point {
+  const usableWidth = Math.max(
+    containerWidth - CANVAS_PADDING * 2,
+    CARD_WIDTH
+  );
+
+  const columns = Math.max(
+    1,
+    Math.floor(usableWidth / (CARD_WIDTH + 24))
+  );
+
+  const column = index % columns;
+  const row = Math.floor(index / columns);
+
+  const totalRowWidth =
+    Math.min(columns, 4) * CARD_WIDTH +
+    Math.max(Math.min(columns, 4) - 1, 0) * 24;
+
+  const centeredStart =
+    Math.max(
+      CANVAS_PADDING,
+      (containerWidth - totalRowWidth) / 2
+    );
+
+  return {
+    x: centeredStart + column * (CARD_WIDTH + 24),
+    y: 54 + row * 205,
+  };
+}
+
+function ReferenceCanvasCard({
+  reference,
+  position,
+  index,
+  onMove,
+  onRemove,
+  onExamine,
+}: {
+  reference: Reference;
+  position: Point;
+  index: number;
+  onMove: (id: string, point: Point) => void;
+  onRemove: (id: string) => void;
+  onExamine: (reference: Reference) => void;
+}) {
+
+  const draggingRef = useRef(false);
+  const pointerOffsetRef = useRef<Point>({
+    x: 0,
+    y: 0,
+  });
+
+  const handlePointerDown = (
+    event: ReactPointerEvent<HTMLDivElement>
+  ) => {
+    if (event.button !== 0) {
+      return;
+    }
+
+    const element = event.currentTarget;
+    const rect = element.getBoundingClientRect();
+
+    draggingRef.current = true;
+
+    pointerOffsetRef.current = {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    };
+
+    element.setPointerCapture(event.pointerId);
+
+    event.preventDefault();
+  };
+
+  const handlePointerMove = (
+    event: ReactPointerEvent<HTMLDivElement>
+  ) => {
+    if (!draggingRef.current) {
+      return;
+    }
+
+    const canvas =
+      event.currentTarget.parentElement;
+
+    if (!canvas) {
+      return;
+    }
+
+    const canvasRect =
+      canvas.getBoundingClientRect();
+
+    const nextX =
+      event.clientX -
+      canvasRect.left -
+      pointerOffsetRef.current.x;
+
+    const nextY =
+      event.clientY -
+      canvasRect.top -
+      pointerOffsetRef.current.y;
+
+    const maxX = Math.max(
+      CANVAS_PADDING,
+      canvasRect.width -
+        CARD_WIDTH -
+        CANVAS_PADDING
+    );
+
+    const maxY = Math.max(
+      CANVAS_PADDING,
+      canvasRect.height -
+        CARD_HEIGHT -
+        CANVAS_PADDING
+    );
+
+    onMove(reference.id, {
+      x: Math.min(
+        Math.max(CANVAS_PADDING, nextX),
+        maxX
+      ),
+      y: Math.min(
+        Math.max(CANVAS_PADDING, nextY),
+        maxY
+      ),
+    });
+  };
+
+  const handlePointerUp = (
+    event: ReactPointerEvent<HTMLDivElement>
+  ) => {
+    if (!draggingRef.current) {
+      return;
+    }
+
+    draggingRef.current = false;
+
+    if (
+      event.currentTarget.hasPointerCapture(
+        event.pointerId
+      )
+    ) {
+      event.currentTarget.releasePointerCapture(
+        event.pointerId
+      );
+    }
+  };
+
+  const hasImage =
+    typeof reference.image === "string" &&
+    reference.image.trim().length > 0;
+
+  return (
+    <div
+      className="absolute select-none touch-none"
+      style={{
+        left: position.x,
+        top: position.y,
+        width: CARD_WIDTH,
+        zIndex: index + 1,
+      }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+    >
+      <Card
+        className={`
+          overflow-hidden
+          rounded-xl
+          border
+          border-white/[0.12]
+          bg-black/[0.94]
+          p-0
+          shadow-[0_12px_35px_rgba(0,0,0,0.45)]
+          transition-all
+          duration-200
+          hover:border-white/20
+        `}
+      >
+
+        {/* VISTA COMPACTA */}
+          <div className="relative">
+
+            {hasImage ? (
+              <img
+                src={reference.image}
+                alt={reference.title}
+                draggable={false}
+                className="
+                  block
+                  h-[72px]
+                  w-full
+                  object-cover
+                  opacity-75
+                "
+              />
+            ) : (
+              <div
+                className="
+                  h-[72px]
+                  w-full
+                  bg-black
+                "
+              />
+            )}
+
+            <div
+              className="
+                pointer-events-none
+                absolute
+                inset-0
+                bg-gradient-to-t
+                from-black
+                via-black/45
+                to-black/20
+              "
+            />
+
+            <div className="absolute inset-x-3 top-2 flex items-center justify-between">
+              <span
+                className="
+                  rounded-full
+                  border
+                  border-white/10
+                  bg-black/70
+                  px-2
+                  py-0.5
+                  text-[8px]
+                  tracking-[0.18em]
+                  text-white/45
+                "
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <span
+                className="
+                  text-[8px]
+                  uppercase
+                  tracking-[0.22em]
+                  text-cyan-300/55
+                "
+              >
+                {reference.category}
+              </span>
+            </div>
+
+            <div className="absolute inset-x-3 bottom-2">
+              <p className="truncate text-sm text-white/90">
+                {reference.title}
+              </p>
+            </div>
+          </div>
+
+
+        {/* ACCIONES DE LA VISTA COMPACTA */}
+          <div className="
+            flex
+            items-center
+            justify-between
+            border-t
+            border-white/[0.07]
+            px-3
+            py-2
+          ">
+
+            <span className="
+              text-[8px]
+              uppercase
+              tracking-[0.16em]
+              text-white/20
+            ">
+              Arrastra
+            </span>
+
+            <button
+              type="button"
+              onPointerDown={(event) => {
+                event.stopPropagation();
+              }}
+              onClick={(event) => {
+                event.stopPropagation();
+                onExamine(reference);
+              }}
+              className="
+                flex
+                items-center
+                gap-1
+                text-[8px]
+                uppercase
+                tracking-[0.16em]
+                text-cyan-300/65
+                transition
+                hover:text-cyan-200
+              "
+            >
+              <span>↗</span>
+              Examinar
+            </button>
+
+            <button
+              type="button"
+              onPointerDown={(event) => {
+                event.stopPropagation();
+              }}
+              onClick={(event) => {
+                event.stopPropagation();
+                onRemove(reference.id);
+              }}
+              className="
+                text-[8px]
+                uppercase
+                tracking-[0.16em]
+                text-white/20
+                transition
+                hover:text-white/60
+              "
+            >
+              Quitar
+            </button>
+
+          </div>
+
+
+      </Card>
+    </div>
+  );
+}
+
+export default function LightTable() {
+  const [selectedReference, setSelectedReference] =
+    useState<Reference | null>(null);
+
+
+  const lightTable =
+    useRevealStore(
+      (state) => state.lightTable
+    );
+
+  const projectId =
+    useRevealStore(
+      (state) => state.project.id
+    );
+
+  const removeFromLightTable =
+    useRevealStore(
+      (state) => state.removeFromLightTable
+    );
+
+  const setScene =
+    useRevealStore(
+      (state) => state.setScene
+    );
+
+  const canvasRef =
+    useRef<HTMLDivElement | null>(null);
+
+  const storageKey =
+    `revela-light-table-positions-${projectId}`;
+
+  const [positions, setPositions] =
+    useState<Positions>({});
+
+  const [canvasWidth, setCanvasWidth] =
+    useState(1100);
+
+  useEffect(() => {
+    try {
+      const stored =
+        window.localStorage.getItem(
+          storageKey
+        );
+
+      if (!stored) {
+        return;
+      }
+
+      const parsed =
+        JSON.parse(stored) as Positions;
+
+      if (
+        parsed &&
+        typeof parsed === "object"
+      ) {
+        setPositions(parsed);
+      }
+    } catch {
+      // La Mesa de Luz puede continuar
+      // aunque no exista memoria local válida.
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        storageKey,
+        JSON.stringify(positions)
+      );
+    } catch {
+      // La posición sigue funcionando en memoria.
+    }
+  }, [positions, storageKey]);
+
+  useEffect(() => {
+    const element =
+      canvasRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    const updateSize = () => {
+      setCanvasWidth(
+        element.getBoundingClientRect().width
+      );
+    };
+
+    updateSize();
+
+    const observer =
+      new ResizeObserver(updateSize);
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const activePositions =
+    useMemo(() => {
+      const next: Positions = {
+        ...positions,
+      };
+
+      lightTable.forEach(
+        (reference, index) => {
+          if (!next[reference.id]) {
+            next[reference.id] =
+              getInitialPosition(
+                index,
+                canvasWidth
+              );
+          }
+        }
+      );
+
+      return next;
+    }, [
+      positions,
+      lightTable,
+      canvasWidth,
+    ]);
+
+  const handleMove = (
+    id: string,
+    point: Point
+  ) => {
+    setPositions((current) => ({
+      ...current,
+      [id]: point,
+    }));
+  };
+
+  const handleAddReferences = () => {
+    setScene("references");
+  };
+
+  if (!lightTable.length) {
+    return (
+      <EmptyState
+        title="La Mesa de Luz está vacía"
+        description="Añade referencias desde Referencias para empezar a observar, comparar y relacionar."
+        action={
+          <Button
+            onClick={handleAddReferences}
+          >
+            Añadir referencias
+          </Button>
+        }
+      />
+    );
+  }
+
+  return (
+    <section
+      className="
+        relative
+        overflow-hidden
+        rounded-[1.45rem]
+        border
+        border-white/[0.08]
+        bg-white/[0.012]
+      "
+    >
+      <div
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.055),transparent_58%)]
+        "
+      />
+
+      <div className="relative p-[clamp(1.25rem,2.4vw,3rem)]">
+        <header
+          className="
+            flex
+            flex-col
+            gap-5
+            border-b
+            border-white/10
+            pb-6
+            sm:flex-row
+            sm:items-end
+            sm:justify-between
+          "
+        >
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.34em] text-cyan-300">
+              Mesa de Luz
+            </p>
+
+            <h1 className="mt-3 text-4xl font-light tracking-tight text-white">
+              {lightTable.length}{" "}
+              {lightTable.length === 1
+                ? "referencia"
+                : "referencias"}
+            </h1>
+
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/45">
+              Aquí reúnes las referencias que
+              has decidido conservar para
+              observarlas, compararlas y
+              relacionarlas.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                setScene("references")
+              }
+            >
+              Volver a Referencias
+            </Button>
+
+            <Button
+              variant="ghost"
+              onClick={handleAddReferences}
+              className="text-cyan-300"
+            >
+              ＋ Añadir referencias
+            </Button>
+          </div>
+        </header>
+
+        <div
+          ref={canvasRef}
+          className="
+            relative
+            mt-6
+            min-h-[680px]
+            overflow-hidden
+            rounded-[1.25rem]
+            border
+            border-white/[0.07]
+            bg-black/20
+          "
+        >
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              opacity-30
+              [background-image:linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]
+              [background-size:48px_48px]
+            "
+          />
+
+          <div className="pointer-events-none absolute left-5 top-5">
+            <span className="text-[9px] uppercase tracking-[0.3em] text-white/20">
+              Selección activa
+            </span>
+          </div>
+
+          {lightTable.map(
+            (reference, index) => (
+              <ReferenceCanvasCard
+                key={reference.id}
+                reference={reference}
+                index={index}
+                position={
+                  activePositions[
+                    reference.id
+                  ] ??
+                  getInitialPosition(
+                    index,
+                    canvasWidth
+                  )
+                }
+                onMove={handleMove}
+                onRemove={
+                  removeFromLightTable
+                }
+            onExamine={(reference) =>
+              setSelectedReference(reference)
+            }
+              />
+            )
+          )}
+
+          <div className="pointer-events-none absolute bottom-5 left-5">
+            <span className="text-[9px] uppercase tracking-[0.28em] text-white/20">
+              Mueve las referencias para
+              encontrar relaciones
+            </span>
+          </div>
+        </div>
+      </div>
+    
+      
+      <ReferenceDetail
+        reference={selectedReference}
+        open={selectedReference !== null}
+        onClose={() => setSelectedReference(null)}
+      />
+
+</section>
+  );
+}

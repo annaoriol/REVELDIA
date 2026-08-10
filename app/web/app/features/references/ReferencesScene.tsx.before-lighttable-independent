@@ -178,12 +178,68 @@ export default function ReferencesScene() {
       ================================================= */}
 
       <section className="mt-20">
-        <UserEvidencePanel
-          onOpenLightTable={() =>
-            setScene("light-table")
-          }
-        />
+        <UserEvidencePanel />
       </section>
+
+      {/* =================================================
+          REFERENCIAS REUNIDAS
+          
+          Esta sección aparece DESPUÉS de que
+          RƎVELA haya mostrado sus referencias y
+          después de que la persona pueda aportar
+          las suyas.
+      ================================================= */}
+
+      {lightTable.length > 0 && (
+        <section className="mt-16 rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.04] p-6 sm:p-8">
+
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+
+            <div>
+
+              <p className="text-[10px] uppercase tracking-[0.32em] text-cyan-300">
+                Referencias reunidas
+              </p>
+
+              <h2 className="mt-3 text-2xl font-light text-white sm:text-3xl">
+                {lightTable.length}{" "}
+                {lightTable.length === 1
+                  ? "referencia preparada"
+                  : "referencias preparadas"}
+              </h2>
+
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/55">
+                Aquí se reúnen las referencias de
+                RƎVELA y las que has aportado.
+                Puedes seguir añadiendo material
+                antes de abrir la Mesa de Luz.
+              </p>
+
+            </div>
+
+            <Button
+              variant="ghost"
+              className="
+                w-fit
+                shrink-0
+                border
+                border-cyan-300/30
+                text-cyan-300
+                transition
+                hover:bg-cyan-300/10
+                hover:text-cyan-200
+              "
+              onClick={() =>
+                setScene("light-table")
+              }
+            >
+              Abrir Mesa de Luz →
+            </Button>
+
+          </div>
+
+        </section>
+      )}
 
       {/* =================================================
           AMPLIADORA

@@ -38,13 +38,7 @@ const referenceKinds = [
 type ReferenceKind =
   (typeof referenceKinds)[number]["value"];
 
-interface UserEvidencePanelProps {
-  onOpenLightTable?: () => void;
-}
-
-export default function UserEvidencePanel({
-  onOpenLightTable,
-}: UserEvidencePanelProps) {
+export default function UserEvidencePanel() {
   const registerReference = useRevealStore(
     (state) => state.registerReference
   );
@@ -240,47 +234,26 @@ export default function UserEvidencePanel({
             Arrastra aquí tus referencias
           </p>
 
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                setIsOpen(true);
-                handleChooseFile();
-              }}
-              className="
-                rounded-xl
-                border
-                border-cyan-300/40
-                px-5
-                py-3
-                text-cyan-300
-                transition
-                hover:bg-cyan-300/10
-              "
-            >
-              ＋ Aportar referencia
-            </button>
-
-            {onOpenLightTable && (
-              <button
-                type="button"
-                onClick={onOpenLightTable}
-                className="
-                  rounded-xl
-                  border
-                  border-white/15
-                  px-5
-                  py-3
-                  text-white/65
-                  transition
-                  hover:border-cyan-300/40
-                  hover:text-cyan-300
-                "
-              >
-                Mesa de Luz →
-              </button>
-            )}
-          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setIsOpen(true);
+              handleChooseFile();
+            }}
+            className="
+              mt-5
+              rounded-xl
+              border
+              border-cyan-300/40
+              px-5
+              py-3
+              text-cyan-300
+              transition
+              hover:bg-cyan-300/10
+            "
+          >
+            ＋ Aportar referencia
+          </button>
 
           <input
             ref={fileInputRef}
