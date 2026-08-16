@@ -23,6 +23,11 @@ export default function ReferencesScene() {
     (state) => state.lightTable
   );
 
+  const discoveredReferences =
+    useRevealStore(
+      (state) => state.discoveredReferences
+    );
+
   const toggleLightTable = useRevealStore(
     (state) => state.toggleLightTable
   );
@@ -41,14 +46,39 @@ export default function ReferencesScene() {
     [lightTable]
   );
 
+  const availableReferences = useMemo(() => {
+    const byId = new Map<string, Reference>();
+
+    /*
+     * Las referencias descubiertas por el Provider
+     * aparecen primero porque representan la
+     * exploración actual del Director Creativo.
+     */
+    discoveredReferences.forEach((reference) => {
+      byId.set(reference.id, reference);
+    });
+
+    references.forEach((reference) => {
+      if (!byId.has(reference.id)) {
+        byId.set(reference.id, {
+          ...reference,
+          origin:
+            reference.origin ?? "revela",
+        });
+      }
+    });
+
+    return Array.from(byId.values());
+  }, [discoveredReferences]);
+
   const filteredReferences = useMemo(() => {
     const query = search.trim().toLowerCase();
 
     if (!query.length) {
-      return references;
+      return availableReferences;
     }
 
-    return references.filter((reference) => {
+    return availableReferences.filter((reference) => {
       return (
         reference.title
           .toLowerCase()
@@ -66,7 +96,7 @@ export default function ReferencesScene() {
         )
       );
     });
-  }, [search]);
+  }, [search, availableReferences]);
 
   function handleSelectReference(
     reference: Reference

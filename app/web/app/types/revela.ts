@@ -371,6 +371,13 @@ export interface RevealState {
   navigation: Navigation;
   history: SceneId[];
   memory: Memory;
+
+  /**
+   * Referencias descubiertas por el Provider
+   * durante la exploración del Director Creativo.
+   */
+  discoveredReferences: Reference[];
+
   lightTable: Reference[];
   lightTableGroups: Group[];
   relationships: ProjectDNARelationship[];

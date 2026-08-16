@@ -6,6 +6,7 @@ import { getSceneById } from "@/app/core/orchestrator/method-scenes";
 import { createObservation } from "@/app/domain/observation";
 import { initialRevealState } from "@/app/core/state/initial-state";
 import { CreativeDirectorEngine } from "@/app/core/creative-director/CreativeDirectorEngine";
+import { ReferenceDiscoveryOrchestrator } from "@/app/core/references/ReferenceDiscoveryOrchestrator";
 
 import type { Reference } from "@/app/features/references/data";
 import { references as revelaReferences } from "@/app/features/references/data";
@@ -58,7 +59,7 @@ type RevealActions = {
 
   evaluateCreativeDirector: () => void;
 
-  exploreCreativeDirector: () => void;
+  exploreCreativeDirector: () => Promise<void>;
 
   revealIdentity: (
     revelation: Omit<ProjectDNARevelation, "createdAt">
@@ -533,7 +534,7 @@ export const useRevealStore =
       }));
     },
 
-    exploreCreativeDirector: () => {
+    exploreCreativeDirector: async () => {
       const state = get();
 
       const creativeDirector =
@@ -579,36 +580,47 @@ export const useRevealStore =
       const evaluation =
         engine.evaluate(input);
 
+      const exploration =
+        evaluation.nextExploration ??
+        "Explorar referencias relevantes para la intención, el contexto y la dirección creativa del proyecto.";
+
       /*
-       * Toda referencia que el Director
-       * presenta en una ronda pasa a formar
-       * parte de su exploración.
+       * El Director define QUÉ necesita explorar.
        *
-       * La propuesta y la selección son
-       * estados diferentes:
-       *
-       * exploredReferenceIds
-       * = referencias consideradas por RƎVELA
-       *
-       * proposedReferenceIds
-       * = referencias presentadas en la ronda actual
-       *
-       * lightTable
-       * = referencias elegidas por la persona
+       * El Reference Provider se encarga de
+       * BUSCAR las referencias que responden
+       * a esa exploración.
        */
+
+      const discovery =
+        new ReferenceDiscoveryOrchestrator();
+
+      const discovered =
+        evaluation.decision === "continue"
+          ? await discovery.discover(
+              input,
+              exploration,
+              8
+            )
+          : [];
+
+      const discoveredIds =
+        discovered.map(
+          (reference) => reference.id
+        );
 
       const nextExploredReferenceIds =
         Array.from(
           new Set([
             ...creativeDirector.exploredReferenceIds,
-            ...evaluation.nextReferenceIds,
+            ...discoveredIds,
           ])
         );
 
       const nextProposedReferenceIds =
         Array.from(
           new Set(
-            evaluation.nextReferenceIds
+            discoveredIds
           )
         );
 
@@ -682,6 +694,16 @@ export const useRevealStore =
 
           updatedAt: now,
         },
+
+        /*
+         * Estas referencias las ha descubierto
+         * el Provider para que RƎVELA las presente
+         * al usuario.
+         *
+         * NO pasan automáticamente a la Mesa de Luz.
+         */
+        discoveredReferences:
+          discovered,
       }));
     },
 

@@ -79,6 +79,9 @@ export const initialRevealState: RevealState = {
     entries: [],
     lastSyncedAt: null,
   },
+
+  discoveredReferences: [],
+
   lightTable: [],
   lightTableGroups: [],
   relationships: [],

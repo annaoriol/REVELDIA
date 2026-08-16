@@ -4,7 +4,6 @@ export type ReferenceOrientation =
   | "square";
 
 export interface Reference {
-
   id: string;
 
   title: string;
@@ -21,4 +20,39 @@ export interface Reference {
 
   keywords: string[];
 
+  /**
+   * Recurso audiovisual principal.
+   * Puede ser una imagen, vídeo, PDF u otro recurso.
+   */
+  mediaUrl?: string;
+
+  /**
+   * Página web o fuente original de la referencia.
+   */
+  sourceUrl?: string;
+
+  /**
+   * Nombre de la fuente de procedencia.
+   */
+  sourceName?: string;
+
+  /**
+   * Nombre original del archivo cuando
+   * la referencia procede de un archivo local.
+   */
+  fileName?: string;
+
+  /**
+   * Tipo MIME del recurso.
+   */
+  mimeType?: string;
+
+  /**
+   * Indica que la referencia procede
+   * de una búsqueda/propuesta del Director.
+   */
+  origin?:
+    | "revela"
+    | "user"
+    | "provider";
 }
