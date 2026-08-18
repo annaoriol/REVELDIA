@@ -18,7 +18,31 @@ export interface Reference {
 
   description: string;
 
+  /**
+   * Significado interpretativo de la referencia.
+   * Puede proceder del Provider.
+   */
+  meaning?: string;
+
+  /**
+   * Tipo de referencia detectado por RƎVELA.
+   */
+  kind?:
+    | "visual"
+    | "narrative"
+    | "cultural"
+    | "emotional"
+    | "conceptual"
+    | "editorial"
+    | "cinematic";
+
   keywords: string[];
+
+  /**
+   * Motivo por el que el Director/Provider
+   * considera relevante esta referencia.
+   */
+  reason?: string;
 
   /**
    * Recurso audiovisual principal.

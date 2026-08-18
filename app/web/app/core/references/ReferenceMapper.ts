@@ -21,8 +21,17 @@ export function mapReferenceCandidate(
     description:
       candidate.description,
 
+    meaning:
+      candidate.meaning,
+
+    kind:
+      candidate.kind,
+
     keywords:
       candidate.keywords,
+
+    reason:
+      candidate.reason,
 
     mediaUrl:
       candidate.mediaUrl,

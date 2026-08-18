@@ -132,17 +132,6 @@ export default function ReferencesScene() {
       </p>
 
       {/* =================================================
-          BUSCADOR
-      ================================================= */}
-
-      <section className="mt-8">
-        <ReferenceSearch
-          value={search}
-          onChange={setSearch}
-        />
-      </section>
-
-      {/* =================================================
           REFERENCIAS DE RƎVELA
       ================================================= */}
 
@@ -151,7 +140,7 @@ export default function ReferencesScene() {
         <div className="mb-6">
 
           <p className="text-[10px] uppercase tracking-[0.32em] text-cyan-300">
-            RƎVELA encuentra
+            RƎVELA proporciona
           </p>
 
           <h2 className="mt-2 text-2xl font-light text-white">
@@ -201,6 +190,17 @@ export default function ReferencesScene() {
           lightTableIds={lightTableIds}
         />
 
+      </section>
+
+      {/* =================================================
+          BUSCADOR
+      ================================================= */}
+
+      <section className="mt-8">
+        <ReferenceSearch
+          value={search}
+          onChange={setSearch}
+        />
       </section>
 
       {/* =================================================

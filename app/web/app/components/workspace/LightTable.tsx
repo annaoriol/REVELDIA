@@ -22,40 +22,102 @@ type Point = {
 
 type Positions = Record<string, Point>;
 
-const CARD_WIDTH = 230;
-const CARD_HEIGHT = 245;
+const CARD_WIDTH = 190;
+const CARD_HEIGHT = 120;
 const CANVAS_PADDING = 24;
 
+/*
+ * La Mesa de Luz no es una cuadrícula.
+ *
+ * Es una superficie de trabajo donde las referencias
+ * pueden convivir, superponerse y ser reorganizadas
+ * libremente por la persona.
+ *
+ * Las nuevas referencias aparecen alrededor del centro
+ * de la mesa, dentro de la zona visible.
+ */
 function getInitialPosition(
   index: number,
+  _referenceCount: number,
   containerWidth: number
 ): Point {
-  const usableWidth = Math.max(
-    containerWidth - CANVAS_PADDING * 2,
-    CARD_WIDTH
-  );
+  const centerX =
+    containerWidth / 2 -
+    CARD_WIDTH / 2;
 
-  const columns = Math.max(
-    1,
-    Math.floor(usableWidth / (CARD_WIDTH + 24))
-  );
+  /*
+   * Núcleo de posiciones alrededor del centro.
+   *
+   * Las referencias se solapan deliberadamente:
+   * esto permite observarlas como una composición
+   * y evita crear filas que desaparezcan por debajo
+   * del viewport.
+   */
+  const offsets: Point[] = [
+    { x: 0, y: 0 },
 
-  const column = index % columns;
-  const row = Math.floor(index / columns);
+    { x: 34, y: 22 },
+    { x: -34, y: 22 },
 
-  const totalRowWidth =
-    Math.min(columns, 4) * CARD_WIDTH +
-    Math.max(Math.min(columns, 4) - 1, 0) * 24;
+    { x: 48, y: -22 },
+    { x: -48, y: -22 },
 
-  const centeredStart =
-    Math.max(
-      CANVAS_PADDING,
-      (containerWidth - totalRowWidth) / 2
+    { x: 68, y: 42 },
+    { x: -68, y: 42 },
+
+    { x: 76, y: -42 },
+    { x: -76, y: -42 },
+
+    { x: 0, y: 58 },
+    { x: 0, y: -58 },
+
+    { x: 52, y: 62 },
+    { x: -52, y: 62 },
+
+    { x: 52, y: -62 },
+    { x: -52, y: -62 },
+  ];
+
+  const offset =
+    offsets[index % offsets.length];
+
+  /*
+   * Para más referencias reutilizamos el núcleo
+   * con un desplazamiento mínimo.
+   *
+   * No creamos nuevas filas infinitas.
+   * La mesa sigue siendo una superficie compacta
+   * donde las referencias pueden superponerse.
+   */
+  const cycle =
+    Math.floor(
+      index / offsets.length
     );
 
+  const cycleOffset =
+    Math.min(cycle * 8, 40);
+
+  const direction =
+    cycle % 2 === 0 ? 1 : -1;
+
   return {
-    x: centeredStart + column * (CARD_WIDTH + 24),
-    y: 54 + row * 205,
+    x: Math.max(
+      CANVAS_PADDING,
+      Math.min(
+        containerWidth -
+          CARD_WIDTH -
+          CANVAS_PADDING,
+        centerX +
+          offset.x +
+          cycleOffset *
+            direction
+      )
+    ),
+
+    y:
+      70 +
+      offset.y +
+      cycle * 8,
   };
 }
 
@@ -387,7 +449,7 @@ export default function LightTable() {
     useRef<HTMLDivElement | null>(null);
 
   const storageKey =
-    `revela-light-table-positions-${projectId}`;
+    `revela-light-table-positions-v3-${projectId}`;
 
   const [positions, setPositions] =
     useState<Positions>({});
@@ -470,6 +532,7 @@ export default function LightTable() {
             next[reference.id] =
               getInitialPosition(
                 index,
+                lightTable.length,
                 canvasWidth
               );
           }
@@ -592,7 +655,7 @@ export default function LightTable() {
           className="
             relative
             mt-6
-            min-h-[680px]
+            min-h-[500px]
             overflow-hidden
             rounded-[1.25rem]
             border
@@ -629,6 +692,7 @@ export default function LightTable() {
                   ] ??
                   getInitialPosition(
                     index,
+                    lightTable.length,
                     canvasWidth
                   )
                 }

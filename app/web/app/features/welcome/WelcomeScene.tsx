@@ -2,24 +2,60 @@
 
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { editorialAssets } from "@/app/assets/editorial-assets";
 import { useRevealStore } from "@/app/stores/useRevealStore";
 
 function WelcomeScene() {
-  const enterLaboratory = useRevealStore(
-    (state) => state.enterLaboratory
+  const setScene = useRevealStore(
+    (state) => state.setScene
   );
 
   const [showTransition, setShowTransition] =
     useState(false);
 
   const handleReveal = () => {
+    if (showTransition) {
+      return;
+    }
+
     setTimeout(() => {
       setShowTransition(true);
     }, 180);
   };
+
+  /*
+   * La entrada al laboratorio también puede
+   * activarse directamente con Enter.
+   *
+   * En Bienvenida no existe un campo de escritura,
+   * por lo que Enter funciona como acceso rápido
+   * al CTA principal.
+   */
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key === "Enter" &&
+        !showTransition
+      ) {
+        event.preventDefault();
+        handleReveal();
+      }
+    };
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+    };
+  }, [showTransition]);
 
   return (
     <section className="relative min-h-full overflow-hidden rounded-[var(--revela-radius-lg)] bg-black">
@@ -64,10 +100,12 @@ function WelcomeScene() {
           {/* CTA */}
 
           <button
+            type="button"
             onClick={handleReveal}
-            className="group mt-[clamp(3rem,5vw,4rem)] flex items-center gap-5 bg-transparent"
+            aria-label="Entrar en RƎVELA"
+            className="group mt-[clamp(2.5rem,4vw,3.5rem)] flex items-center gap-3 bg-transparent focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--revela-accent)] focus-visible:ring-offset-4 focus-visible:ring-offset-black"
           >
-            <span className="font-[var(--font-space)] text-[clamp(2.3rem,3vw,3.4rem)] font-light tracking-[0.16em] text-white transition-all duration-300 group-hover:opacity-80">
+            <span className="font-[var(--font-space)] text-[clamp(1.35rem,1.8vw,2rem)] font-light tracking-[0.16em] text-white transition-all duration-300 group-hover:opacity-80">
               R
               <span className="text-[var(--revela-accent)]">
                 Ǝ
@@ -76,8 +114,9 @@ function WelcomeScene() {
             </span>
 
             <ArrowRight
-              size={42}
-              className="text-[var(--revela-accent)] transition-transform duration-300 group-hover:translate-x-2"
+              size={26}
+              strokeWidth={1.5}
+              className="text-[var(--revela-accent)] transition-transform duration-300 group-hover:translate-x-1.5"
             />
           </button>
 
@@ -91,7 +130,9 @@ function WelcomeScene() {
             autoPlay
             playsInline
             className="h-full w-full object-cover"
-            onEnded={enterLaboratory}
+            onEnded={() =>
+              setScene("creative-director")
+            }
           >
             <source
               src="/videos/transition.mp4"

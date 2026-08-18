@@ -82,51 +82,39 @@ export default function UserEvidencePanel({
     const file =
       event.target.files?.[0] ?? null;
 
-    setSelectedFile(file);
-  };
-
-  const handleRegister = () => {
-    if (!selectedFile) {
+    if (!file) {
       return;
     }
 
     /*
-     * 1. Guardamos la referencia en el ADN
-     * del proyecto.
+     * Aportar una referencia implica incorporarla
+     * inmediatamente al proyecto.
      *
-     * registerReference genera el ID real
-     * dentro del store.
-     */
-    /*
-     * Conservamos un recurso reproducible para la referencia.
-     *
-     * Antes solo se creaba ObjectURL para imágenes.
-     * Eso hacía que los vídeos conservaran metadata,
-     * pero perdieran el recurso que debía reproducirse.
+     * No existe un segundo paso de confirmación.
      */
     const mediaUrl =
-      URL.createObjectURL(selectedFile);
+      URL.createObjectURL(file);
 
     const imageUrl =
-      selectedFile.type.startsWith("image/")
+      file.type.startsWith("image/")
         ? mediaUrl
         : undefined;
 
     registerReference({
       kind,
-      title: selectedFile.name,
-      description: selectedFile.name,
+      title: file.name,
+      description: file.name,
       meaning:
         meaning.trim() ||
-        `Referencia aportada por la persona: ${selectedFile.name}`,
+        `Referencia aportada por la persona: ${file.name}`,
       image: imageUrl,
       mediaUrl,
-      fileName: selectedFile.name,
-      mimeType: selectedFile.type,
+      fileName: file.name,
+      mimeType: file.type,
     });
 
     /*
-     * 2. Recuperamos inmediatamente la referencia
+     * Recuperamos inmediatamente la referencia
      * que acaba de crear el store.
      *
      * Así utilizamos EXACTAMENTE el mismo ID
@@ -146,29 +134,20 @@ export default function UserEvidencePanel({
     }
 
     /*
-     * 3. Si es una imagen, creamos una URL local
-     * para mostrarla en la Mesa de Luz.
-     */
-    const isImage =
-      selectedFile.type.startsWith("image/");
-
-    const image =
-      isImage
-        ? URL.createObjectURL(selectedFile)
-        : "";
-
-    /*
-     * 4. La MISMA referencia entra en la Mesa
+     * 3. La MISMA referencia entra en la Mesa
      * de Luz con el MISMO ID que tiene en el ADN.
+     *
+     * Reutilizamos la misma URL creada arriba.
+     * No generamos una segunda ObjectURL.
      */
     addToLightTable({
       id: registeredReference.id,
 
-      title: selectedFile.name,
+      title: file.name,
 
       category: "Tu referencia",
 
-      image,
+      image: imageUrl ?? "",
 
       orientation: "landscape",
 
@@ -443,30 +422,7 @@ export default function UserEvidencePanel({
               Cancelar
             </button>
 
-            <button
-              type="button"
-              disabled={!selectedFile}
-              onClick={handleRegister}
-              className="
-                rounded-xl
-                border
-                border-cyan-300/40
-                bg-cyan-300/[0.06]
-                px-5
-                py-3
-                text-xs
-                uppercase
-                tracking-[0.2em]
-                text-cyan-300
-                transition
-                hover:bg-cyan-300/10
-                disabled:cursor-default
-                disabled:border-white/10
-                disabled:text-white/20
-              "
-            >
-              Añadir referencia
-            </button>
+
 
           </div>
 

@@ -638,54 +638,6 @@ const isLightTable =
 
             </div>
 
-            <div className="mt-5 border-t border-white/10 pt-5">
-
-              <div className="flex items-center justify-between">
-
-                <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
-                  Material reunido
-                </span>
-
-                <span className="text-sm text-white/60">
-                  {selectedCount}
-                </span>
-
-              </div>
-
-            </div>
-
-            <div className="mt-5 border-t border-white/10 pt-5">
-
-              <div className="flex items-center justify-between">
-
-                <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
-                  Estado
-                </span>
-
-                <span className="text-xs text-white/45">
-                  {creativeDirectorStatus}
-                </span>
-
-              </div>
-
-              <div className="mt-3 h-px bg-white/10">
-
-                <div
-                  className={[
-                    "h-px transition-all duration-500",
-                    creativeDirectorStatus ===
-                    "Material suficiente"
-                      ? "w-full bg-cyan-300"
-                      : exploredCount > 0
-                        ? "w-1/2 bg-cyan-300/60"
-                        : "w-[12%] bg-cyan-300/40",
-                  ].join(" ")}
-                />
-
-              </div>
-
-            </div>
-
             {/* ACCIÓN DEL DIRECTOR */}
 
             <div className="mt-5 border-t border-white/10 pt-5">
@@ -732,6 +684,54 @@ const isLightTable =
                 </div>
 
               </button>
+
+            </div>
+
+            <div className="mt-5 border-t border-white/10 pt-5">
+
+              <div className="flex items-center justify-between">
+
+                <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
+                  Material reunido
+                </span>
+
+                <span className="text-sm text-white/60">
+                  {selectedCount}
+                </span>
+
+              </div>
+
+            </div>
+
+            <div className="mt-5 border-t border-white/10 pt-5">
+
+              <div className="flex items-center justify-between">
+
+                <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
+                  Estado
+                </span>
+
+                <span className="text-xs text-white/45">
+                  {creativeDirectorStatus}
+                </span>
+
+              </div>
+
+              <div className="mt-3 h-px bg-white/10">
+
+                <div
+                  className={[
+                    "h-px transition-all duration-500",
+                    creativeDirectorStatus ===
+                    "Material suficiente"
+                      ? "w-full bg-cyan-300"
+                      : exploredCount > 0
+                        ? "w-1/2 bg-cyan-300/60"
+                        : "w-[12%] bg-cyan-300/40",
+                  ].join(" ")}
+                />
+
+              </div>
 
             </div>
 

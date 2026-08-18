@@ -30,6 +30,10 @@ export default function ReferenceDetail({
     (state) => state.project.dna.references
   );
 
+  const discoveredReferences = useRevealStore(
+    (state) => state.discoveredReferences
+  );
+
   const toggleLightTable = useRevealStore(
     (state) => state.toggleLightTable
   );
@@ -77,11 +81,22 @@ export default function ReferenceDetail({
 
   /*
    * La tarjeta utiliza una Reference ligera.
-   * Para la ampliadora recuperamos, cuando existe,
-   * la ProjectDNAReference completa mediante el mismo id.
+   *
+   * Una referencia puede proceder de:
+   *
+   * 1. una aportación del usuario
+   * 2. una referencia descubierta por el Provider
+   *
+   * Las referencias descubiertas conservan su
+   * enriquecimiento directamente en Reference.
    */
   const projectReference: ProjectDNAReference | undefined =
     projectReferences.find(
+      (item) => item.id === currentReference.id
+    );
+
+  const discoveredReference =
+    discoveredReferences.find(
       (item) => item.id === currentReference.id
     );
 
@@ -194,17 +209,20 @@ export default function ReferenceDetail({
         <div className="flex-1 overflow-y-auto px-7 py-7">
           <p className="text-base leading-7 text-white/75">
             {projectReference?.description ??
+              discoveredReference?.description ??
               currentReference.description}
           </p>
 
-          {projectReference?.meaning && (
+          {(projectReference?.meaning ??
+            discoveredReference?.meaning) && (
             <div className="mt-7">
               <p className="text-[10px] uppercase tracking-[0.35em] text-white/35">
                 Significado
               </p>
 
               <p className="mt-4 text-sm leading-7 text-white/60">
-                {projectReference.meaning}
+                {projectReference?.meaning ??
+                  discoveredReference?.meaning}
               </p>
             </div>
           )}
