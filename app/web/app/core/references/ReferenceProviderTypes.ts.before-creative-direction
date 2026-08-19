@@ -44,19 +44,6 @@ export interface ReferenceSearchContext {
     context: string;
   };
 
-  creativeDirection: {
-    creativeReading: string;
-    formatDirectives: string[];
-    explorationTerritories: string[];
-    questions: string[];
-    nextAction:
-      | "explore-references"
-      | "add-references"
-      | "light-table"
-      | "synthesize"
-      | null;
-  };
-
   userReferences: string[];
 
   selectedReferences: string[];

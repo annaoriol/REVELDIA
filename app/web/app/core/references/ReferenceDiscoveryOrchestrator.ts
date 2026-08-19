@@ -18,6 +18,10 @@ import type {
   Reference,
 } from "@/app/features/references/data";
 
+import type {
+  ReferenceSearchQuery,
+} from "./ReferenceProviderTypes";
+
 export class ReferenceDiscoveryOrchestrator {
   private readonly discoveryService: ReferenceDiscoveryService;
 
@@ -39,11 +43,13 @@ export class ReferenceDiscoveryOrchestrator {
   async discover(
     input: CreativeDirectorInput,
     exploration: string,
+    creativeDirection: ReferenceSearchQuery["context"]["creativeDirection"],
     limit = 8
   ): Promise<Reference[]> {
     return this.discoveryService.discover(
       input,
       exploration,
+      creativeDirection,
       limit
     );
   }

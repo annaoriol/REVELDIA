@@ -1,0 +1,118 @@
+import type {
+  ReferenceCandidate,
+  ReferenceProvider,
+  ReferenceSearchQuery,
+} from "./ReferenceProviderTypes";
+
+export class MockReferenceProvider
+  implements ReferenceProvider
+{
+  async search(
+    input: ReferenceSearchQuery
+  ): Promise<ReferenceCandidate[]> {
+    const query =
+      input.query.trim().toLowerCase();
+
+    const candidates: ReferenceCandidate[] = [
+      {
+        id: "mock-light-architecture",
+        title: "Light as Architecture",
+        description:
+          "Referencias donde la luz construye el espacio y determina la percepción.",
+        meaning:
+          "La luz funciona como estructura narrativa y espacial.",
+        kind: "cinematic",
+        category: "Arquitectura",
+        keywords: [
+          "luz",
+          "espacio",
+          "geometría",
+          "arquitectura",
+        ],
+        reason:
+          "La intención sugiere explorar la relación entre luz, espacio y percepción.",
+      },
+
+      {
+        id: "mock-editorial-minimalism",
+        title: "Editorial Minimalism",
+        description:
+          "Lenguajes editoriales basados en claridad, silencio visual y composición.",
+        meaning:
+          "La reducción de elementos puede aumentar la fuerza del mensaje.",
+        kind: "editorial",
+        category: "Editorial",
+        keywords: [
+          "minimalismo",
+          "editorial",
+          "composición",
+          "silencio",
+        ],
+        reason:
+          "Aporta contraste y permite explorar cómo la simplicidad puede construir significado.",
+      },
+
+      {
+        id: "mock-materiality",
+        title: "Materiality and Texture",
+        description:
+          "Referencias centradas en materia, textura y presencia física.",
+        meaning:
+          "La materialidad aporta una dimensión sensorial a la comunicación.",
+        kind: "visual",
+        category: "Dirección de arte",
+        keywords: [
+          "materia",
+          "textura",
+          "sensorial",
+          "detalle",
+        ],
+        reason:
+          "Amplía la exploración hacia una dimensión táctil y sensorial.",
+      },
+
+      {
+        id: "mock-human-editorial",
+        title: "Human Editorial",
+        description:
+          "Lenguajes editoriales que combinan dirección visual y presencia humana.",
+        meaning:
+          "La mirada humana introduce emoción y narrativa.",
+        kind: "narrative",
+        category: "Editorial",
+        keywords: [
+          "humano",
+          "narrativa",
+          "editorial",
+          "emoción",
+        ],
+        reason:
+          "Introduce una dimensión narrativa y emocional complementaria.",
+      },
+    ];
+
+    const filtered =
+      query.length === 0
+        ? candidates
+        : candidates.filter(
+            (candidate) =>
+              candidate.title
+                .toLowerCase()
+                .includes(query) ||
+              candidate.description
+                .toLowerCase()
+                .includes(query) ||
+              candidate.keywords.some(
+                (keyword) =>
+                  keyword
+                    .toLowerCase()
+                    .includes(query)
+              )
+          );
+
+    return filtered.slice(
+      0,
+      Math.max(1, input.limit)
+    );
+  }
+}

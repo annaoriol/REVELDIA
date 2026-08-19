@@ -9,6 +9,7 @@ import type {
 export function buildReferenceSearchQuery(
   input: CreativeDirectorInput,
   exploration: string,
+  creativeDirection: ReferenceSearchQuery["context"]["creativeDirection"],
   limit = 8
 ): ReferenceSearchQuery {
   const intention = [
@@ -32,6 +33,8 @@ export function buildReferenceSearchQuery(
 
     context: {
       intention: input.intention,
+
+      creativeDirection,
 
       userReferences:
         input.userReferences,

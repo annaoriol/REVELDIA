@@ -9,6 +9,7 @@ import {
 import type {
   ReferenceCandidate,
   ReferenceProvider,
+  ReferenceSearchQuery,
 } from "./ReferenceProviderTypes";
 
 export class ReferenceSearchService {
@@ -19,12 +20,14 @@ export class ReferenceSearchService {
   async search(
     input: CreativeDirectorInput,
     exploration: string,
+    creativeDirection: ReferenceSearchQuery["context"]["creativeDirection"],
     limit = 8
   ): Promise<ReferenceCandidate[]> {
     const query =
       buildReferenceSearchQuery(
         input,
         exploration,
+        creativeDirection,
         limit
       );
 

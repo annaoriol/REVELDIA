@@ -22,12 +22,16 @@ export class ReferenceDiscoveryService {
   async discover(
     input: CreativeDirectorInput,
     exploration: string,
+    creativeDirection: Parameters<
+      typeof this.searchService.search
+    >[2],
     limit = 8
   ): Promise<Reference[]> {
     const candidates =
       await this.searchService.search(
         input,
         exploration,
+        creativeDirection,
         limit
       );
 

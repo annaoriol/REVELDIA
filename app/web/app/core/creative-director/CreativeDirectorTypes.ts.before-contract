@@ -6,29 +6,6 @@ export type CreativeDirectorStatus =
   | "exploring"
   | "sufficient";
 
-export interface CreativeDirectorBrief {
-  projectType: string;
-  format: string;
-  intention: {
-    whatToReveal: string;
-    whatToTransmit: string;
-    context: string;
-  };
-  constraints: string[];
-}
-
-export interface CreativeDirection {
-  creativeReading: string;
-  formatDirectives: string[];
-  explorationTerritories: string[];
-  questions: string[];
-  nextAction:
-    | "explore-references"
-    | "add-references"
-    | "light-table"
-    | "synthesize";
-}
-
 export interface CreativeDirectorInput {
   intention: {
     whatToReveal: string;

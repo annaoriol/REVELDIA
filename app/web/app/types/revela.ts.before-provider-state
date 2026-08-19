@@ -229,19 +229,6 @@ export interface ProjectDNAExpression {
 export interface ProjectDNACreativeDirection {
   criteria: string[];
   decisions: string[];
-
-  creativeReading: string;
-  formatDirectives: string[];
-  explorationTerritories: string[];
-  questions: string[];
-
-  nextAction:
-    | "explore-references"
-    | "add-references"
-    | "light-table"
-    | "synthesize"
-    | null;
-
   updatedAt: string | null;
 }
 
@@ -384,13 +371,6 @@ export interface RevealState {
   navigation: Navigation;
   history: SceneId[];
   memory: Memory;
-
-  /**
-   * Referencias descubiertas por el Provider
-   * durante la exploración del Director Creativo.
-   */
-  discoveredReferences: Reference[];
-
   lightTable: Reference[];
   lightTableGroups: Group[];
   relationships: ProjectDNARelationship[];

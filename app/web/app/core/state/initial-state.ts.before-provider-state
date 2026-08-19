@@ -55,14 +55,6 @@ export const initialRevealState: RevealState = {
       creativeDirection: {
         criteria: [],
         decisions: [],
-
-        creativeReading: "",
-        formatDirectives: [],
-        explorationTerritories: [],
-        questions: [],
-
-        nextAction: null,
-
         updatedAt: null,
       },
       specialistAnalyses: [],
@@ -87,9 +79,6 @@ export const initialRevealState: RevealState = {
     entries: [],
     lastSyncedAt: null,
   },
-
-  discoveredReferences: [],
-
   lightTable: [],
   lightTableGroups: [],
   relationships: [],
