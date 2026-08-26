@@ -59,9 +59,7 @@ type RevealActions = {
 
   evaluateCreativeDirector: () => void;
 
-  exploreCreativeDirector: (force?: boolean) => Promise<void>;
-  searchReferences: (query: string) => Promise<void>;
-  searchedReferences: Reference[];
+  exploreCreativeDirector: () => Promise<void>;
 
   revealIdentity: (
     revelation: Omit<ProjectDNARevelation, "createdAt">
@@ -331,9 +329,6 @@ export const useRevealStore =
           reference.kind,
           "aportada",
         ],
-
-        origin:
-          "user",
       };
 
       set((state) => ({
@@ -539,7 +534,7 @@ export const useRevealStore =
       }));
     },
 
-    exploreCreativeDirector: async (force = false) => {
+    exploreCreativeDirector: async () => {
       const state = get();
 
       const creativeDirector =
@@ -601,12 +596,12 @@ export const useRevealStore =
         new ReferenceDiscoveryOrchestrator();
 
       const discovered =
-        (force || evaluation.decision === "continue")
+        evaluation.decision === "continue"
           ? await discovery.discover(
               input,
               exploration,
               state.project.dna.creativeDirection,
-              4
+              8
             )
           : [];
 
@@ -708,81 +703,9 @@ export const useRevealStore =
          *
          * NO pasan automáticamente a la Mesa de Luz.
          */
-        discoveredReferences: [
-          ...state.discoveredReferences,
-          ...discovered.filter(
-            (reference) =>
-              !state.discoveredReferences.some(
-                (existing) =>
-                  existing.id === reference.id
-              )
-          ),
-        ],
+        discoveredReferences:
+          discovered,
       }));
-    },
-
-    searchedReferences: [],
-
-    searchReferences: async (query) => {
-      const state = get();
-
-      const trimmedQuery = query.trim();
-
-      if (!trimmedQuery) {
-        return;
-      }
-
-      const creativeDirector =
-        state.project.dna.creativeDirector;
-
-      const input = {
-        intention: {
-          whatToReveal:
-            state.project.dna.identity.whatToReveal,
-
-          whatToTransmit:
-            state.project.dna.identity.whatToTransmit,
-
-          context:
-            state.project.dna.identity.context,
-        },
-
-        revelaReferences:
-          revelaReferences.map(
-            (reference) => reference.id
-          ),
-
-        userReferences:
-          state.project.dna.references.map(
-            (reference) => reference.id
-          ),
-
-        selectedReferences:
-          state.lightTable.map(
-            (reference) => reference.id
-          ),
-
-        proposalNumber:
-          creativeDirector.proposalNumber,
-
-        exploredReferenceIds:
-          creativeDirector.exploredReferenceIds,
-      };
-
-      const discovery =
-        new ReferenceDiscoveryOrchestrator();
-
-      const results =
-        await discovery.search(
-          input,
-          trimmedQuery,
-          state.project.dna.creativeDirection,
-          3
-        );
-
-      set({
-        searchedReferences: results,
-      });
     },
 
     revealIdentity: (

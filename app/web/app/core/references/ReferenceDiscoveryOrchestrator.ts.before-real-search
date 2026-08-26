@@ -53,18 +53,4 @@ export class ReferenceDiscoveryOrchestrator {
       limit
     );
   }
-
-  async search(
-    input: CreativeDirectorInput,
-    query: string,
-    creativeDirection: ReferenceSearchQuery["context"]["creativeDirection"],
-    limit = 3
-  ): Promise<Reference[]> {
-    return this.discoveryService.searchUserQuery(
-      input,
-      query,
-      creativeDirection,
-      limit
-    );
-  }
 }

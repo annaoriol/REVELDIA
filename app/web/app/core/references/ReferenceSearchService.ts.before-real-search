@@ -33,22 +33,4 @@ export class ReferenceSearchService {
 
     return this.provider.search(query);
   }
-
-  async searchUserQuery(
-    input: CreativeDirectorInput,
-    queryText: string,
-    creativeDirection: ReferenceSearchQuery["context"]["creativeDirection"],
-    limit = 3
-  ): Promise<ReferenceCandidate[]> {
-    const query =
-      buildReferenceSearchQuery(
-        input,
-        queryText,
-        creativeDirection,
-        limit,
-        queryText
-      );
-
-    return this.provider.search(query);
-  }
 }

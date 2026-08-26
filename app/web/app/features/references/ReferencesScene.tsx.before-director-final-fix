@@ -1,0 +1,506 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+
+import Button from "@/app/components/ui/Button";
+import SectionTitle from "@/app/components/ui/SectionTitle";
+import { useRevealStore } from "@/app/stores/useRevealStore";
+
+import UserEvidencePanel from "@/app/features/evidence/components/UserEvidencePanel";
+
+import { references, type Reference } from "./data";
+import ReferenceDetail from "./ReferenceDetail";
+import ReferenceGrid from "./ReferenceGrid";
+import ReferenceSearch from "./ReferenceSearch";
+
+export default function ReferencesScene() {
+  const [search, setSearch] = useState("");
+
+  const [selectedReference, setSelectedReference] =
+    useState<Reference | null>(null);
+
+  const lightTable = useRevealStore(
+    (state) => state.lightTable
+  );
+
+  const discoveredReferences =
+    useRevealStore(
+      (state) => state.discoveredReferences
+    );
+
+  const creativeDirector =
+    useRevealStore(
+      (state) => state.project.dna.creativeDirector
+    );
+
+  const creativeDirection =
+    useRevealStore(
+      (state) => state.project.dna.creativeDirection
+    );
+
+  const exploreCreativeDirector =
+    useRevealStore(
+      (state) => state.exploreCreativeDirector
+    );
+
+  const toggleLightTable = useRevealStore(
+    (state) => state.toggleLightTable
+  );
+
+  const setScene = useRevealStore(
+    (state) => state.setScene
+  );
+
+  /*
+   * Al entrar por primera vez en Referencias,
+   * el Director inicia automáticamente su primera
+   * exploración si todavía no existe una propuesta.
+   */
+  useEffect(() => {
+    if (discoveredReferences.length === 0) {
+      void exploreCreativeDirector();
+    }
+  }, [
+    discoveredReferences.length,
+    exploreCreativeDirector,
+  ]);
+
+  const lightTableIds = useMemo(
+    () =>
+      new Set(
+        lightTable.map(
+          (reference) => reference.id
+        )
+      ),
+    [lightTable]
+  );
+
+  const availableReferences = useMemo(() => {
+    const byId = new Map<string, Reference>();
+
+    /*
+     * Las referencias descubiertas por el Provider
+     * aparecen primero porque representan la
+     * exploración actual del Director Creativo.
+     */
+    discoveredReferences.forEach((reference) => {
+      byId.set(reference.id, reference);
+    });
+
+    references.forEach((reference) => {
+      if (!byId.has(reference.id)) {
+        byId.set(reference.id, {
+          ...reference,
+          origin:
+            reference.origin ?? "revela",
+        });
+      }
+    });
+
+    return Array.from(byId.values());
+  }, [discoveredReferences]);
+
+  const filteredReferences = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query.length) {
+      return availableReferences;
+    }
+
+    return availableReferences.filter((reference) => {
+      return (
+        reference.title
+          .toLowerCase()
+          .includes(query) ||
+        reference.category
+          .toLowerCase()
+          .includes(query) ||
+        reference.description
+          .toLowerCase()
+          .includes(query) ||
+        reference.keywords.some((keyword) =>
+          keyword
+            .toLowerCase()
+            .includes(query)
+        )
+      );
+    });
+  }, [search, availableReferences]);
+
+  const filteredDiscoveredReferences =
+    useMemo(() => {
+      const query = search.trim().toLowerCase();
+
+      if (!query.length) {
+        return discoveredReferences;
+      }
+
+      return discoveredReferences.filter(
+        (reference) => {
+          return (
+            reference.title
+              .toLowerCase()
+              .includes(query) ||
+            reference.category
+              .toLowerCase()
+              .includes(query) ||
+            reference.description
+              .toLowerCase()
+              .includes(query) ||
+            reference.keywords.some((keyword) =>
+              keyword
+                .toLowerCase()
+                .includes(query)
+            )
+          );
+        }
+      );
+    }, [search, discoveredReferences]);
+
+  const catalogReferences = useMemo(
+    () =>
+      filteredReferences.filter(
+        (reference) =>
+          !discoveredReferences.some(
+            (discovered) =>
+              discovered.id === reference.id
+          )
+      ),
+    [filteredReferences, discoveredReferences]
+  );
+
+  function handleSelectReference(
+    reference: Reference
+  ) {
+    setSelectedReference(reference);
+  }
+
+  function handleCloseDetail() {
+    setSelectedReference(null);
+  }
+
+  return (
+    <section>
+      {/* =================================================
+          CABECERA
+      ================================================= */}
+
+      <SectionTitle
+        eyebrow="Inspiración"
+        title="Referencias"
+      />
+
+      <p className="mt-4 max-w-4xl text-sm leading-7 text-white/60">
+        <span className="text-white">R</span>
+        <span className="text-cyan-300">Ǝ</span>
+        <span className="text-white">
+          VELA
+        </span>{" "}
+        encuentra referencias relevantes para tu
+        proyecto y las convierte en inspiración
+        para descubrir patrones, estilos y
+        oportunidades.
+      </p>
+
+      {/* =================================================
+          REFERENCIAS DE RƎVELA
+      ================================================= */}
+
+      <section className="mt-10">
+
+        {/* =================================================
+            DIRECTOR CREATIVO
+        ================================================= */}
+
+        <section className="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-transparent">
+
+          <div className="border-b border-white/10 bg-transparent px-5 py-4 sm:px-6">
+
+            <div className="flex flex-wrap items-center justify-between gap-4">
+
+              <div className="flex items-center gap-3">
+
+                <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(85,193,212,0.7)]" />
+
+                <p className="text-[10px] uppercase tracking-[0.32em] text-cyan-300">
+                  Director Creativo · IA
+                </p>
+
+                <span className="text-[10px] uppercase tracking-[0.22em] text-white/35">
+                  Propuesta {creativeDirector.proposalNumber}
+                </span>
+
+              </div>
+
+              <span className="text-xs text-white/40">
+                {creativeDirector.exploredReferenceIds.length} exploradas
+              </span>
+
+            </div>
+
+          </div>
+
+          <div className="px-5 py-6 sm:px-6">
+
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+
+              <div className="max-w-4xl">
+
+                <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">
+                  Lectura creativa
+                </p>
+
+                <p className="mt-3 text-lg leading-8 text-white/85">
+                  {creativeDirection.creativeReading ||
+                    "RƎVELA está construyendo una lectura creativa a partir de la intención y las referencias del proyecto."}
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  void exploreCreativeDirector();
+                }}
+                className="flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg border border-white/15 bg-transparent px-4 text-[10px] uppercase tracking-[0.22em] text-white/55 transition-all hover:border-cyan-300/50 hover:text-cyan-300"
+              >
+                <span className="text-base">↻</span>
+                Nueva exploración
+              </button>
+
+            </div>
+
+            {(creativeDirection.explorationTerritories.length > 0 ||
+              creativeDirection.formatDirectives.length > 0) && (
+              <div className="mt-7 grid gap-5 border-t border-white/10 pt-6 md:grid-cols-2">
+
+                {creativeDirection.explorationTerritories.length > 0 && (
+                  <div>
+
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">
+                      Territorios de exploración
+                    </p>
+
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {creativeDirection.explorationTerritories.map(
+                        (territory) => (
+                          <span
+                            key={territory}
+                            className="rounded-full border border-cyan-300/20 bg-transparent px-3 py-1.5 text-xs text-white/65"
+                          >
+                            {territory}
+                          </span>
+                        )
+                      )}
+                    </div>
+
+                  </div>
+                )}
+
+                {creativeDirection.formatDirectives.length > 0 && (
+                  <div>
+
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">
+                      Directrices de formato
+                    </p>
+
+                    <div className="mt-3 space-y-2">
+                      {creativeDirection.formatDirectives.map(
+                        (directive) => (
+                          <p
+                            key={directive}
+                            className="text-sm leading-6 text-white/55"
+                          >
+                            {directive}
+                          </p>
+                        )
+                      )}
+                    </div>
+
+                  </div>
+                )}
+
+              </div>
+            )}
+
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-5">
+
+              <p className="text-sm text-white/50">
+                {discoveredReferences.length > 0
+                  ? "Estas son las referencias que el Director propone explorar ahora."
+                  : "El Director está preparando una nueva exploración."}
+              </p>
+
+              {creativeDirector.decision && (
+                <span className="text-[10px] uppercase tracking-[0.25em] text-cyan-300/70">
+                  {creativeDirector.decision === "sufficient"
+                    ? "Material suficiente"
+                    : "Explorando"}
+                </span>
+              )}
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <div className="mb-6">
+
+          <p className="text-[10px] uppercase tracking-[0.32em] text-white/30">
+            Campo de referencias
+          </p>
+
+          <h2 className="mt-2 text-2xl font-light text-white">
+            Inspiración para tu proyecto
+          </h2>
+
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-white/60">
+            Observa, examina y decide qué referencias
+            quieres llevar a la Mesa de Luz.
+          </p>
+
+        </div>
+
+        {/* =================================================
+            CONTADORES
+        ================================================= */}
+
+        <div className="mb-5 flex items-center justify-between text-sm text-white/50">
+
+          <span>
+            {filteredReferences.length}{" "}
+            {filteredReferences.length === 1
+              ? "resultado"
+              : "resultados"}
+          </span>
+
+          <span>
+            {lightTable.length}{" "}
+            {lightTable.length === 1
+              ? "seleccionada"
+              : "seleccionadas"}
+          </span>
+
+        </div>
+
+        {/* =================================================
+            PROPUESTA DEL DIRECTOR
+        ================================================= */}
+
+        {discoveredReferences.length > 0 && (
+          <section className="mb-12 bg-transparent p-0">
+
+            <div className="mb-6">
+
+              <p className="text-[10px] uppercase tracking-[0.32em] text-cyan-300">
+                Director Creativo
+              </p>
+
+              <div className="mt-2 flex flex-wrap items-baseline justify-between gap-3">
+
+                <h3 className="text-2xl font-light text-white">
+                  Propuesta para explorar
+                </h3>
+
+                <span className="text-xs text-white/40">
+                  {filteredDiscoveredReferences.length}{" "}
+                  {filteredDiscoveredReferences.length === 1
+                    ? "referencia"
+                    : "referencias"}
+                </span>
+
+              </div>
+
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-white/55">
+                Estas referencias han sido encontradas por
+                RƎVELA a partir de la exploración actual del
+                Director Creativo. Obsérvalas y decide cuáles
+                quieres llevar a la Mesa de Luz.
+              </p>
+
+            </div>
+
+            <ReferenceGrid
+              items={filteredDiscoveredReferences}
+              onSelect={handleSelectReference}
+              onToggleLightTable={
+                toggleLightTable
+              }
+              lightTableIds={lightTableIds}
+            />
+
+          </section>
+        )}
+
+        {/* =================================================
+            CATÁLOGO
+        ================================================= */}
+
+        <section>
+
+          <div className="mb-6">
+
+            <p className="text-[10px] uppercase tracking-[0.32em] text-white/30">
+              Catálogo de RƎVELA
+            </p>
+
+            <h3 className="mt-2 text-2xl font-light text-white">
+              Referencias disponibles
+            </h3>
+
+          </div>
+
+          <ReferenceGrid
+            items={catalogReferences}
+            onSelect={handleSelectReference}
+            onToggleLightTable={
+              toggleLightTable
+            }
+            lightTableIds={lightTableIds}
+          />
+
+        </section>
+
+      </section>
+
+      {/* =================================================
+          BUSCADOR
+      ================================================= */}
+
+      <section className="mt-8">
+        <ReferenceSearch
+          value={search}
+          onChange={setSearch}
+        />
+      </section>
+
+      {/* =================================================
+          TÚ APORTAS
+      ================================================= */}
+
+      <section className="mt-20">
+        <UserEvidencePanel
+          onOpenLightTable={() =>
+            setScene("light-table")
+          }
+        />
+      </section>
+
+      {/* =================================================
+          AMPLIADORA
+      ================================================= */}
+
+      <ReferenceDetail
+        reference={selectedReference}
+        open={
+          selectedReference !== null
+        }
+        onClose={
+          handleCloseDetail
+        }
+      />
+
+    </section>
+  );
+}

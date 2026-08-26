@@ -36,36 +36,7 @@ export class ReferenceDiscoveryService {
       );
 
     return candidates.map(
-      (candidate) =>
-        mapReferenceCandidate(
-          candidate,
-          "provider"
-        )
-    );
-  }
-
-  async searchUserQuery(
-    input: CreativeDirectorInput,
-    queryText: string,
-    creativeDirection: Parameters<
-      typeof this.searchService.search
-    >[2],
-    limit = 3
-  ): Promise<Reference[]> {
-    const candidates =
-      await this.searchService.searchUserQuery(
-        input,
-        queryText,
-        creativeDirection,
-        limit
-      );
-
-    return candidates.map(
-      (candidate) =>
-        mapReferenceCandidate(
-          candidate,
-          "search"
-        )
+      mapReferenceCandidate
     );
   }
 }

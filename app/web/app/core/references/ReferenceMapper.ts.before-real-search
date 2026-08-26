@@ -2,13 +2,10 @@ import type { Reference } from "@/app/features/references/data";
 import type { ReferenceCandidate } from "./ReferenceProviderTypes";
 
 export function mapReferenceCandidate(
-  candidate: ReferenceCandidate,
-  origin: Reference["origin"] = "provider"
+  candidate: ReferenceCandidate
 ): Reference {
   return {
     id: candidate.id,
-
-    origin,
 
     title: candidate.title,
 
@@ -51,5 +48,6 @@ export function mapReferenceCandidate(
     mimeType:
       candidate.mimeType,
 
+    origin: "provider",
   };
 }

@@ -78,6 +78,5 @@ export interface Reference {
   origin?:
     | "revela"
     | "user"
-    | "provider"
-    | "search";
+    | "provider";
 }

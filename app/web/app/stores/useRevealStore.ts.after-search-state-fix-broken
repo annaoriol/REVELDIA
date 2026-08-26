@@ -61,7 +61,6 @@ type RevealActions = {
 
   exploreCreativeDirector: (force?: boolean) => Promise<void>;
   searchReferences: (query: string) => Promise<void>;
-  searchedReferences: Reference[];
 
   revealIdentity: (
     revelation: Omit<ProjectDNARevelation, "createdAt">
@@ -720,17 +719,19 @@ export const useRevealStore =
         ],
       }));
     },
-
-    searchedReferences: [],
-
     searchReferences: async (query) => {
-      const state = get();
-
-      const trimmedQuery = query.trim();
+      const trimmedQuery =
+        query.trim();
 
       if (!trimmedQuery) {
+        set({
+          searchedReferences: [],
+        });
+
         return;
       }
+
+      const state = get();
 
       const creativeDirector =
         state.project.dna.creativeDirector;
@@ -783,6 +784,44 @@ export const useRevealStore =
       set({
         searchedReferences: results,
       });
+    },
+
+        revelaReferences:
+          revelaReferences.map(
+            (reference) => reference.id
+          ),
+
+        userReferences:
+          state.project.dna.references.map(
+            (reference) => reference.id
+          ),
+
+        selectedReferences:
+          state.lightTable.map(
+            (reference) => reference.id
+          ),
+
+        proposalNumber:
+          creativeDirector.proposalNumber,
+
+        exploredReferenceIds:
+          creativeDirector.exploredReferenceIds,
+      };
+
+      const discovery =
+        new ReferenceDiscoveryOrchestrator();
+
+      const results =
+        await discovery.search(
+          input,
+          trimmedQuery,
+          state.project.dna.creativeDirection,
+          3
+        );
+
+      set((state) => ({
+        searchReferences: results,
+      }));
     },
 
     revealIdentity: (

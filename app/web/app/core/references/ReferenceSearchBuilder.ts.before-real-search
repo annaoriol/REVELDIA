@@ -10,8 +10,7 @@ export function buildReferenceSearchQuery(
   input: CreativeDirectorInput,
   exploration: string,
   creativeDirection: ReferenceSearchQuery["context"]["creativeDirection"],
-  limit = 8,
-  queryOverride?: string
+  limit = 8
 ): ReferenceSearchQuery {
   const intention = [
     input.intention.whatToReveal,
@@ -21,17 +20,13 @@ export function buildReferenceSearchQuery(
     .filter(Boolean)
     .join(". ");
 
-  const query = (
-    queryOverride?.trim()
-      ? queryOverride.trim()
-      : [
-          intention,
-          exploration,
-        ]
-          .filter(Boolean)
-          .join(". ")
-          .trim()
-  );
+  const query = [
+    intention,
+    exploration,
+  ]
+    .filter(Boolean)
+    .join(". ")
+    .trim();
 
   return {
     query,

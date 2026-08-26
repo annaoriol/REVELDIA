@@ -61,7 +61,6 @@ type RevealActions = {
 
   exploreCreativeDirector: (force?: boolean) => Promise<void>;
   searchReferences: (query: string) => Promise<void>;
-  searchedReferences: Reference[];
 
   revealIdentity: (
     revelation: Omit<ProjectDNARevelation, "createdAt">
@@ -721,19 +720,16 @@ export const useRevealStore =
       }));
     },
 
-    searchedReferences: [],
-
     searchReferences: async (query) => {
-      const state = get();
-
       const trimmedQuery = query.trim();
 
       if (!trimmedQuery) {
         return;
       }
 
-      const creativeDirector =
-        state.project.dna.creativeDirector;
+      const state = get();
+
+
 
       const input = {
         intention: {
@@ -780,9 +776,9 @@ export const useRevealStore =
           3
         );
 
-      set({
+      set(() => ({
         searchedReferences: results,
-      });
+      }));
     },
 
     revealIdentity: (

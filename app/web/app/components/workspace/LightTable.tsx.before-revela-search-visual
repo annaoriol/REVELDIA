@@ -248,29 +248,22 @@ function ReferenceCanvasCard({
   const isUser =
     reference.origin === "user";
 
-  const isRevelaSearch =
-    reference.origin === "search";
-
   const originLabel =
     isDirector
       ? "✦ DIRECTOR"
-      : isRevelaSearch
-        ? "⌕ RƎVELA"
-        : isUser
-          ? "● APORTADA"
-          : "";
+      : isUser
+        ? "● APORTADA"
+        : "";
 
   const cardOriginClass =
     isDirector
       ? "border-2 border-[#55C1D4]/80 bg-[#55C1D4]/[0.10]"
-      : isRevelaSearch
-        ? "border-2 border-[#55C1D4]/60 bg-[#55C1D4]/[0.07]"
-        : isUser
-          ? "border border-white/[0.12] bg-transparent"
-          : "border border-white/[0.12] bg-transparent";
+      : isUser
+        ? "border border-white/[0.12] bg-transparent"
+        : "border border-white/[0.12] bg-transparent";
 
   const originTextClass =
-    isDirector || isRevelaSearch
+    isDirector
       ? "text-[#55C1D4]"
       : "text-white/45";
 

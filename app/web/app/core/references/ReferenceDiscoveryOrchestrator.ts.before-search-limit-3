@@ -44,25 +44,11 @@ export class ReferenceDiscoveryOrchestrator {
     input: CreativeDirectorInput,
     exploration: string,
     creativeDirection: ReferenceSearchQuery["context"]["creativeDirection"],
-    limit = 3
+    limit = 8
   ): Promise<Reference[]> {
     return this.discoveryService.discover(
       input,
       exploration,
-      creativeDirection,
-      limit
-    );
-  }
-
-  async search(
-    input: CreativeDirectorInput,
-    query: string,
-    creativeDirection: ReferenceSearchQuery["context"]["creativeDirection"],
-    limit = 3
-  ): Promise<Reference[]> {
-    return this.discoveryService.searchUserQuery(
-      input,
-      query,
       creativeDirection,
       limit
     );

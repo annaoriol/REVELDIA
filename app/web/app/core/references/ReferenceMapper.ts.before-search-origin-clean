@@ -51,5 +51,6 @@ export function mapReferenceCandidate(
     mimeType:
       candidate.mimeType,
 
+    origin: "provider",
   };
 }

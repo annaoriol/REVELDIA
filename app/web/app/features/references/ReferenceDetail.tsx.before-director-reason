@@ -213,22 +213,8 @@ export default function ReferenceDetail({
               currentReference.description}
           </p>
 
-          {currentReference.origin === "provider" &&
-            currentReference.reason && (
-              <div className="mt-8 rounded-2xl border border-cyan-300/15 bg-cyan-300/[0.035] p-5">
-                <p className="text-[10px] uppercase tracking-[0.35em] text-cyan-300">
-                  Por qué la propone RƎVELA
-                </p>
-
-                <p className="mt-4 text-sm leading-7 text-white/70">
-                  {currentReference.reason}
-                </p>
-              </div>
-            )}
-
           {(projectReference?.meaning ??
-            discoveredReference?.meaning ??
-            currentReference.meaning) && (
+            discoveredReference?.meaning) && (
             <div className="mt-7">
               <p className="text-[10px] uppercase tracking-[0.35em] text-white/35">
                 Significado

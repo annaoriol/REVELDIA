@@ -29,16 +29,6 @@ export default function ReferencesScene() {
       (state) => state.discoveredReferences
     );
 
-  const searchedReferences =
-    useRevealStore(
-      (state) => state.searchedReferences
-    );
-
-  const searchReferences =
-    useRevealStore(
-      (state) => state.searchReferences
-    );
-
   const creativeDirector =
     useRevealStore(
       (state) => state.project.dna.creativeDirector
@@ -86,6 +76,35 @@ export default function ReferencesScene() {
     [lightTable]
   );
 
+  const filteredDiscoveredReferences =
+    useMemo(() => {
+      const query = search.trim().toLowerCase();
+
+      if (!query.length) {
+        return discoveredReferences;
+      }
+
+      return discoveredReferences.filter(
+        (reference) => {
+          return (
+            reference.title
+              .toLowerCase()
+              .includes(query) ||
+            reference.category
+              .toLowerCase()
+              .includes(query) ||
+            reference.description
+              .toLowerCase()
+              .includes(query) ||
+            reference.keywords.some((keyword) =>
+              keyword
+                .toLowerCase()
+                .includes(query)
+            )
+          );
+        }
+      );
+    }, [search, discoveredReferences]);
 
   function handleSelectReference(
     reference: Reference
@@ -127,7 +146,7 @@ export default function ReferencesScene() {
           </div>
 
           <ReferenceGrid
-            items={discoveredReferences}
+            items={filteredDiscoveredReferences}
             onSelect={handleSelectReference}
             onToggleLightTable={toggleLightTable}
             lightTableIds={lightTableIds}
@@ -148,55 +167,10 @@ export default function ReferencesScene() {
         </section>
       )}
 
-      {searchedReferences.length > 0 && (
-        <section className="mb-12 mt-10 bg-transparent p-0">
-
-          <div className="mb-6">
-
-            <p className="text-[10px] uppercase tracking-[0.35em] text-cyan-300">
-              RƎVELA · BÚSQUEDA
-            </p>
-
-            <h3 className="mt-2 text-2xl font-light text-white">
-              Referencias encontradas
-            </h3>
-
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/55">
-              Referencias encontradas a partir de tu búsqueda.
-            </p>
-
-          </div>
-
-          <ReferenceGrid
-            items={searchedReferences}
-            onSelect={handleSelectReference}
-            onToggleLightTable={toggleLightTable}
-            lightTableIds={lightTableIds}
-          />
-
-        </section>
-      )}
-
       <section className="mt-8">
         <ReferenceSearch
           value={search}
           onChange={setSearch}
-          loading={searchLoading}
-          onSearch={async () => {
-            const query = search.trim();
-
-            if (!query) {
-              return;
-            }
-
-            setSearchLoading(true);
-
-            try {
-              await searchReferences(query);
-            } finally {
-              setSearchLoading(false);
-            }
-          }}
         />
       </section>
 

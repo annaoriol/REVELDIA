@@ -15,7 +15,6 @@ import ReferenceSearch from "./ReferenceSearch";
 
 export default function ReferencesScene() {
   const [search, setSearch] = useState("");
-  const [searchLoading, setSearchLoading] = useState(false);
 
   const [selectedReference, setSelectedReference] =
     useState<Reference | null>(null);
@@ -27,16 +26,6 @@ export default function ReferencesScene() {
   const discoveredReferences =
     useRevealStore(
       (state) => state.discoveredReferences
-    );
-
-  const searchedReferences =
-    useRevealStore(
-      (state) => state.searchedReferences
-    );
-
-  const searchReferences =
-    useRevealStore(
-      (state) => state.searchReferences
     );
 
   const creativeDirector =
@@ -86,6 +75,47 @@ export default function ReferencesScene() {
     [lightTable]
   );
 
+  const filteredDiscoveredReferences =
+    useMemo(() => {
+      const query = search.trim().toLowerCase();
+
+      if (!query.length) {
+        return discoveredReferences;
+      }
+
+      return discoveredReferences.filter(
+        (reference) => {
+          return (
+            reference.title
+              .toLowerCase()
+              .includes(query) ||
+            reference.category
+              .toLowerCase()
+              .includes(query) ||
+            reference.description
+              .toLowerCase()
+              .includes(query) ||
+            reference.keywords.some((keyword) =>
+              keyword
+                .toLowerCase()
+                .includes(query)
+            )
+          );
+        }
+      );
+    }, [search, discoveredReferences]);
+
+  const catalogReferences = useMemo(
+    () =>
+      filteredReferences.filter(
+        (reference) =>
+          !discoveredReferences.some(
+            (discovered) =>
+              discovered.id === reference.id
+          )
+      ),
+    [filteredReferences, discoveredReferences]
+  );
 
   function handleSelectReference(
     reference: Reference
@@ -104,99 +134,10 @@ export default function ReferencesScene() {
           BUSCADOR
       ================================================= */}
 
-      {discoveredReferences.length > 0 && (
-        <section className="mb-12 bg-transparent p-0">
-
-          <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
-
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.35em] text-cyan-300">
-                Director Creativo · IA
-              </p>
-
-              <h3 className="mt-2 text-2xl font-light text-white">
-                Referencias propuestas
-              </h3>
-
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/55">
-                Explora estas referencias y decide cuáles quieres llevar
-                a la Mesa de Luz.
-              </p>
-            </div>
-
-          </div>
-
-          <ReferenceGrid
-            items={discoveredReferences}
-            onSelect={handleSelectReference}
-            onToggleLightTable={toggleLightTable}
-            lightTableIds={lightTableIds}
-          />
-
-          <div className="mt-8 flex justify-center">
-            <button
-              type="button"
-              onClick={() => {
-                void exploreCreativeDirector(true);
-              }}
-              className="flex h-10 items-center justify-center gap-2 rounded-lg border border-white/15 bg-transparent px-5 text-[10px] uppercase tracking-[0.22em] text-white/60 transition-all hover:border-cyan-300/50 hover:text-cyan-300"
-            >
-              ↻ Explorar más
-            </button>
-          </div>
-
-        </section>
-      )}
-
-      {searchedReferences.length > 0 && (
-        <section className="mb-12 mt-10 bg-transparent p-0">
-
-          <div className="mb-6">
-
-            <p className="text-[10px] uppercase tracking-[0.35em] text-cyan-300">
-              RƎVELA · BÚSQUEDA
-            </p>
-
-            <h3 className="mt-2 text-2xl font-light text-white">
-              Referencias encontradas
-            </h3>
-
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/55">
-              Referencias encontradas a partir de tu búsqueda.
-            </p>
-
-          </div>
-
-          <ReferenceGrid
-            items={searchedReferences}
-            onSelect={handleSelectReference}
-            onToggleLightTable={toggleLightTable}
-            lightTableIds={lightTableIds}
-          />
-
-        </section>
-      )}
-
       <section className="mt-8">
         <ReferenceSearch
           value={search}
           onChange={setSearch}
-          loading={searchLoading}
-          onSearch={async () => {
-            const query = search.trim();
-
-            if (!query) {
-              return;
-            }
-
-            setSearchLoading(true);
-
-            try {
-              await searchReferences(query);
-            } finally {
-              setSearchLoading(false);
-            }
-          }}
         />
       </section>
 

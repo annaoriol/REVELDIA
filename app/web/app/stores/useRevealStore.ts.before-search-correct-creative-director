@@ -725,17 +725,11 @@ export const useRevealStore =
 
     searchReferences: async (query) => {
       const state = get();
-
       const trimmedQuery = query.trim();
-
-      if (!trimmedQuery) {
+if (!trimmedQuery) {
         return;
       }
-
-      const creativeDirector =
-        state.project.dna.creativeDirector;
-
-      const input = {
+const input = {
         intention: {
           whatToReveal:
             state.project.dna.identity.whatToReveal,
@@ -760,12 +754,7 @@ export const useRevealStore =
         selectedReferences:
           state.lightTable.map(
             (reference) => reference.id
-          ),
-
-        proposalNumber:
-          creativeDirector.proposalNumber,
-
-        exploredReferenceIds:
+          ),exploredReferenceIds:
           creativeDirector.exploredReferenceIds,
       };
 
@@ -780,9 +769,9 @@ export const useRevealStore =
           3
         );
 
-      set({
+      set(() => ({
         searchedReferences: results,
-      });
+      }));
     },
 
     revealIdentity: (

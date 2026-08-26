@@ -242,43 +242,6 @@ function ReferenceCanvasCard({
     typeof reference.image === "string" &&
     reference.image.trim().length > 0;
 
-  const isDirector =
-    reference.origin === "provider";
-
-  const isUser =
-    reference.origin === "user";
-
-  const isRevelaSearch =
-    reference.origin === "search";
-
-  const originLabel =
-    isDirector
-      ? "✦ DIRECTOR"
-      : isRevelaSearch
-        ? "⌕ RƎVELA"
-        : isUser
-          ? "● APORTADA"
-          : "";
-
-  const cardOriginClass =
-    isDirector
-      ? "border-2 border-[#55C1D4]/80 bg-[#55C1D4]/[0.10]"
-      : isRevelaSearch
-        ? "border-2 border-[#55C1D4]/60 bg-[#55C1D4]/[0.07]"
-        : isUser
-          ? "border border-white/[0.12] bg-transparent"
-          : "border border-white/[0.12] bg-transparent";
-
-  const originTextClass =
-    isDirector || isRevelaSearch
-      ? "text-[#55C1D4]"
-      : "text-white/45";
-
-  const footerClass =
-    isDirector
-      ? "border-[#55C1D4]/30 bg-black/[0.96]"
-      : "border-white/[0.10] bg-black/[0.96]";
-
   return (
     <div
       className="absolute select-none touch-none"
@@ -294,29 +257,16 @@ function ReferenceCanvasCard({
       onPointerCancel={handlePointerUp}
     >
       <Card
-        
-        style={
-          isDirector
-            ? {
-                border: "2px solid rgba(85, 193, 212, 0.90)",
-                backgroundColor: "rgba(85, 193, 212, 0.16)",
-                boxShadow:
-                  "0 0 0 1px rgba(85, 193, 212, 0.25), 0 0 18px rgba(85, 193, 212, 0.16)",
-              }
-            : isUser
-              ? {
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                }
-              : undefined
-        }
         className={`
           overflow-hidden
           rounded-xl
           border
-          ${cardOriginClass}
           p-0
+          ${
+            reference.origin === "provider"
+              ? "border-emerald-300/35 bg-emerald-300/[0.055]"
+              : "border-white/[0.12] bg-transparent"
+          }
           shadow-[0_12px_35px_rgba(0,0,0,0.45)]
           transition-all
           duration-200
@@ -384,10 +334,10 @@ function ReferenceCanvasCard({
                   text-[8px]
                   uppercase
                   tracking-[0.22em]
-                  ${originTextClass}
+                  text-cyan-300/55
                 "
               >
-                {originLabel || reference.category}
+                {reference.category}
               </span>
             </div>
 
@@ -400,18 +350,21 @@ function ReferenceCanvasCard({
 
 
         {/* ACCIONES DE LA VISTA COMPACTA */}
-          <div
-            className={[
-              "flex items-center justify-between border-t px-3 py-2",
-              footerClass,
-            ].join(" ")}
-          >
+          <div className="
+            flex
+            items-center
+            justify-between
+            border-t
+            border-white/[0.07]
+            px-3
+            py-2
+          ">
 
             <span className="
               text-[8px]
               uppercase
               tracking-[0.16em]
-              text-white/45
+              text-white/20
             ">
               Arrastra
             </span>
@@ -432,7 +385,7 @@ function ReferenceCanvasCard({
                 text-[8px]
                 uppercase
                 tracking-[0.16em]
-                text-cyan-300/85
+                text-cyan-300/65
                 transition
                 hover:text-cyan-200
               "
@@ -454,7 +407,7 @@ function ReferenceCanvasCard({
                 text-[8px]
                 uppercase
                 tracking-[0.16em]
-                text-white/45
+                text-white/20
                 transition
                 hover:text-white/60
               "
@@ -729,7 +682,7 @@ export default function LightTable() {
           />
 
           <div className="pointer-events-none absolute left-5 top-5">
-            <span className="text-[9px] uppercase tracking-[0.3em] text-white/45">
+            <span className="text-[9px] uppercase tracking-[0.3em] text-white/20">
               Selección activa
             </span>
           </div>
@@ -762,7 +715,7 @@ export default function LightTable() {
           )}
 
           <div className="pointer-events-none absolute bottom-5 left-5">
-            <span className="text-[9px] uppercase tracking-[0.28em] text-white/45">
+            <span className="text-[9px] uppercase tracking-[0.28em] text-white/20">
               Mueve las referencias para
               encontrar relaciones
             </span>

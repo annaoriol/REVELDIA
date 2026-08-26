@@ -16,41 +16,39 @@ export default function ReferenceCard({
   onToggleLightTable,
 }: ReferenceCardProps) {
   const origin =
-    reference.origin ?? "provider";
+    reference.origin ?? "revela";
 
-  const isDirectorProposal =
-    origin === "provider";
-
-  const isRevelaSearch =
-    origin === "search";
+  const originLabel =
+    origin === "provider"
+      ? "✦ DIRECTOR"
+      : origin === "user"
+        ? "● APORTADA"
+        : "◇ RƎVELA";
 
   const originClass =
-    isDirectorProposal
-      ? "border-cyan-300/40 bg-cyan-300/[0.035] hover:border-cyan-300/70 shadow-[inset_0_1px_0_rgba(85,193,212,0.18)]"
-      : isRevelaSearch
-        ? "border-2 border-[#55C1D4]/70 bg-[#55C1D4]/[0.07] hover:border-[#55C1D4] shadow-[0_0_22px_rgba(85,193,212,0.08)]"
+    origin === "provider"
+      ? "border-cyan-300/35 bg-cyan-300/[0.025] hover:border-cyan-300/55"
+      : origin === "user"
+        ? "border-dashed border-white/20 bg-white/[0.015] hover:border-white/35"
         : "border-white/10 bg-black/35 hover:border-white/25";
+
+  const originLabelClass =
+    origin === "provider"
+      ? "text-cyan-300"
+      : origin === "user"
+        ? "text-white/60"
+        : "text-white/35";
+
   return (
     <article
       className={[
-        "group flex min-h-[340px] flex-col overflow-hidden rounded-2xl border transition-all duration-200",
+        "group flex h-[300px] flex-col overflow-hidden rounded-2xl border transition-all duration-200",
         originClass,
-        origin === "provider"
-          ? "shadow-[inset_0_1px_0_rgba(85,193,212,0.18)]"
-          : "",
         isInLightTable
           ? "border-cyan-300/70 shadow-[0_0_24px_rgba(85,193,212,0.08)]"
           : "",
       ].join(" ")}
     >
-      {isRevelaSearch && (
-        <div className="border-b border-[#55C1D4]/30 bg-[#55C1D4]/[0.08] px-5 py-2">
-          <span className="text-[9px] font-medium uppercase tracking-[0.28em] text-[#55C1D4]">
-            ⌕ RƎVELA
-          </span>
-        </div>
-      )}
-
       {/* =================================================
           CONTENIDO
       ================================================= */}
@@ -63,13 +61,11 @@ export default function ReferenceCard({
 
           <span
             className={[
-              "inline-flex items-center rounded-full border px-2.5 py-1 text-[9px] uppercase tracking-[0.22em]",
-              isDirectorProposal
-                ? "border-cyan-300/50 bg-cyan-300/[0.12] text-cyan-300"
-                : "border-white/15 bg-white/[0.025] text-white/40",
+              "text-[9px] uppercase tracking-[0.25em]",
+              originLabelClass,
             ].join(" ")}
           >
-            
+            {originLabel}
           </span>
 
           <span className="truncate text-[9px] uppercase tracking-[0.25em] text-white/30">

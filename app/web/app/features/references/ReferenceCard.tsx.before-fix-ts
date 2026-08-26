@@ -20,16 +20,10 @@ export default function ReferenceCard({
 
   const isDirectorProposal =
     origin === "provider";
-
-  const isRevelaSearch =
-    origin === "search";
-
   const originClass =
     isDirectorProposal
       ? "border-cyan-300/40 bg-cyan-300/[0.035] hover:border-cyan-300/70 shadow-[inset_0_1px_0_rgba(85,193,212,0.18)]"
-      : isRevelaSearch
-        ? "border-2 border-[#55C1D4]/70 bg-[#55C1D4]/[0.07] hover:border-[#55C1D4] shadow-[0_0_22px_rgba(85,193,212,0.08)]"
-        : "border-white/10 bg-black/35 hover:border-white/25";
+      : "border-white/10 bg-black/35 hover:border-white/25";
   return (
     <article
       className={[
@@ -43,14 +37,6 @@ export default function ReferenceCard({
           : "",
       ].join(" ")}
     >
-      {isRevelaSearch && (
-        <div className="border-b border-[#55C1D4]/30 bg-[#55C1D4]/[0.08] px-5 py-2">
-          <span className="text-[9px] font-medium uppercase tracking-[0.28em] text-[#55C1D4]">
-            ⌕ RƎVELA
-          </span>
-        </div>
-      )}
-
       {/* =================================================
           CONTENIDO
       ================================================= */}
@@ -69,7 +55,7 @@ export default function ReferenceCard({
                 : "border-white/15 bg-white/[0.025] text-white/40",
             ].join(" ")}
           >
-            
+            {originLabel}
           </span>
 
           <span className="truncate text-[9px] uppercase tracking-[0.25em] text-white/30">

@@ -120,7 +120,9 @@ const isLightTable =
         </p>
 
         <h2 className="mt-3 font-[var(--font-space)] text-2xl font-light tracking-[0.08em] text-white">
-          "Contexto"
+          {isReferences
+            ? "Dirección"
+            : "Contexto"}
         </h2>
       </section>
 
@@ -592,6 +594,169 @@ const isLightTable =
 
   </div>
 )}
+      {/* =================================================
+          REFERENCIAS
+      ================================================= */}
+
+      {isReferences && (
+        <div className="mt-7 space-y-5">
+
+          <section className="rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.035] p-5">
+
+            <div className="flex items-center gap-3">
+
+              <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                Director Creativo IA
+              </p>
+
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
+
+              <span className="text-xs text-white/45">
+                {creativeDirectorStatus}
+              </span>
+
+            </div>
+
+            <div className="mt-5">
+
+              <p className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
+                Exploración
+              </p>
+
+              <div className="mt-2 flex items-baseline justify-between gap-3">
+
+                <p className="text-lg font-light text-white">
+                  Propuesta{" "}
+                  {proposalNumber}
+                </p>
+
+                <span className="text-xs text-white/35">
+                  {exploredCount} exploradas
+                </span>
+
+              </div>
+
+            </div>
+
+            {/* ACCIÓN DEL DIRECTOR */}
+
+            <div className="mt-5 border-t border-white/10 pt-5">
+
+              <button
+                type="button"
+                onClick={
+                  handleProposeMore
+                }
+                className="group w-full rounded-xl border border-cyan-300/25 bg-cyan-300/[0.04] px-4 py-4 text-left transition-all duration-300 hover:border-cyan-300/60 hover:bg-cyan-300/[0.08]"
+              >
+
+                <div className="flex items-center justify-between gap-4">
+
+                  <div>
+
+                    <p className="font-[var(--font-space)] text-sm tracking-[0.08em] text-white">
+
+                      <span className="text-white">
+                        R
+                      </span>
+
+                      <span className="text-cyan-300">
+                        Ǝ
+                      </span>
+
+                      <span className="text-white">
+                        VELA
+                      </span>
+
+                    </p>
+
+                    <p className="mt-2 text-xs leading-5 text-white/45">
+                      Proponer más referencias
+                      para continuar la exploración.
+                    </p>
+
+                  </div>
+
+                  <span className="text-lg text-cyan-300 transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+
+                </div>
+
+              </button>
+
+            </div>
+
+            <div className="mt-5 border-t border-white/10 pt-5">
+
+              <div className="flex items-center justify-between">
+
+                <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
+                  Material reunido
+                </span>
+
+                <span className="text-sm text-white/60">
+                  {selectedCount}
+                </span>
+
+              </div>
+
+            </div>
+
+            <div className="mt-5 border-t border-white/10 pt-5">
+
+              <div className="flex items-center justify-between">
+
+                <span className="text-[0.68rem] uppercase tracking-[0.24em] text-white/30">
+                  Estado
+                </span>
+
+                <span className="text-xs text-white/45">
+                  {creativeDirectorStatus}
+                </span>
+
+              </div>
+
+              <div className="mt-3 h-px bg-white/10">
+
+                <div
+                  className={[
+                    "h-px transition-all duration-500",
+                    creativeDirectorStatus ===
+                    "Material suficiente"
+                      ? "w-full bg-cyan-300"
+                      : exploredCount > 0
+                        ? "w-1/2 bg-cyan-300/60"
+                        : "w-[12%] bg-cyan-300/40",
+                  ].join(" ")}
+                />
+
+              </div>
+
+            </div>
+
+            {decision && (
+              <div className="mt-5 rounded-xl border border-cyan-300/10 bg-black/20 px-4 py-3">
+
+                <p className="text-[0.62rem] uppercase tracking-[0.24em] text-white/30">
+                  Decisión
+                </p>
+
+                <p className="mt-2 text-sm text-white/70">
+                  {decision ===
+                  "sufficient"
+                    ? "Preparado para avanzar"
+                    : "Continuar explorando"}
+                </p>
+
+              </div>
+            )}
+
+          </section>
+
+        </div>
+      )}
+
       {/* =================================================
           CONTEXTO GENERAL
       ================================================= */}
