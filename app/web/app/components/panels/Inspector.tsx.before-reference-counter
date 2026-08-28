@@ -128,32 +128,6 @@ const isLightTable =
           PROYECTO ACTIVO
       ================================================= */}
 
-      {/* =================================================
-          CONTADOR DE REFERENCIAS
-      ================================================= */}
-
-      {isReferences && (
-        <section className="mt-7 rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.025] p-5">
-
-          <div className="flex items-center justify-between gap-3">
-
-            <p className="text-[0.62rem] uppercase tracking-[0.24em] text-white/30">
-              Referencias
-            </p>
-
-            <span className="font-[var(--font-space)] text-2xl font-light text-cyan-300">
-              {selectedCount}
-            </span>
-
-          </div>
-
-          <p className="mt-2 text-xs leading-5 text-white/45">
-            Seleccionadas para la Mesa de Luz
-          </p>
-
-        </section>
-      )}
-
       {!isWelcome && (
         <section className="mt-7 rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.025] p-5">
 

@@ -39,11 +39,6 @@ export default function ReferencesScene() {
       (state) => state.searchReferences
     );
 
-  const exploreSearchReferences =
-    useRevealStore(
-      (state) => state.exploreSearchReferences
-    );
-
   const creativeDirector =
     useRevealStore(
       (state) => state.project.dna.creativeDirector
@@ -207,18 +202,14 @@ export default function ReferencesScene() {
           <div className="mt-8 flex justify-center">
             <button
               type="button"
-              onClick={async () => {
-                if (!search.trim()) {
+              onClick={() => {
+                const query = search.trim();
+
+                if (!query) {
                   return;
                 }
 
-                setSearchLoading(true);
-
-                try {
-                  await exploreSearchReferences();
-                } finally {
-                  setSearchLoading(false);
-                }
+                void searchReferences(query);
               }}
               disabled={searchLoading}
               className="flex h-10 items-center justify-center gap-2 rounded-lg border border-white/15 bg-transparent px-5 text-[10px] uppercase tracking-[0.22em] text-white/60 transition-all hover:border-cyan-300/50 hover:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-35"

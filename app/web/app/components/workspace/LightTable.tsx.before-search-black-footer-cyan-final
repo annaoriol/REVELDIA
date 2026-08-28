@@ -278,7 +278,7 @@ function ReferenceCanvasCard({
     isDirector
       ? "border-[#55C1D4]/30 bg-black/[0.96]"
       : isRevelaSearch
-        ? "border-[#55C1D4]/40 bg-black/[0.96]"
+        ? "border-[#55C1D4]/40 bg-transparent"
         : "border-white/[0.10] bg-black/[0.96]";
 
   return (
@@ -382,12 +382,12 @@ function ReferenceCanvasCard({
               </span>
 
               <span
-                className={[
-                  "text-[8px]",
-                  "uppercase",
-                  "tracking-[0.22em]",
-                  originTextClass,
-                ].join(" ")}
+                className="
+                  text-[8px]
+                  uppercase
+                  tracking-[0.22em]
+                  ${originTextClass}
+                "
               >
                 {originLabel || reference.category}
               </span>

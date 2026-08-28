@@ -61,9 +61,7 @@ type RevealActions = {
 
   exploreCreativeDirector: (force?: boolean) => Promise<void>;
   searchReferences: (query: string) => Promise<void>;
-  exploreSearchReferences: () => Promise<void>;
   searchedReferences: Reference[];
-  searchedReferencesQuery: string;
 
   revealIdentity: (
     revelation: Omit<ProjectDNARevelation, "createdAt">
@@ -724,7 +722,6 @@ export const useRevealStore =
     },
 
     searchedReferences: [],
-    searchedReferencesQuery: "",
 
     searchReferences: async (query) => {
       const state = get();
@@ -734,10 +731,6 @@ export const useRevealStore =
       if (!trimmedQuery) {
         return;
       }
-
-      set({
-        searchedReferencesQuery: trimmedQuery,
-      });
 
       const creativeDirector =
         state.project.dna.creativeDirector;
@@ -793,112 +786,6 @@ export const useRevealStore =
           ...results.filter(
             (reference) =>
               !state.searchedReferences.some(
-                (existing) =>
-                  existing.id === reference.id
-              )
-          ),
-        ],
-      }));
-    },
-
-    exploreSearchReferences: async () => {
-      const state = get();
-
-      const query =
-        state.searchedReferencesQuery.trim();
-
-      if (!query) {
-        return;
-      }
-
-      const creativeDirector =
-        state.project.dna.creativeDirector;
-
-      /*
-       * RƎVELA · EXPLORAR MÁS
-       *
-       * Las referencias que ya aparecieron
-       * en la búsqueda quedan excluidas.
-       *
-       * El Provider ya implementa esta exclusión
-       * mediante exploredReferenceIds.
-       */
-
-      const searchedIds =
-        state.searchedReferences.map(
-          (reference) =>
-            reference.id
-        );
-
-      const userIds =
-        state.project.dna.references.map(
-          (reference) =>
-            reference.id
-        );
-
-      const lightTableIds =
-        state.lightTable.map(
-          (reference) =>
-            reference.id
-        );
-
-      const exploredReferenceIds =
-        Array.from(
-          new Set([
-            ...creativeDirector.exploredReferenceIds,
-            ...searchedIds,
-            ...userIds,
-            ...lightTableIds,
-          ])
-        );
-
-      const input = {
-        intention: {
-          whatToReveal:
-            state.project.dna.identity.whatToReveal,
-
-          whatToTransmit:
-            state.project.dna.identity.whatToTransmit,
-
-          context:
-            state.project.dna.identity.context,
-        },
-
-        revelaReferences:
-          revelaReferences.map(
-            (reference) =>
-              reference.id
-          ),
-
-        userReferences:
-          userIds,
-
-        selectedReferences:
-          lightTableIds,
-
-        proposalNumber:
-          creativeDirector.proposalNumber,
-
-        exploredReferenceIds,
-      };
-
-      const discovery =
-        new ReferenceDiscoveryOrchestrator();
-
-      const results =
-        await discovery.search(
-          input,
-          query,
-          state.project.dna.creativeDirection,
-          3
-        );
-
-      set((current) => ({
-        searchedReferences: [
-          ...current.searchedReferences,
-          ...results.filter(
-            (reference) =>
-              !current.searchedReferences.some(
                 (existing) =>
                   existing.id === reference.id
               )

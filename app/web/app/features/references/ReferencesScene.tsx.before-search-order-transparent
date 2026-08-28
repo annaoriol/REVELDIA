@@ -39,11 +39,6 @@ export default function ReferencesScene() {
       (state) => state.searchReferences
     );
 
-  const exploreSearchReferences =
-    useRevealStore(
-      (state) => state.exploreSearchReferences
-    );
-
   const creativeDirector =
     useRevealStore(
       (state) => state.project.dna.creativeDirector
@@ -153,32 +148,7 @@ export default function ReferencesScene() {
         </section>
       )}
 
-      
-
-      <section className="mt-8">
-        <ReferenceSearch
-          value={search}
-          onChange={setSearch}
-          loading={searchLoading}
-          onSearch={async () => {
-            const query = search.trim();
-
-            if (!query) {
-              return;
-            }
-
-            setSearchLoading(true);
-
-            try {
-              await searchReferences(query);
-            } finally {
-              setSearchLoading(false);
-            }
-          }}
-        />
-      </section>
-
-{searchedReferences.length > 0 && (
+      {searchedReferences.length > 0 && (
         <section className="mb-12 mt-10 bg-transparent p-0">
 
           <div className="mb-6">
@@ -204,31 +174,31 @@ export default function ReferencesScene() {
             lightTableIds={lightTableIds}
           />
 
-          <div className="mt-8 flex justify-center">
-            <button
-              type="button"
-              onClick={async () => {
-                if (!search.trim()) {
-                  return;
-                }
-
-                setSearchLoading(true);
-
-                try {
-                  await exploreSearchReferences();
-                } finally {
-                  setSearchLoading(false);
-                }
-              }}
-              disabled={searchLoading}
-              className="flex h-10 items-center justify-center gap-2 rounded-lg border border-white/15 bg-transparent px-5 text-[10px] uppercase tracking-[0.22em] text-white/60 transition-all hover:border-cyan-300/50 hover:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-35"
-            >
-              {searchLoading ? "Explorando…" : "↻ Explorar más"}
-            </button>
-          </div>
-
         </section>
       )}
+
+      <section className="mt-8">
+        <ReferenceSearch
+          value={search}
+          onChange={setSearch}
+          loading={searchLoading}
+          onSearch={async () => {
+            const query = search.trim();
+
+            if (!query) {
+              return;
+            }
+
+            setSearchLoading(true);
+
+            try {
+              await searchReferences(query);
+            } finally {
+              setSearchLoading(false);
+            }
+          }}
+        />
+      </section>
 
       {/* =================================================
           TÚ APORTAS
