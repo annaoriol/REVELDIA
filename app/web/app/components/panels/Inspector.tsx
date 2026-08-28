@@ -95,6 +95,42 @@ const isLightTable =
   const selectedCount =
     lightTable.length;
 
+  const referenceOriginCounts =
+    lightTable.reduce(
+      (counts, reference) => {
+        const origin =
+          (
+            reference as typeof reference & {
+              origin?: string;
+            }
+          ).origin;
+
+        if (origin === "search") {
+          counts.revela += 1;
+        } else if (origin === "provider") {
+          counts.director += 1;
+        } else if (origin === "user") {
+          counts.user += 1;
+        }
+
+        return counts;
+      },
+      {
+        revela: 0,
+        director: 0,
+        user: 0,
+      }
+    );
+
+  const revelaReferenceCount =
+    referenceOriginCounts.revela;
+
+  const directorReferenceCount =
+    referenceOriginCounts.director;
+
+  const userReferenceCount =
+    referenceOriginCounts.user;
+
   const creativeDirectorStatus =
     creativeDirector.status ===
     "sufficient"
@@ -127,32 +163,6 @@ const isLightTable =
       {/* =================================================
           PROYECTO ACTIVO
       ================================================= */}
-
-      {/* =================================================
-          CONTADOR DE REFERENCIAS
-      ================================================= */}
-
-      {isReferences && (
-        <section className="mt-7 rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.025] p-5">
-
-          <div className="flex items-center justify-between gap-3">
-
-            <p className="text-[0.62rem] uppercase tracking-[0.24em] text-white/30">
-              Referencias
-            </p>
-
-            <span className="font-[var(--font-space)] text-2xl font-light text-cyan-300">
-              {selectedCount}
-            </span>
-
-          </div>
-
-          <p className="mt-2 text-xs leading-5 text-white/45">
-            Seleccionadas para la Mesa de Luz
-          </p>
-
-        </section>
-      )}
 
       {!isWelcome && (
         <section className="mt-7 rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.025] p-5">
@@ -209,6 +219,67 @@ const isLightTable =
               {intention.context ||
                 "Pendiente"}
             </p>
+
+          </div>
+
+        </section>
+      )}
+
+      {/* =================================================
+          REFERENCIAS · CONTADOR
+          Compartido por Referencias y Mesa de Luz.
+      ================================================= */}
+
+      {(isReferences || isLightTable) && (
+        <section className="mt-7 rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.025] p-5">
+
+          <div className="flex items-center justify-between gap-3">
+
+            <p className="text-[0.62rem] uppercase tracking-[0.24em] text-white/30">
+              Referencias
+            </p>
+
+            <span className="font-[var(--font-space)] text-2xl font-light text-cyan-300">
+              {selectedCount}
+            </span>
+
+          </div>
+
+          <p className="mt-2 text-xs leading-5 text-white/45">
+            Seleccionadas para la Mesa de Luz
+          </p>
+
+          <div className="mt-4 space-y-2 border-t border-white/10 pt-4">
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-[0.58rem] uppercase tracking-[0.22em] text-cyan-300/80">
+                RƎVELA
+              </span>
+
+              <span className="font-[var(--font-space)] text-sm text-white/65">
+                {revelaReferenceCount}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-[0.58rem] uppercase tracking-[0.22em] text-white/45">
+                Director Creativo
+              </span>
+
+              <span className="font-[var(--font-space)] text-sm text-white/65">
+                {directorReferenceCount}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-[0.58rem] uppercase tracking-[0.22em] text-white/45">
+                Tú aportas
+              </span>
+
+              <span className="font-[var(--font-space)] text-sm text-white/65">
+                {userReferenceCount}
+              </span>
+            </div>
 
           </div>
 
@@ -500,124 +571,6 @@ const isLightTable =
 
         </div>
       )}
-{/* =================================================
-    MESA DE LUZ
-================================================= */}
-
-{isLightTable && (
-  <div className="mt-7 space-y-5">
-
-    <section className="rounded-[var(--revela-radius-md)] border border-cyan-300/15 bg-cyan-300/[0.035] p-5">
-
-      <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
-        Mesa de Luz
-      </p>
-
-      <h3 className="mt-3 text-xl font-light text-white">
-        Selección del proyecto
-      </h3>
-
-      <p className="mt-3 text-sm leading-6 text-white/50">
-        Aquí organizas las referencias que has
-        decidido conservar para continuar
-        observando, relacionando y revelando.
-      </p>
-
-      <div className="mt-5 border-t border-white/10 pt-5">
-
-        <div className="flex items-center justify-between">
-
-          <span className="text-[0.65rem] uppercase tracking-[0.22em] text-white/30">
-            Referencias
-          </span>
-
-          <span className="text-sm text-cyan-300">
-            {lightTable.length}
-          </span>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section className="rounded-[var(--revela-radius-md)] border border-white/10 bg-white/[0.025] p-5">
-
-      <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
-        Intención
-      </p>
-
-      <div className="mt-4 space-y-4">
-
-        <div>
-
-          <p className="text-[0.62rem] uppercase tracking-[0.22em] text-white/30">
-            RƎVELAR
-          </p>
-
-          <p className="mt-2 text-sm leading-6 text-white/60">
-            {intention.whatToReveal ||
-              "Pendiente"}
-          </p>
-
-        </div>
-
-        <div>
-
-          <p className="text-[0.62rem] uppercase tracking-[0.22em] text-white/30">
-            Transmitir
-          </p>
-
-          <p className="mt-2 text-sm leading-6 text-white/50">
-            {intention.whatToTransmit ||
-              "Pendiente"}
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section className="rounded-[var(--revela-radius-md)] border border-white/10 bg-white/[0.025] p-5">
-
-      <p className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
-        Director Creativo
-      </p>
-
-      <div className="mt-4 flex items-center justify-between">
-
-        <span className="text-sm text-white/50">
-          Exploración
-        </span>
-
-        <span className="text-sm text-white/70">
-          Propuesta{" "}
-          {creativeDirector.proposalNumber}
-        </span>
-
-      </div>
-
-      <div className="mt-3 flex items-center justify-between">
-
-        <span className="text-sm text-white/50">
-          Referencias exploradas
-        </span>
-
-        <span className="text-sm text-white/70">
-          {
-            creativeDirector
-              .exploredReferenceIds
-              .length
-          }
-        </span>
-
-      </div>
-
-    </section>
-
-  </div>
-)}
       {/* =================================================
           CONTEXTO GENERAL
       ================================================= */}

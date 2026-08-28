@@ -37,68 +37,81 @@ const CANVAS_PADDING = 24;
  * de la mesa, dentro de la zona visible.
  */
 function getInitialPosition(
-  index: number,
-  _referenceCount: number,
+  reference: Reference,
+  groupIndex: number,
   containerWidth: number
 ): Point {
+  /*
+   * La Mesa de Luz mantiene tres territorios visuales:
+   *
+   *   IZQUIERDA  → Director Creativo
+   *   CENTRO     → RƎVELA
+   *   DERECHA    → Tú aportas
+   *
+   * Cada territorio funciona como un pequeño pilón:
+   * las referencias conviven y se solapan ligeramente,
+   * pero el origen queda visualmente diferenciado.
+   */
+
+  const group =
+    reference.origin === "provider"
+      ? "director"
+      : reference.origin === "user"
+        ? "user"
+        : "revela";
+
   const centerX =
     containerWidth / 2 -
     CARD_WIDTH / 2;
 
+  const columnOffset =
+    group === "director"
+      ? -Math.min(containerWidth * 0.27, 300)
+      : group === "user"
+        ? Math.min(containerWidth * 0.27, 300)
+        : 0;
+
   /*
-   * Núcleo de posiciones alrededor del centro.
-   *
-   * Las referencias se solapan deliberadamente:
-   * esto permite observarlas como una composición
-   * y evita crear filas que desaparezcan por debajo
-   * del viewport.
+   * Pequeña composición interna de cada pilón.
+   * No son filas: son posiciones compactas que se
+   * superponen ligeramente.
    */
-  const offsets: Point[] = [
+  const pileOffsets: Point[] = [
     { x: 0, y: 0 },
-
-    { x: 34, y: 22 },
-    { x: -34, y: 22 },
-
-    { x: 48, y: -22 },
-    { x: -48, y: -22 },
-
-    { x: 68, y: 42 },
-    { x: -68, y: 42 },
-
-    { x: 76, y: -42 },
-    { x: -76, y: -42 },
-
-    { x: 0, y: 58 },
-    { x: 0, y: -58 },
-
-    { x: 52, y: 62 },
-    { x: -52, y: 62 },
-
-    { x: 52, y: -62 },
-    { x: -52, y: -62 },
+    { x: 26, y: 18 },
+    { x: -26, y: 18 },
+    { x: 18, y: -20 },
+    { x: -18, y: -20 },
+    { x: 38, y: 34 },
+    { x: -38, y: 34 },
+    { x: 34, y: -36 },
+    { x: -34, y: -36 },
   ];
 
   const offset =
-    offsets[index % offsets.length];
+    pileOffsets[groupIndex % pileOffsets.length];
 
-  /*
-   * Para más referencias reutilizamos el núcleo
-   * con un desplazamiento mínimo.
-   *
-   * No creamos nuevas filas infinitas.
-   * La mesa sigue siendo una superficie compacta
-   * donde las referencias pueden superponerse.
-   */
   const cycle =
     Math.floor(
-      index / offsets.length
+      groupIndex / pileOffsets.length
     );
 
   const cycleOffset =
-    Math.min(cycle * 8, 40);
+    Math.min(cycle * 8, 32);
 
   const direction =
     cycle % 2 === 0 ? 1 : -1;
+
+  const rawX =
+    centerX +
+    columnOffset +
+    offset.x +
+    cycleOffset * direction;
+
+  const rawY =
+    72 +
+    offset.y +
+    cycle * 8;
 
   return {
     x: Math.max(
@@ -107,17 +120,14 @@ function getInitialPosition(
         containerWidth -
           CARD_WIDTH -
           CANVAS_PADDING,
-        centerX +
-          offset.x +
-          cycleOffset *
-            direction
+        rawX
       )
     ),
 
-    y:
-      70 +
-      offset.y +
-      cycle * 8,
+    y: Math.max(
+      CANVAS_PADDING,
+      rawY
+    ),
   };
 }
 
@@ -501,7 +511,7 @@ export default function LightTable() {
     useRef<HTMLDivElement | null>(null);
 
   const storageKey =
-    `revela-light-table-positions-v3-${projectId}`;
+    `revela-light-table-positions-v4-${projectId}`;
 
   const [positions, setPositions] =
     useState<Positions>({});
@@ -581,10 +591,20 @@ export default function LightTable() {
       lightTable.forEach(
         (reference, index) => {
           if (!next[reference.id]) {
+            const groupIndex =
+              lightTable
+                .slice(0, index)
+                .filter(
+                  (item) =>
+                    item.origin ===
+                    reference.origin
+                )
+                .length;
+
             next[reference.id] =
               getInitialPosition(
-                index,
-                lightTable.length,
+                reference,
+                groupIndex,
                 canvasWidth
               );
           }
@@ -649,68 +669,11 @@ export default function LightTable() {
       />
 
       <div className="relative p-[clamp(1.25rem,2.4vw,3rem)]">
-        <header
-          className="
-            flex
-            items-center
-            justify-between
-            gap-4
-            border-b
-            border-white/10
-            pb-4
-          "
-        >
-          <div className="min-w-0 flex-1">
-
-            <div className="flex items-baseline gap-4">
-
-              <p className="shrink-0 text-[10px] uppercase tracking-[0.34em] text-cyan-300">
-                Mesa de Luz
-              </p>
-
-              <h1 className="text-2xl font-light tracking-tight text-white">
-                {lightTable.length}{" "}
-                {lightTable.length === 1
-                  ? "referencia"
-                  : "referencias"}
-              </h1>
-
-            </div>
-
-            <p className="mt-1 truncate text-xs leading-5 text-white/40">
-              Aquí reúnes las referencias que has decidido conservar para observarlas, compararlas y relacionarlas.
-            </p>
-
-          </div>
-
-          <div className="flex shrink-0 items-center gap-2">
-
-            <Button
-              variant="ghost"
-              onClick={() =>
-                setScene("references")
-              }
-            >
-              Volver a Referencias
-            </Button>
-
-            <Button
-              variant="ghost"
-              onClick={handleAddReferences}
-              className="text-cyan-300"
-            >
-              ＋ Añadir referencias
-            </Button>
-
-          </div>
-
-        </header>
-
         <div
           ref={canvasRef}
           className="
             relative
-            mt-3
+            mt-0
             min-h-[500px]
             overflow-hidden
             rounded-[1.25rem]
@@ -719,7 +682,7 @@ export default function LightTable() {
             bg-black/20
           "
         >
-          <div
+<div
             className="
               pointer-events-none
               absolute
@@ -730,11 +693,6 @@ export default function LightTable() {
             "
           />
 
-          <div className="pointer-events-none absolute left-5 top-5">
-            <span className="text-[9px] uppercase tracking-[0.3em] text-white/45">
-              Selección activa
-            </span>
-          </div>
 
           {lightTable.map(
             (reference, index) => (
@@ -747,8 +705,15 @@ export default function LightTable() {
                     reference.id
                   ] ??
                   getInitialPosition(
-                    index,
-                    lightTable.length,
+                    reference,
+                    lightTable
+                      .slice(0, index)
+                      .filter(
+                        (item) =>
+                          item.origin ===
+                          reference.origin
+                      )
+                      .length,
                     canvasWidth
                   )
                 }
@@ -763,12 +728,7 @@ export default function LightTable() {
             )
           )}
 
-          <div className="pointer-events-none absolute bottom-5 left-5">
-            <span className="text-[9px] uppercase tracking-[0.28em] text-white/45">
-              Mueve las referencias para
-              encontrar relaciones
-            </span>
-          </div>
+          
         </div>
       </div>
     

@@ -1,18 +1,53 @@
+"use client";
+
 import Image from "next/image";
 
 import LightTable from "@/app/components/workspace/LightTable";
 import SectionTitle from "@/app/components/ui/SectionTitle";
+import Button from "@/app/components/ui/Button";
+import { useRevealStore } from "@/app/stores/useRevealStore";
 
 export default function LightTableScene() {
+  const setScene = useRevealStore(
+    (state) => state.setScene
+  );
   return (
     <section className="flex min-h-screen flex-col">
-      <SectionTitle
-  eyebrow="Mesa de Luz"
-  title="Relaciones de identidad"
-  description=""
-/>
+      <header className="relative z-40">
 
-      <div className="relative mt-2 h-[calc(100vh-120px)] overflow-hidden rounded-2xl">
+        <SectionTitle
+          eyebrow="Mesa de Luz"
+          title="Relaciones de identidad"
+          description=""
+        />
+
+        <div className="mt-5 flex items-center gap-2">
+
+          <Button
+            variant="ghost"
+            onClick={() =>
+              setScene("references")
+            }
+            className="shrink-0 whitespace-nowrap text-cyan-300"
+          >
+            ＋ Añadir referencias
+          </Button>
+
+          <Button
+            variant="ghost"
+            onClick={() =>
+              setScene("references")
+            }
+            className="shrink-0 whitespace-nowrap"
+          >
+            Volver a Referencias
+          </Button>
+
+        </div>
+
+      </header>
+
+      <div className="relative mt-6 h-[calc(100vh-120px)] overflow-hidden rounded-2xl">
         <Image
   src="/workspace/light-table_.jpeg"
   alt="Mesa de Luz"
