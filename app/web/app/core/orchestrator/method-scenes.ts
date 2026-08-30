@@ -75,33 +75,6 @@ export const methodScenes: Scene[] = [
       "Genera piezas desde el Sistema Creativo.",
     status: "locked",
   },
-  {
-    id: "production",
-    order: 8,
-    title: "Producción",
-    eyebrow: "Multimodal",
-    description:
-      "Produce activos para distintos medios.",
-    status: "locked",
-  },
-  {
-    id: "adaptation",
-    order: 9,
-    title: "Adaptación",
-    eyebrow: "Canales",
-    description:
-      "Adapta el contenido manteniendo coherencia.",
-    status: "locked",
-  },
-  {
-    id: "export",
-    order: 10,
-    title: "Exportación",
-    eyebrow: "Entrega",
-    description:
-      "Prepara los entregables finales.",
-    status: "locked",
-  },
 ];
 
 export function getSceneById(sceneId: Scene["id"]): Scene {

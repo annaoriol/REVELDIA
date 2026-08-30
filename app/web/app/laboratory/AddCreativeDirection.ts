@@ -18,6 +18,16 @@ export function addCreativeDirection(
     projectDNA.creativeDirector;
 
   const creativeDirector: ProjectDNACreativeDirector = {
+    requestedOutput: previousDirector.requestedOutput ?? "",
+    userVision: previousDirector.userVision ?? "",
+
+    openQuestions: previousDirector.openQuestions ?? [],
+    tensions: previousDirector.tensions ?? [],
+    hypotheses: previousDirector.hypotheses ?? [],
+    perspectivesUsed: previousDirector.perspectivesUsed ?? [],
+
+    clarityLevel: previousDirector.clarityLevel ?? "low",
+
     criteria: input.creativeDirection.criteria,
     decisions: input.creativeDirection.decisions,
     decisionHistory: previousDirector.decisionHistory ?? [],

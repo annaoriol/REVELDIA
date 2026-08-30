@@ -4,9 +4,6 @@ import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useRevealStore } from "@/app/stores/useRevealStore";
-import { CreativeDirectionMapper } from "@/app/core/mappers/CreativeDirectionMapper";
-
-import { MockCreativeDirectionProvider } from "@/app/core/creative-director/MockCreativeDirectionProvider";
 
 const revealTypes = [
   "Marca",
@@ -44,15 +41,15 @@ export default function CreativeDirectorScene() {
     (state) => state.updateIntention
   );
 
-  const updateCreativeDirection =
-    useRevealStore(
-      (state) =>
-        state.updateCreativeDirection
-    );
-
   const setScene = useRevealStore(
     (state) => state.setScene
   );
+
+  const generateCreativeDirection =
+    useRevealStore(
+      (state) =>
+        state.generateCreativeDirection
+    );
 
   const [selectedType, setSelectedType] =
     useState<string | null>(null);
@@ -88,9 +85,6 @@ export default function CreativeDirectorScene() {
     Boolean(description.trim()) &&
     Boolean(selectedFormat);
 
-  const creativeDirectionProvider =
-    new MockCreativeDirectionProvider();
-
   const handleReveal = () => {
     if (!canReveal) {
       return;
@@ -120,34 +114,16 @@ export default function CreativeDirectorScene() {
       context,
     });
 
-    const creativeDirection =
-      creativeDirectionProvider.direct({
-        projectType: selectedType!,
-        format: selectedFormat!,
-        intention: {
-          whatToReveal,
-          whatToTransmit,
-          context,
-        },
-        constraints: [],
-      });
-
-    console.log("===== RƎVELA · CREATIVE DIRECTION =====");
-    console.log("LECTURA CREATIVA:", creativeDirection.creativeReading);
-    console.log("DIRECTRICES DE FORMATO:", creativeDirection.formatDirectives);
-    console.log("TERRITORIOS DE EXPLORACIÓN:", creativeDirection.explorationTerritories);
-    console.log("PREGUNTAS:", creativeDirection.questions);
-    console.log("SIGUIENTE ACCIÓN:", creativeDirection.nextAction);
-    console.log("===== FIN CREATIVE DIRECTION =====");
-
-    const persistedCreativeDirection =
-      CreativeDirectionMapper.toProjectDNA(
-        creativeDirection
-      );
-
-    updateCreativeDirection(
-      persistedCreativeDirection
-    );
+    generateCreativeDirection({
+      projectType: selectedType!,
+      format: selectedFormat!,
+      intention: {
+        whatToReveal,
+        whatToTransmit,
+        context,
+      },
+      constraints: [],
+    });
 
     /*
      * La intención queda registrada

@@ -32,6 +32,16 @@ export const initialRevealState: RevealState = {
       },
       sensoryDNA: null,
       creativeDirector: {
+  requestedOutput: "",
+  userVision: "",
+
+  openQuestions: [],
+  tensions: [],
+  hypotheses: [],
+  perspectivesUsed: [],
+
+  clarityLevel: "low",
+
   criteria: [],
   decisions: [],
   decisionHistory: [],

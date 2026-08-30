@@ -8,6 +8,10 @@ import { initialRevealState } from "@/app/core/state/initial-state";
 import { CreativeDirectorEngine } from "@/app/core/creative-director/CreativeDirectorEngine";
 import { ReferenceDiscoveryOrchestrator } from "@/app/core/references/ReferenceDiscoveryOrchestrator";
 
+import { CreativeDirectorService } from "@/app/core/creative-director/CreativeDirectorService";
+import { MockCreativeDirectionProvider } from "@/app/core/creative-director/MockCreativeDirectionProvider";
+import { CreativeDirectionMapper } from "@/app/core/mappers/CreativeDirectionMapper";
+
 import type { Reference } from "@/app/features/references/data";
 import { references as revelaReferences } from "@/app/features/references/data";
 
@@ -55,6 +59,19 @@ type RevealActions = {
       ProjectDNACreativeDirection,
       "updatedAt"
     >
+  ) => void;
+
+  generateCreativeDirection: (
+    brief: {
+      projectType: string;
+      format: string;
+      intention: {
+        whatToReveal: string;
+        whatToTransmit: string;
+        context: string;
+      };
+      constraints?: string[];
+    }
   ) => void;
 
   evaluateCreativeDirector: () => void;
@@ -171,7 +188,7 @@ export const useRevealStore =
 
     enterLaboratory: () => {
       const firstLaboratoryScene =
-        getSceneById("intention");
+        getSceneById("creative-director");
 
       set((state) => ({
         scene: {
@@ -387,6 +404,61 @@ export const useRevealStore =
           updatedAt: now,
         },
       }));
+    },
+
+    generateCreativeDirection: (
+      brief
+    ) => {
+      const provider =
+        new MockCreativeDirectionProvider();
+
+      const service =
+        new CreativeDirectorService(
+          provider
+        );
+
+      const creativeDirection =
+        service.direct({
+          ...brief,
+          constraints:
+            brief.constraints ?? [],
+        });
+
+      console.log(
+        "===== RƎVELA · CREATIVE DIRECTION ====="
+      );
+      console.log(
+        "LECTURA CREATIVA:",
+        creativeDirection.creativeReading
+      );
+      console.log(
+        "DIRECTRICES DE FORMATO:",
+        creativeDirection.formatDirectives
+      );
+      console.log(
+        "TERRITORIOS DE EXPLORACIÓN:",
+        creativeDirection.explorationTerritories
+      );
+      console.log(
+        "PREGUNTAS:",
+        creativeDirection.questions
+      );
+      console.log(
+        "SIGUIENTE ACCIÓN:",
+        creativeDirection.nextAction
+      );
+      console.log(
+        "===== FIN CREATIVE DIRECTION ====="
+      );
+
+      const persistedCreativeDirection =
+        CreativeDirectionMapper.toProjectDNA(
+          creativeDirection
+        );
+
+      get().updateCreativeDirection(
+        persistedCreativeDirection
+      );
     },
 
     evaluateCreativeDirector: () => {

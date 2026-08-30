@@ -203,6 +203,28 @@ export interface ProjectDNACreativeDirectorDecision {
 }
 
 export interface ProjectDNACreativeDirector {
+  /**
+   * Dirección inicial expresada por el usuario.
+   */
+  requestedOutput: string;
+  userVision: string;
+
+  /**
+   * Memoria crítica del proceso creativo.
+   */
+  openQuestions: string[];
+  tensions: string[];
+  hypotheses: string[];
+  perspectivesUsed: string[];
+
+  /**
+   * Nivel de definición actual del proyecto.
+   */
+  clarityLevel: "low" | "medium" | "high";
+
+  /**
+   * Exploración y decisiones del Director.
+   */
   criteria: string[];
   decisions: string[];
   decisionHistory: ProjectDNACreativeDirectorDecision[];
